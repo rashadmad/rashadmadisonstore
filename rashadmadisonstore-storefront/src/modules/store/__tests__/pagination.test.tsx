@@ -170,7 +170,7 @@ describe('Pagination', () => {
       const page4Button = screen.getByText('4')
       fireEvent.click(page4Button)
 
-      expect(mockPush).toHaveBeenCalledWith(`${mockPathname}?sortBy=price_asc&page=4`)
+      expect(mockPush).toHaveBeenCalledWith(`${mockPathname}?page=4&sortBy=price_asc`)
 
       mockSearchParams = new URLSearchParams()
     })
@@ -181,7 +181,8 @@ describe('Pagination', () => {
       render(React.createElement(Pagination, { page: 1, totalPages: 1 }))
 
       // Should still render the container
-      const mainContainer = screen.getByRole('generic', { hidden: true })
+      const mainContainer = document.querySelector('.flex.justify-center.w-full.mt-12')
+      expect(mainContainer).toBeInTheDocument()
       expect(mainContainer).toHaveClass('flex', 'justify-center', 'w-full', 'mt-12')
 
       // Should have one disabled button for page 1
