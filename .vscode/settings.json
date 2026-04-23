@@ -1,0 +1,4 @@
+{
+  "jest.command": "npm test -- --config ./rashadmadisonstore-storefront/jest.config.js",
+  "jest.pathToConfig": "./rashadmadisonstore-storefront/jest.config.js"
+}
