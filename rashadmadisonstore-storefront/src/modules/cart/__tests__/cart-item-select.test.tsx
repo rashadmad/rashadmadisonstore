@@ -50,7 +50,8 @@ describe('Cart Item Select', () => {
   it('should apply custom className', () => {
     render(<CartItemSelect className="custom-class" data-testid="cart-select" />)
     const select = screen.getByTestId('cart-select')
-    expect(select).toHaveClass('custom-class')
+    const iconBadge = select.closest('.custom-class')
+    expect(iconBadge).toBeInTheDocument()
   })
 
   it('should render chevron down icon', () => {

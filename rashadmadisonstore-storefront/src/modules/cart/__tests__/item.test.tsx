@@ -11,8 +11,8 @@ jest.mock('@lib/data/cart', () => ({
 // Mock UI components
 jest.mock('@medusajs/ui', () => ({
   Table: {
-    Row: ({ children, ...props }: any) => <tr {...props}>{children}</tr>,
-    Cell: ({ children, ...props }: any) => <td {...props}>{children}</td>,
+    Row: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+    Cell: ({ children, ...props }: any) => <div {...props}>{children}</div>,
   },
   Text: ({ children, ...props }: any) => <span {...props}>{children}</span>,
   clx: jest.fn((...args) => args.join(' ')),
@@ -21,7 +21,7 @@ jest.mock('@medusajs/ui', () => ({
 // Mock common components
 jest.mock('@modules/common/components/delete-button', () => {
   return function MockDeleteButton({ id, ...props }: any) {
-    return <button {...props} data-testid="delete-button">Delete</button>
+    return <button {...props}>Delete</button>
   }
 })
 
@@ -32,13 +32,13 @@ jest.mock('@modules/common/components/line-item-options', () => {
 })
 
 jest.mock('@modules/common/components/line-item-price', () => {
-  return function MockLineItemPrice({ ...props }: any) {
+  return function MockLineItemPrice({ item, style, currencyCode, ...props }: any) {
     return <span {...props}>Price</span>
   }
 })
 
 jest.mock('@modules/common/components/line-item-unit-price', () => {
-  return function MockLineItemUnitPrice({ ...props }: any) {
+  return function MockLineItemUnitPrice({ item, style, currencyCode, ...props }: any) {
     return <span {...props}>Unit Price</span>
   }
 })

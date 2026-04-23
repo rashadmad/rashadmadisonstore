@@ -4,7 +4,7 @@ import { SubmitButton } from '../components/submit-button'
 
 // Mock UI components
 jest.mock('@medusajs/ui', () => ({
-  Button: ({ children, ...props }: any) => React.createElement('button', props, children),
+  Button: ({ children, isLoading, ...props }: any) => React.createElement('button', props, children),
 }))
 
 // Mock useFormStatus

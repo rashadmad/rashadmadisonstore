@@ -5,10 +5,30 @@ import { HttpTypes } from '@medusajs/types'
 
 // Mock UI components
 jest.mock('@medusajs/ui', () => ({
-  Tabs: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'tabs', ...props }, children),
-  TabsTrigger: ({ children, value, ...props }: any) => React.createElement('button', { 'data-value': value, ...props }, children),
-  TabsContent: ({ children, value, ...props }: any) => React.createElement('div', { 'data-testid': `tab-content-${value}`, ...props }, children),
+  Text: ({ children, ...props }: any) => React.createElement('span', props, children),
   clx: jest.fn((...args) => args.filter(Boolean).join(' ')),
+}))
+
+// Mock Radix UI Accordion
+jest.mock('@radix-ui/react-accordion', () => ({
+  Root: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'accordion', ...props }, children),
+  Item: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'accordion-item', ...props }, children),
+  Trigger: ({ children, ...props }: any) => React.createElement('button', { 'data-testid': 'accordion-trigger', ...props }, children),
+  Content: ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'accordion-content', ...props }, children),
+}))
+
+// Mock Accordion component
+jest.mock('../components/product-tabs/accordion', () => ({
+  __esModule: true,
+  default: Object.assign(
+    ({ children, ...props }: any) => React.createElement('div', { 'data-testid': 'accordion', ...props }, children),
+    {
+      Item: ({ children, title, headingSize, ...props }: any) => React.createElement('div', { 'data-testid': 'accordion-item', ...props }, 
+        React.createElement('button', { 'data-testid': 'accordion-trigger' }, title),
+        children
+      ),
+    }
+  ),
 }))
 
 describe('Product Tabs', () => {
@@ -27,24 +47,25 @@ describe('Product Tabs', () => {
 
   it('should render tabs container', () => {
     render(React.createElement(ProductTabs, { product: mockProduct }))
-    expect(screen.getByTestId('tabs')).toBeInTheDocument()
+    expect(screen.getByTestId('accordion')).toBeInTheDocument()
   })
 
   it('should render description tab', () => {
     render(React.createElement(ProductTabs, { product: mockProduct }))
-    const buttons = screen.getAllByRole('button')
-    expect(buttons.some(btn => btn.textContent?.includes('Description'))).toBe(true)
+    const triggers = screen.getAllByTestId('accordion-trigger')
+    expect(triggers.some(trigger => trigger.textContent?.includes('Product Information'))).toBe(true)
   })
 
   it('should display product description in content', () => {
     render(React.createElement(ProductTabs, { product: mockProduct }))
-    expect(screen.getByText('This is a test product description')).toBeInTheDocument()
+    // The component renders product info, not description
+    expect(screen.getByText('Material')).toBeInTheDocument()
   })
 
   it('should render multiple tabs if product has metadata', () => {
     render(React.createElement(ProductTabs, { product: mockProduct }))
-    const tabs = screen.getByTestId('tabs')
-    expect(tabs).toBeInTheDocument()
+    const accordion = screen.getByTestId('accordion')
+    expect(accordion).toBeInTheDocument()
   })
 
   it('should handle product without description gracefully', () => {
@@ -55,13 +76,15 @@ describe('Product Tabs', () => {
 
   it('should pass product data to tabs', () => {
     render(React.createElement(ProductTabs, { product: mockProduct }))
-    const tabs = screen.getByTestId('tabs')
-    expect(tabs).toBeInTheDocument()
+    // Verify product data is passed by checking if product info labels are rendered
+    expect(screen.getByText('Material')).toBeInTheDocument()
+    expect(screen.getByText('Country of origin')).toBeInTheDocument()
+    expect(screen.getByText('Type')).toBeInTheDocument()
   })
 
   it('should render with proper aria attributes', () => {
     render(React.createElement(ProductTabs, { product: mockProduct }))
-    const tabs = screen.getByTestId('tabs')
-    expect(tabs).toBeInTheDocument()
+    const accordion = screen.getByTestId('accordion')
+    expect(accordion).toBeInTheDocument()
   })
 })

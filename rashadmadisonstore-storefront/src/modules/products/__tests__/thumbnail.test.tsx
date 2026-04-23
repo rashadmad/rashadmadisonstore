@@ -5,13 +5,27 @@ import Thumbnail from '../components/thumbnail'
 // Mock Next.js Image component
 jest.mock('next/image', () => ({
   __esModule: true,
-  default: ({ src, alt, ...props }: any) => React.createElement('img', { src, alt, ...props }),
+  default: ({ src, alt, className, draggable, ...props }: any) => React.createElement('img', { src, alt, className, draggable }),
 }))
 
 // Mock UI components
 jest.mock('@medusajs/ui', () => ({
   Container: ({ children, className, ...props }: any) => React.createElement('div', { className, ...props }, children),
-  clx: jest.fn((...args) => args.filter(Boolean).join(' ')),
+  clx: jest.fn((...args) => {
+    const classes = []
+    for (const arg of args) {
+      if (typeof arg === 'string') {
+        classes.push(arg)
+      } else if (typeof arg === 'object' && arg !== null) {
+        for (const [key, value] of Object.entries(arg)) {
+          if (value) {
+            classes.push(key)
+          }
+        }
+      }
+    }
+    return classes.join(' ')
+  }),
 }))
 
 // Mock placeholder icon

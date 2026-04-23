@@ -31,6 +31,11 @@ jest.mock('@modules/common/components/interactive-link', () => ({
   default: ({ href, children }: any) => React.createElement('a', { href, 'data-testid': 'product-link' }, children),
 }))
 
+jest.mock('@modules/common/components/localized-client-link', () => ({
+  __esModule: true,
+  default: ({ href, children, className }: any) => React.createElement('a', { href, className, 'data-testid': 'product-link' }, children),
+}))
+
 // Mock Suspense
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
@@ -67,7 +72,7 @@ describe('Product Preview', () => {
 
   it('should render product price', () => {
     render(React.createElement(ProductPreview, { product: mockProduct, region: mockRegion }))
-    expect(screen.getByTestId('product-price')).toBeInTheDocument()
+    expect(screen.getByTestId('price')).toBeInTheDocument()
   })
 
   it('should display product title', () => {

@@ -14,7 +14,7 @@ jest.mock('react-dom', () => {
 // Mock medusajs ui components
 jest.mock('@medusajs/ui', () => ({
   Badge: ({ children, color }: any) => <div data-testid="badge" data-color={color}>{children}</div>,
-  Button: ({ children, ...props }: any) => <button {...props}>{children}</button>,
+  Button: ({ children, isLoading, ...props }: any) => <button {...props}>{children}</button>,
   clx: jest.fn((...args) => args.flat().filter(Boolean).join(' ')),
 }))
 
