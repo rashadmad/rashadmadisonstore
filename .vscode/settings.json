@@ -1,4 +1,9 @@
 {
   "jest.command": "npm test -- --config ./rashadmadisonstore-storefront/jest.config.js",
-  "jest.pathToConfig": "./rashadmadisonstore-storefront/jest.config.js"
+  "jest.pathToConfig": "./rashadmadisonstore-storefront/jest.config.js",
+  "jest.runMode": "on-demand",
+  "jest.debugMode": false,
+  "jest.decorateOutput": false,
+  "files.autoSave": "onFocusChange",
+  "jest.rootPath": "./rashadmadisonstore-storefront"
 }
