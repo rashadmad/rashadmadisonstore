@@ -10,6 +10,40 @@ const regionMapCache = {
   regionMapUpdated: Date.now(),
 }
 
+export async function fetchRegionsFromBackend(
+  backendUrl: string,
+  publishableApiKey?: string
+) {
+  try {
+    const response = await fetch(`${backendUrl}/store/regions`, {
+      headers: {
+        "x-publishable-api-key": publishableApiKey ?? "",
+      },
+      next: {
+        revalidate: 3600,
+      },
+      cache: "force-cache",
+    })
+
+    const json = await response.json().catch(() => null)
+
+    if (!response.ok) {
+      throw new Error(json?.message ?? `Failed to fetch regions (${response.status})`)
+    }
+
+    return Array.isArray(json?.regions) ? json.regions : []
+  } catch (error) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "Middleware.ts: Unable to fetch regions from Medusa. Falling back to the default region.",
+        error
+      )
+    }
+
+    return []
+  }
+}
+
 async function getRegionMap(cacheId: string) {
   const { regionMap, regionMapUpdated } = regionMapCache
 
@@ -23,30 +57,20 @@ async function getRegionMap(cacheId: string) {
     !regionMap.keys().next().value ||
     regionMapUpdated < Date.now() - 3600 * 1000
   ) {
-    // Fetch regions from Medusa. We can't use the JS client here because middleware is running on Edge and the client needs a Node environment.
-    const { regions } = await fetch(`${BACKEND_URL}/store/regions`, {
-      headers: {
-        "x-publishable-api-key": PUBLISHABLE_API_KEY!,
-      },
-      next: {
-        revalidate: 3600,
-        tags: [`regions-${cacheId}`],
-      },
-      cache: "force-cache",
-    }).then(async (response) => {
-      const json = await response.json()
+    const regions = await fetchRegionsFromBackend(BACKEND_URL, PUBLISHABLE_API_KEY)
 
-      if (!response.ok) {
-        throw new Error(json.message)
-      }
+    regionMapCache.regionMap.clear()
 
-      return json
-    })
+    if (!regions.length) {
+      regionMapCache.regionMap.set(DEFAULT_REGION, {
+        id: DEFAULT_REGION,
+        name: DEFAULT_REGION.toUpperCase(),
+        currency_code: "usd",
+        countries: [],
+      } as HttpTypes.StoreRegion)
 
-    if (!regions?.length) {
-      throw new Error(
-        "No regions found. Please set up regions in your Medusa Admin."
-      )
+      regionMapCache.regionMapUpdated = Date.now()
+      return regionMapCache.regionMap
     }
 
     // Create a map of country codes to regions.
