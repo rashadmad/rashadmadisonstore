@@ -1,4 +1,7 @@
-import { Github } from "@medusajs/icons"
+import { faInstagram } from "@fortawesome/free-brands-svg-icons"
+import { faFacebook } from "@fortawesome/free-brands-svg-icons"
+import { faStripe } from "@fortawesome/free-brands-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Button, Heading } from "@medusajs/ui"
 
 const Hero = () => {
@@ -8,25 +11,46 @@ const Hero = () => {
         <span>
           <Heading
             level="h1"
-            className="text-3xl leading-10 text-ui-fg-base font-normal"
+            className="mb-4 text-5xl leading-10 text-ui-fg-base font-normal"
           >
-            Ecommerce Starter Template
+            This is the Quintessential
           </Heading>
           <Heading
             level="h2"
-            className="text-3xl leading-10 text-ui-fg-subtle font-normal"
+            className="text-2xl leading-10 text-ui-fg-subtle font-normal"
           >
-            Powered by Medusa and Next.js
+          <p>as of right now it's the place to</p>
+         <p>celebrate and contribute to the Art projects</p>
+         <p>and works of Rashad Madison</p>  
           </Heading>
         </span>
         <a
-          href="https://github.com/medusajs/nextjs-starter-medusa"
+          href="https://www.instagram.com/"
           target="_blank"
+          rel="noreferrer"
         >
-          <Button variant="secondary">
-            View on GitHub
-            <Github />
+          
+          <Button className="mt-4" variant="secondary">
+            Follow on Instagram
+            <span className="ml-2">
+              <FontAwesomeIcon icon={faInstagram} />
+            </span>
           </Button>
+          <br></br>
+          <Button className="mt-4" variant="secondary">
+            Follow on Facebook
+            <span className="ml-2">
+              <FontAwesomeIcon icon={faFacebook} />
+            </span>
+          </Button>
+          <br></br>
+          <Button className="mt-4" variant="secondary">
+            Donate via Stripe
+            <span className="ml-2">
+              <FontAwesomeIcon icon={faStripe} />
+            </span>
+          </Button>
+        
         </a>
       </div>
     </div>
