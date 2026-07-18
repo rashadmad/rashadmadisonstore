@@ -19,9 +19,9 @@ const Hero = () => {
             level="h2"
             className="text-2xl leading-10 text-ui-fg-subtle font-normal"
           >
-          <p>as of right now it's the place to</p>
-         <p>celebrate and contribute to the Art projects</p>
-         <p>and works of Rashad Madison</p>  
+         <p className="small:text-2xl">as of right now this is the place to</p>
+         <p className="small:text-2xl">celebrate and contribute to the Art projects</p>
+         <p className="small:text-2xl">of Rashad Madison</p>  
           </Heading>
         </span>
         <a
