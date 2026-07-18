@@ -15,8 +15,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const SideMenuItems = {
   Home: "/",
-  Store: "/store",
   Account: "/account",
+  Collection: "/collection",
+  Apparel: "/apparel",
+  Blog: "/blog",
   Cart: "/cart",
 }
 
@@ -41,7 +43,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                   data-testid="nav-menu-button"
                   className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base"
                 >
-                 <FontAwesomeIcon icon={faBars} />
+                  <FontAwesomeIcon icon={faBars} className="text-xl sm:text-2xl" />
                 </Popover.Button>
               </div>
 
@@ -69,17 +71,21 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                     className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6"
                   >
                     <div className="flex justify-end" id="xmark">
-                      <button data-testid="close-menu-button" onClick={close}>
-                        <XMark />
+                      <button
+                        data-testid="close-menu-button"
+                        onClick={close}
+                        className="rounded-full p-2 sm:p-3 hover:bg-ui-bg-subtle"
+                      >
+                        <XMark className="text-2xl sm:text-3xl" />
                       </button>
                     </div>
-                    <ul className="flex flex-col gap-6 items-start justify-start">
+                    <ul className="flex flex-col gap-6 items-center justify-center text-center w-full">
                       {Object.entries(SideMenuItems).map(([name, href]) => {
                         return (
-                          <li key={name}>
+                          <li key={name} className="w-full">
                             <LocalizedClientLink
                               href={href}
-                              className="text-3xl leading-10 hover:text-ui-fg-disabled"
+                              className="block w-full text-3xl leading-10 hover:text-ui-fg-disabled"
                               onClick={close}
                               data-testid={`${name.toLowerCase()}-link`}
                             >
@@ -109,24 +115,6 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                           />
                         </div>
                       )}
-                      <div
-                        className="flex justify-between"
-                        onMouseEnter={countryToggleState.open}
-                        onMouseLeave={countryToggleState.close}
-                      >
-                        {regions && (
-                          <CountrySelect
-                            toggleState={countryToggleState}
-                            regions={regions}
-                          />
-                        )}
-                        <ArrowRightMini
-                          className={clx(
-                            "transition-transform duration-150",
-                            countryToggleState.state ? "-rotate-90" : ""
-                          )}
-                        />
-                      </div>
                       <Text className="flex justify-between txt-compact-small">
                         © {new Date().getFullYear()} The Quintessential. All rights
                         reserved.
