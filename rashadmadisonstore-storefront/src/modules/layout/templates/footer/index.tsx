@@ -1,3 +1,5 @@
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons"
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
 import { Text, clx } from "@medusajs/ui"
@@ -18,7 +20,7 @@ export default async function Footer() {
           <div className="flex flex-col items-start gap-y-3">
             <LocalizedClientLink
               href="/"
-              className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-ui-fg-base uppercase text-white"
+              className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-white uppercase text-white"
             >
               The Quintessential
             </LocalizedClientLink>
@@ -57,7 +59,7 @@ export default async function Footer() {
                       >
                         <LocalizedClientLink
                           className={clx(
-                            "hover:text-ui-fg-base text-green-400",
+                            "hover:text-white text-green-400",
                             children && "txt-small-plus"
                           )}
                           href={`/categories/${c.handle}`}
@@ -71,7 +73,7 @@ export default async function Footer() {
                               children.map((child) => (
                                 <li key={child.id}>
                                   <LocalizedClientLink
-                                    className="hover:text-ui-fg-base text-green-400"
+                                    className="hover:text-white text-green-400"
                                     href={`/categories/${child.handle}`}
                                     data-testid="category-link"
                                   >
@@ -103,7 +105,7 @@ export default async function Footer() {
                   {collections?.slice(0, 6).map((c) => (
                     <li key={c.id}>
                       <LocalizedClientLink
-                        className="hover:text-ui-fg-base text-green-400"
+                        className="hover:text-white text-green-400"
                         href={`/collections/${c.handle}`}
                       >
                         {c.title}
@@ -114,16 +116,19 @@ export default async function Footer() {
               </div>
             )}
             <div className="flex flex-col gap-y-2">
-              <span className="txt-small-plus txt-ui-fg-base text-white">Medusa</span>
+              <span className="txt-small-plus txt-ui-fg-base text-white">Follow me</span>
               <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
                 <li>
                   <a
                     href="https://github.com/medusajs"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-ui-fg-base text-green-400"
+                    className="hover:text-white text-green-400"
                   >
-                    GitHub
+                    <span className="mr-3">
+                      <FontAwesomeIcon icon={faInstagram} />
+                    </span>
+                    Instagram
                   </a>
                 </li>
                 <li>
@@ -131,19 +136,12 @@ export default async function Footer() {
                     href="https://docs.medusajs.com"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-ui-fg-base text-green-400"
+                    className="hover:text-white text-green-400"
                   >
-                    Documentation
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="https://github.com/medusajs/nextjs-starter-medusa"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-ui-fg-base text-green-400"
-                  >
-                    Source code
+                     <span className="mr-3">
+                      <FontAwesomeIcon icon={faFacebook} />
+                     </span>
+                    Facebook
                   </a>
                 </li>
               </ul>

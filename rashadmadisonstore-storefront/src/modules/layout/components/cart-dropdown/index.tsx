@@ -82,7 +82,7 @@ const CartDropdown = ({
       <Popover className="relative h-full">
         <PopoverButton className="h-full">
           <LocalizedClientLink
-            className="hover:text-ui-fg-base text-green-400"
+            className="hover:text-white text-green-400"
             href="/cart"
             data-testid="nav-cart-link"
           >{`Cart (${totalItems})`}</LocalizedClientLink>
@@ -104,7 +104,7 @@ const CartDropdown = ({
           >
             <div className="h-full bg-[linear-gradient(46deg,rgba(0,0,0,0.72)_0%,rgba(196,196,196,0.45)_63%,rgba(255,255,255,0.28)_100%)]">
             <div className="p-4 flex items-center justify-center">
-              <h3 className="text-large-semi">Cart</h3>
+              <h2 className="text-2xl font-bold leading-tight tracking-wide">Cart</h2>
             </div>
             {cartState && cartState.items?.length ? (
               <>
@@ -137,6 +137,7 @@ const CartDropdown = ({
                               <div className="flex flex-col overflow-ellipsis whitespace-nowrap mr-4 w-[180px]">
                                 <h3 className="text-base-regular overflow-hidden text-ellipsis">
                                   <LocalizedClientLink
+                                    className="hover:text-white"
                                     href={`/products/${item.product_handle}`}
                                     data-testid="product-link"
                                   >
@@ -212,10 +213,8 @@ const CartDropdown = ({
                   <span>Your shopping bag is empty.</span>
                   <div>
                     <LocalizedClientLink href="/store">
-                      <>
-                        <span className="sr-only">Go to all products page</span>
-                        <Button className="mt-4 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" variant="secondary" onClick={close}>Explore products</Button>
-                      </>
+                      <span className="sr-only">Go to all products page</span>
+                      <Button className="mt-4 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" variant="secondary" onClick={close}>Explore products</Button>
                     </LocalizedClientLink>
                   </div>
                 </div>

@@ -28,7 +28,7 @@ export default async function Nav() {
           <div className="flex items-center h-full">
             <LocalizedClientLink
               href="/"
-              className="flex items-center hover:text-ui-fg-base text-green-400"
+              className="flex items-center hover:text-white text-green-400"
               data-testid="nav-store-link"
             >
               <img
@@ -42,7 +42,7 @@ export default async function Nav() {
           <div className="flex items-center gap-x-6 h-full flex-1 basis-0 justify-end">
             <div className="hidden small:flex items-center gap-x-6 h-full">
               <LocalizedClientLink
-                className="hover:text-ui-fg-base text-green-400"
+                className="hover:text-white text-green-400"
                 href="/account"
                 data-testid="nav-account-link"
               >
@@ -52,7 +52,7 @@ export default async function Nav() {
             <Suspense
               fallback={
                 <LocalizedClientLink
-                  className="hover:text-ui-fg-base flex gap-2"
+                  className="hover:text-white flex gap-2"
                   href="/cart"
                   data-testid="nav-cart-link"
                 >

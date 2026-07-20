@@ -18,6 +18,8 @@ h6 {
 
 h1 {
   font-weight: 800;
+  font-size: clamp(3rem, 7vw, 5rem);
+  line-height: 1.05;
 }
 
 h2 {
@@ -49,7 +51,7 @@ h6 {
 
 @layer utilities {
   .bg-pan-slow {
-    background-size: 100% 100%;
+    background-size: cover;
     background-position: 50% 50%;
     animation: bg-pan-slow 24s ease-in-out infinite alternate;
   }
