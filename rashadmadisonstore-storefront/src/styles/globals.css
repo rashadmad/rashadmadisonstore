@@ -2,7 +2,58 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+
+body {
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-syne), sans-serif;
+}
+
+h1 {
+  font-weight: 800;
+}
+
+h2 {
+  font-weight: 700;
+}
+
+h3 {
+  font-weight: 600;
+}
+
+h4 {
+  font-weight: 500;
+}
+
+h5,
+h6 {
+  font-weight: 400;
+}
+
+@keyframes bg-pan-slow {
+  0% {
+    background-position: 50% 50%;
+  }
+
+  100% {
+    background-position: 62% 50%;
+  }
+}
+
 @layer utilities {
+  .bg-pan-slow {
+    background-size: 100% 100%;
+    background-position: 50% 50%;
+    animation: bg-pan-slow 24s ease-in-out infinite alternate;
+  }
+
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
     display: none;

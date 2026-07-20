@@ -60,15 +60,11 @@ module.exports = {
       },
       fontFamily: {
         sans: [
-          "Inter",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Roboto",
-          "Helvetica Neue",
-          "Ubuntu",
+          "var(--font-dm-sans)",
+          "DM Sans",
           "sans-serif",
         ],
+        display: ["var(--font-syne)", "Syne", "sans-serif"],
       },
       keyframes: {
         ring: {

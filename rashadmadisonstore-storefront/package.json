@@ -1,11 +1,26 @@
 {
-  "name": "medusa-next",
+  "name": "The Quintessential Storefront",
   "version": "1.0.3",
   "private": true,
-  "author": "Kasper Fabricius Kristensen <kasper@medusajs.com> & Victor Gerbrands <victor@medusajs.com> (https://www.medusajs.com)",
-  "description": "Next.js Starter to be used with Medusa V2",
+  "author": "Rashad Madison <https://rashadmadison.com>",
+  "description": "as of right now it's the place to celebrate and contribute to the Art projects and works of Rashad Madison",
   "keywords": [
-    "medusa-storefront"
+    "Rashad Madison Art",
+    "Rashad Madison Storefront",
+    "African American Art",
+    "Contemporary Black Art",
+    "Black Art",
+    "Black Artists",
+    "Black Art Collectors",
+    "Afrocentric Art Prints",
+    "Art on Canvas",
+    "Bold colorful screen prints",
+    "Risograph Prints",
+    "original/limited-edition prints",
+    "Chicago Black Artist",
+    "Buy limited edition screen prints",
+    "Affordable fine art posters",
+    "Independent printmaker Chicago"
   ],
   "scripts": {
     "dev": "next dev --turbopack -p 8000",

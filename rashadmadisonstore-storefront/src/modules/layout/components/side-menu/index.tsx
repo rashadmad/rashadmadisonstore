@@ -41,7 +41,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
               <div className="relative flex h-full">
                 <Popover.Button
                   data-testid="nav-menu-button"
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base"
+                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base text-green-400"
                 >
                   <FontAwesomeIcon icon={faBars} className="text-xl sm:text-2xl" />
                 </Popover.Button>
@@ -65,18 +65,18 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                 leaveFrom="opacity-100 backdrop-blur-2xl"
                 leaveTo="opacity-0"
               >
-                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
+                <PopoverPanel className="flex flex-col absolute w-full pr-0 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-8rem)] z-[51] inset-x-0 text-sm text-ui-fg-on-color m-0 sm:ml-6 sm:mt-20 backdrop-blur-2xl bg-[url('/patternBlue.jpg')] bg-cover bg-center bg-no-repeat rounded-2xl overflow-hidden">
                   <div
                     data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6"
+                    className="flex flex-col h-full bg-[linear-gradient(46deg,rgba(0,0,0,0.72)_0%,rgba(196,196,196,0.45)_63%,rgba(255,255,255,0.28)_100%)] rounded-2xl justify-between p-12 overflow-y-auto"
                   >
                     <div className="flex justify-end" id="xmark">
                       <button
                         data-testid="close-menu-button"
                         onClick={close}
-                        className="rounded-full p-2 sm:p-3 hover:bg-ui-bg-subtle"
+                        className="rounded-full p-4 sm:p-5 text-white hover:text-yellow-300 hover:bg-ui-bg-subtle transition-colors"
                       >
-                        <XMark className="text-2xl sm:text-3xl" />
+                        <XMark className="h-12 w-12 sm:h-12 sm:w-12" />
                       </button>
                     </div>
                     <ul className="flex flex-col gap-6 items-center justify-center text-center w-full">
@@ -85,7 +85,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                           <li key={name} className="w-full">
                             <LocalizedClientLink
                               href={href}
-                              className="block w-full text-3xl leading-10 hover:text-ui-fg-disabled"
+                              className="block w-full text-3xl leading-10 hover:text-yellow-300 text-white"
                               onClick={close}
                               data-testid={`${name.toLowerCase()}-link`}
                             >

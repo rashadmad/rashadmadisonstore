@@ -82,7 +82,7 @@ const CartDropdown = ({
       <Popover className="relative h-full">
         <PopoverButton className="h-full">
           <LocalizedClientLink
-            className="hover:text-ui-fg-base"
+            className="hover:text-ui-fg-base text-green-400"
             href="/cart"
             data-testid="nav-cart-link"
           >{`Cart (${totalItems})`}</LocalizedClientLink>
@@ -99,9 +99,10 @@ const CartDropdown = ({
         >
           <PopoverPanel
             static
-            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-white border-x border-b border-gray-200 w-[420px] text-ui-fg-base"
+            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-[url('/greenPatternThree.jpg')] bg-cover bg-center bg-no-repeat bg-pan-slow border-x border-b border-gray-200 rounded-b-2xl overflow-hidden w-[420px] text-white"
             data-testid="nav-cart-dropdown"
           >
+            <div className="h-full bg-[linear-gradient(46deg,rgba(0,0,0,0.72)_0%,rgba(196,196,196,0.45)_63%,rgba(255,255,255,0.28)_100%)]">
             <div className="p-4 flex items-center justify-center">
               <h3 className="text-large-semi">Cart</h3>
             </div>
@@ -176,7 +177,7 @@ const CartDropdown = ({
                 </div>
                 <div className="p-4 flex flex-col gap-y-4 text-small-regular">
                   <div className="flex items-center justify-between">
-                    <span className="text-ui-fg-base font-semibold">
+                    <span className="text-white font-semibold">
                       Subtotal{" "}
                       <span className="font-normal">(excl. taxes)</span>
                     </span>
@@ -213,13 +214,14 @@ const CartDropdown = ({
                     <LocalizedClientLink href="/store">
                       <>
                         <span className="sr-only">Go to all products page</span>
-                        <Button onClick={close}>Explore products</Button>
+                        <Button className="mt-4 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" variant="secondary" onClick={close}>Explore products</Button>
                       </>
                     </LocalizedClientLink>
                   </div>
                 </div>
               </div>
             )}
+            </div>
           </PopoverPanel>
         </Transition>
       </Popover>

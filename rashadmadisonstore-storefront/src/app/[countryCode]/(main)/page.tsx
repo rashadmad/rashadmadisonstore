@@ -6,9 +6,9 @@ import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 
 export const metadata: Metadata = {
-  title: "Medusa Next.js Starter Template",
+  title: "The Quintessential - Afrocentric Art Storefront",
   description:
-    "A performant frontend ecommerce starter template with Next.js 15 and Medusa.",
+    "A collection of art and merch from the artist Rashad Madison.",
 }
 
 export default async function Home(props: {
@@ -18,23 +18,36 @@ export default async function Home(props: {
 
   const { countryCode } = params
 
-  const region = await getRegion(countryCode)
+  let region = null
+  let collections: { id: string; handle: string; title: string }[] = []
 
-  const { collections } = await listCollections({
-    fields: "id, handle, title",
-  })
+  try {
+    region = await getRegion(countryCode)
 
-  if (!collections || !region) {
-    return null
+    const collectionsResponse = await listCollections({
+      fields: "id, handle, title",
+    })
+
+    collections = collectionsResponse?.collections ?? []
+  } catch {
+    // Keep homepage content visible even if commerce data fails temporarily.
   }
 
   return (
     <>
       <Hero />
       <div className="py-12">
-        <ul className="flex flex-col gap-x-6">
-          <FeaturedProducts collections={collections} region={region} />
-        </ul>
+        {region && collections.length > 0 ? (
+          <ul className="flex flex-col gap-x-6">
+            <FeaturedProducts collections={collections} region={region} />
+          </ul>
+        ) : (
+          <div className="content-container">
+            <p className="text-center text-ui-fg-subtle">
+              Featured products are temporarily unavailable.
+            </p>
+          </div>
+        )}
       </div>
     </>
   )

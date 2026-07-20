@@ -9,19 +9,19 @@ const Hero = () => {
     <div className="h-[75vh] w-full border-b border-ui-border-base relative bg-ui-bg-subtle">
       <div className="absolute inset-0 z-10 flex flex-col justify-center items-center text-center small:p-32 gap-6">
         <span>
-          <Heading
-            level="h1"
-            className="mb-4 text-5xl leading-10 text-ui-fg-base font-normal"
-          >
-            This is the Quintessential
-          </Heading>
-          <Heading
-            level="h2"
-            className="text-2xl leading-10 text-ui-fg-subtle font-normal"
-          >
-         <p className="small:text-2xl">as of right now this is the place to</p>
-         <p className="small:text-2xl">celebrate and contribute to the Art projects</p>
-         <p className="small:text-2xl">of Rashad Madison</p>  
+          <Heading level="h1" className="mb-4 font-display">
+            <span className="block text-5xl leading-10 text-ui-fg-base font-bold">
+              This is the Quintessential
+            </span>
+            <span className="mt-2 block text-2xl leading-10 text-ui-fg-subtle small:text-2xl">
+              as of right now this is the place to
+            </span>
+            <span className="block text-2xl leading-10 text-ui-fg-subtle small:text-2xl">
+              celebrate and contribute to the Art projects
+            </span>
+            <span className="block text-2xl leading-10 text-ui-fg-subtle small:text-2xl">
+              of Rashad Madison
+            </span>
           </Heading>
         </span>
         <a
@@ -30,21 +30,21 @@ const Hero = () => {
           rel="noreferrer"
         >
           
-          <Button className="mt-4" variant="secondary">
+          <Button className="mt-4 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" variant="secondary">
             Follow on Instagram
             <span className="ml-2">
               <FontAwesomeIcon icon={faInstagram} />
             </span>
           </Button>
           <br></br>
-          <Button className="mt-4" variant="secondary">
+          <Button className="mt-4 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" variant="secondary">
             Follow on Facebook
             <span className="ml-2">
               <FontAwesomeIcon icon={faFacebook} />
             </span>
           </Button>
           <br></br>
-          <Button className="mt-4" variant="secondary">
+          <Button className="mt-4 bg-green-500 hover:bg-green-400 text-white font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded" variant="secondary">
             Donate via Stripe
             <span className="ml-2">
               <FontAwesomeIcon icon={faStripe} />
