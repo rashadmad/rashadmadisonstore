@@ -12,6 +12,7 @@ import {
   getCartId,
   removeAuthToken,
   removeCartId,
+  setHasLoggedInBefore,
   setAuthToken,
 } from "./cookies"
 
@@ -61,6 +62,12 @@ export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
 
 export async function signup(_currentState: unknown, formData: FormData) {
   const password = formData.get("password") as string
+  const confirmPassword = formData.get("confirm_password") as string
+
+  if (password !== confirmPassword) {
+    return "Passwords do not match"
+  }
+
   const customerForm = {
     email: formData.get("email") as string,
     first_name: formData.get("first_name") as string,
@@ -92,6 +99,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
     })
 
     await setAuthToken(loginToken as string)
+    await setHasLoggedInBefore()
 
     const customerCacheTag = await getCacheTag("customers")
     revalidateTag(customerCacheTag)
@@ -113,6 +121,7 @@ export async function login(_currentState: unknown, formData: FormData) {
       .login("customer", "emailpass", { email, password })
       .then(async (token) => {
         await setAuthToken(token as string)
+        await setHasLoggedInBefore()
         const customerCacheTag = await getCacheTag("customers")
         revalidateTag(customerCacheTag)
       })

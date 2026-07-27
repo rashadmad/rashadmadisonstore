@@ -1,9 +1,13 @@
 import { Metadata } from "next"
 
+import { retrieveCustomer } from "@lib/data/customer"
+import { getHasLoggedInBefore } from "@lib/data/cookies"
 import FeaturedProducts from "@modules/home/components/featured-products"
 import Hero from "@modules/home/components/hero"
+import HomeTicker from "@modules/home/components/home-ticker"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
+import { HttpTypes } from "@medusajs/types"
 
 export const metadata: Metadata = {
   title: "The Quintessential - Afrocentric Art Storefront",
@@ -19,7 +23,9 @@ export default async function Home(props: {
   const { countryCode } = params
 
   let region = null
-  let collections: { id: string; handle: string; title: string }[] = []
+  const customer = await retrieveCustomer()
+  const hasLoggedInBefore = await getHasLoggedInBefore()
+  let collections: HttpTypes.StoreCollection[] = []
 
   try {
     region = await getRegion(countryCode)
@@ -28,27 +34,22 @@ export default async function Home(props: {
       fields: "id, handle, title",
     })
 
-    collections = collectionsResponse?.collections ?? []
+    collections = (collectionsResponse?.collections ?? []) as HttpTypes.StoreCollection[]
   } catch {
     // Keep homepage content visible even if commerce data fails temporarily.
   }
 
   return (
     <>
-      <Hero />
-      <div className="py-12">
-        {region && collections.length > 0 ? (
+      <Hero customer={customer} hasLoggedInBefore={hasLoggedInBefore} />
+      <HomeTicker />
+      {region && collections.length > 0 ? (
+        <div className="py-12">
           <ul className="flex flex-col gap-x-6">
             <FeaturedProducts collections={collections} region={region} />
           </ul>
-        ) : (
-          <div className="content-container">
-            <p className="text-center text-ui-fg-subtle">
-              Featured products are temporarily unavailable.
-            </p>
-          </div>
-        )}
-      </div>
+        </div>
+      ) : null}
     </>
   )
 }

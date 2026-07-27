@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 
 import { listCartOptions, retrieveCart } from "@lib/data/cart"
+import { getHasLoggedInBefore } from "@lib/data/cookies"
 import { retrieveCustomer } from "@lib/data/customer"
 import { getBaseURL } from "@lib/util/env"
 import { StoreCartShippingOption } from "@medusajs/types"
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 
 export default async function PageLayout(props: { children: React.ReactNode }) {
   const customer = await retrieveCustomer()
+  const hasLoggedInBefore = await getHasLoggedInBefore()
   const cart = await retrieveCart()
   let shippingOptions: StoreCartShippingOption[] = []
 
@@ -26,7 +28,7 @@ export default async function PageLayout(props: { children: React.ReactNode }) {
 
   return (
     <>
-      <Nav />
+      <Nav customer={customer} hasLoggedInBefore={hasLoggedInBefore} />
       {customer && cart && (
         <CartMismatchBanner customer={customer} cart={cart} />
       )}

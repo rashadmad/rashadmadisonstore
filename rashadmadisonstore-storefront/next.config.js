@@ -7,6 +7,7 @@ checkEnvVariables()
  */
 const S3_HOSTNAME = process.env.MEDUSA_CLOUD_S3_HOSTNAME
 const S3_PATHNAME = process.env.MEDUSA_CLOUD_S3_PATHNAME
+const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
 
 /**
  * @type {import('next').NextConfig}
@@ -48,6 +49,15 @@ const nextConfig = {
               protocol: "https",
               hostname: S3_HOSTNAME,
               pathname: S3_PATHNAME,
+            },
+          ]
+        : []),
+      ...(CLOUDINARY_CLOUD_NAME
+        ? [
+            {
+              protocol: "https",
+              hostname: "res.cloudinary.com",
+              pathname: `/${CLOUDINARY_CLOUD_NAME}/**`,
             },
           ]
         : []),

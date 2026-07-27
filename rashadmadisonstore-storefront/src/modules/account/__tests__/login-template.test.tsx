@@ -48,6 +48,11 @@ describe('LoginTemplate Component', () => {
     expect(screen.getByTestId('login-component')).toBeInTheDocument()
   })
 
+  it('should render Register component when initialView is REGISTER', () => {
+    render(<LoginTemplate initialView={LOGIN_VIEW.REGISTER} />)
+    expect(screen.getByTestId('register-component')).toBeInTheDocument()
+  })
+
   it('should render Register component when switching views', () => {
     render(<LoginTemplate />)
     

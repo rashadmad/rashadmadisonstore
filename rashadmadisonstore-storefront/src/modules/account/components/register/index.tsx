@@ -21,11 +21,10 @@ const Register = ({ setCurrentView }: Props) => {
       data-testid="register-page"
     >
       <h1 className="text-large-semi uppercase mb-6">
-        Become a Medusa Store Member
+        Become a Quintessential Member
       </h1>
       <p className="text-center text-base-regular text-ui-fg-base mb-4">
-        Create your Medusa Store Member profile, and get access to an enhanced
-        shopping experience.
+        Create your Quintessential Store Member account, and get access to order info
       </p>
       <form className="w-full flex flex-col" action={formAction}>
         <div className="flex flex-col w-full gap-y-2">
@@ -66,10 +65,18 @@ const Register = ({ setCurrentView }: Props) => {
             autoComplete="new-password"
             data-testid="password-input"
           />
+          <Input
+            label="Confirm password"
+            name="confirm_password"
+            required
+            type="password"
+            autoComplete="new-password"
+            data-testid="confirm-password-input"
+          />
         </div>
         <ErrorMessage error={message} data-testid="register-error" />
         <span className="text-center text-ui-fg-base text-small-regular mt-6">
-          By creating an account, you agree to Medusa Store&apos;s{" "}
+          By creating an account, you agree to The Quintessential{" "}
           <LocalizedClientLink
             href="/content/privacy-policy"
             className="underline"
@@ -85,7 +92,10 @@ const Register = ({ setCurrentView }: Props) => {
           </LocalizedClientLink>
           .
         </span>
-        <SubmitButton className="w-full mt-6" data-testid="register-button">
+        <SubmitButton
+          className="w-full mt-6 inline-flex items-center justify-center bg-green-500 hover:bg-green-400 text-white hover:text-yellow-300 font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
+          data-testid="register-button"
+        >
           Join
         </SubmitButton>
       </form>

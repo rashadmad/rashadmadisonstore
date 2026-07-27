@@ -87,3 +87,20 @@ export const removeCartId = async () => {
     maxAge: -1,
   })
 }
+
+const HAS_LOGGED_IN_COOKIE = "_medusa_has_logged_in"
+
+export const setHasLoggedInBefore = async () => {
+  const cookies = await nextCookies()
+  cookies.set(HAS_LOGGED_IN_COOKIE, "true", {
+    maxAge: 60 * 60 * 24 * 365,
+    httpOnly: true,
+    sameSite: "strict",
+    secure: process.env.NODE_ENV === "production",
+  })
+}
+
+export const getHasLoggedInBefore = async (): Promise<boolean> => {
+  const cookies = await nextCookies()
+  return cookies.get(HAS_LOGGED_IN_COOKIE)?.value === "true"
+}

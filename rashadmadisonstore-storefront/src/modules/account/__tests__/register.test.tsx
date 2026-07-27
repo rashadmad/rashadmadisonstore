@@ -55,12 +55,12 @@ describe('Register Component', () => {
 
   it('should display title text', () => {
     render(<Register setCurrentView={mockSetCurrentView} />)
-    expect(screen.getByText('Become a Medusa Store Member')).toBeInTheDocument()
+    expect(screen.getByText('Become a Quintessential Member')).toBeInTheDocument()
   })
 
   it('should display description text', () => {
     render(<Register setCurrentView={mockSetCurrentView} />)
-    expect(screen.getByText(/Create your Medusa Store Member profile/)).toBeInTheDocument()
+    expect(screen.getByText(/Create your Quintessential Store Member account/)).toBeInTheDocument()
   })
 
   it('should render first name input', () => {
@@ -86,6 +86,11 @@ describe('Register Component', () => {
   it('should render password input', () => {
     render(<Register setCurrentView={mockSetCurrentView} />)
     expect(screen.getByTestId('input-wrapper-password')).toBeInTheDocument()
+  })
+
+  it('should render confirm password input', () => {
+    render(<Register setCurrentView={mockSetCurrentView} />)
+    expect(screen.getByTestId('input-wrapper-confirm_password')).toBeInTheDocument()
   })
 
   it('should render join button', () => {
@@ -139,6 +144,7 @@ describe('Register Component', () => {
     expect(screen.getByText('Email')).toBeInTheDocument()
     expect(screen.getByText('Phone')).toBeInTheDocument()
     expect(screen.getByText('Password')).toBeInTheDocument()
+    expect(screen.getByText('Confirm password')).toBeInTheDocument()
   })
 
   it('should have correct privacy policy link href', () => {

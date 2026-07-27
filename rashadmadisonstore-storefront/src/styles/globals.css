@@ -7,6 +7,205 @@ body {
   font-family: var(--font-dm-sans), sans-serif;
 }
 
+.hero-art-frame {
+  background-color: #ddc;
+  border: solid 0.8rem #eee;
+  border-bottom-color: #fff;
+  border-left-color: #eee;
+  border-radius: 2px;
+  border-right-color: #eee;
+  border-top-color: #ddd;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.25) inset, 0 5px 10px 5px rgba(0, 0, 0, 0.25);
+  box-sizing: border-box;
+  padding: 0.8rem;
+  position: relative;
+}
+
+.hero-art-frame::before {
+  border-radius: 2px;
+  bottom: -0.2rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25) inset;
+  content: "";
+  left: -0.2rem;
+  position: absolute;
+  right: -0.2rem;
+  top: -0.2rem;
+}
+
+.hero-art-frame::after {
+  border-radius: 2px;
+  bottom: -0.3rem;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.25);
+  content: "";
+  left: -0.3rem;
+  position: absolute;
+  right: -0.3rem;
+  top: -0.3rem;
+}
+
+.hero-art-frame-image {
+  border: solid 2px;
+  border-bottom-color: #ffe;
+  border-left-color: #eed;
+  border-right-color: #eed;
+  border-top-color: #ccb;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+/* African Sunset variant: extends the base frame with distinct trim and no mat layer */
+.african-sunset-frame {
+  border-width: 1rem;
+  border-top-color: #d8d0bc;
+  border-left-color: #cfc6ae;
+  border-right-color: #e9e2d0;
+  border-bottom-color: #f4efe1;
+  border-radius: 6px;
+  box-shadow: 0 0 7px 0 rgba(0, 0, 0, 0.28) inset, 0 8px 16px 2px rgba(0, 0, 0, 0.25);
+}
+
+.african-sunset-frame::before {
+  bottom: -0.25rem;
+  left: -0.25rem;
+  right: -0.25rem;
+  top: -0.25rem;
+  box-shadow: 0 1px 3px 0 rgba(255, 255, 255, 0.35) inset, 0 2px 6px 0 rgba(0, 0, 0, 0.2) inset;
+}
+
+.african-sunset-frame::after {
+  bottom: -0.4rem;
+  left: -0.4rem;
+  right: -0.4rem;
+  top: -0.4rem;
+  box-shadow: 0 3px 9px 0 rgba(0, 0, 0, 0.22);
+}
+
+.african-sunset-frame-image {
+  border-top-color: #b8aa8c;
+  border-left-color: #c9bc9f;
+  border-right-color: #e1d6bf;
+  border-bottom-color: #eee6d3;
+  box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(255, 255, 255, 0.55);
+}
+
+.hero-art-frame-v2 {
+  display: inline-block;
+  padding: 40px;
+  border-width: 20px;
+  border-style: solid;
+  border-color: #2f2d2d #434040 #4f4c4c #434040;
+  background: #f5f5f5;
+  background-image: linear-gradient(#e5e4df, #cdcdc6);
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6), 0 5px 2px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-art-frame-v2::before {
+  content: "";
+  position: absolute;
+  top: -175px;
+  right: -20%;
+  width: 400px;
+  height: 400px;
+  transform: rotateZ(-40deg);
+  background-image: linear-gradient(rgba(255, 255, 255, 0.4), rgba(255, 255, 255, 0));
+}
+
+.hero-art-frame-v2-image {
+  border-width: 2px;
+  border-style: solid;
+  border-color: #bbbab4 #c7c7bf #e5e4df #c7c7bf;
+  box-shadow: 0 -1px 1px rgba(0, 0, 0, 0.1), 0 1px 1px 1px rgba(255, 255, 255, 0.7);
+  max-width: 100%;
+}
+
+.artFrame-v3 {
+  margin: 20px auto;
+  padding: 15px;
+  width: 100%;
+  box-shadow: 10px 10px 50px rgba(0, 0, 0, 0.5), -1px -1px 2px rgba(255, 255, 255, 1);
+  box-sizing: border-box;
+  background-color: #623d00;
+}
+
+.hero-art-frame-v3-inner {
+  width: 100%;
+  border-top: 25px solid rgba(0, 0, 0, 0.19);
+  border-left: 25px solid rgba(0, 0, 0, 0.15);
+  border-right: 25px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 25px solid rgba(0, 0, 0, 0.05);
+  box-shadow: -1px -1px 1px rgba(0, 0, 0, 0.6), 1px 1px 2px rgba(255, 255, 255, 1);
+}
+
+.hero-art-frame-v3-mat {
+  width: 100%;
+  border-top: 2px solid rgba(0, 0, 0, 0.3);
+  border-left: 2px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  border-right: 2px solid rgba(0, 0, 0, 0.05);
+  margin: 18px auto;
+  padding: 0;
+  background-color: #fff;
+}
+
+.hero-art-frame-v3-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 180px;
+  object-fit: cover;
+}
+
+.hero-art-frame-v3-tag {
+  width: min(200px, 100%);
+  margin: 2em auto;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  border-left: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.02);
+  border-right: 1px solid rgba(0, 0, 0, 0.02);
+  background-color: rgba(247, 245, 225, 0.05);
+  padding: 10px;
+}
+
+.hero-art-frame-v3-tag-title {
+  font-family: "Open Sans", "Helvetica Neue", Arial, sans-serif;
+  color: #d3ae34;
+  font-size: 1em;
+  padding: 0;
+  margin: 0 0 0.5em 0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero-art-frame-v3-tag-copy {
+  font-size: 0.75em;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 700;
+  padding: 0;
+  margin: 0 0 0.5em 0;
+  color: rgba(0, 0, 0, 0.7);
+  line-height: 1.4;
+}
+
+.hero-art-frame-v3-tag-note {
+  display: block;
+  font-size: 0.6em;
+  font-family: "Times New Roman", Times, serif;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.7);
+}
+
+.hero-art-frame-v3-tag-meta {
+  display: block;
+  font-size: 0.5em;
+  margin-top: 1em;
+  font-family: "Open Sans", "Helvetica Neue", Arial, sans-serif;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.7);
+}
+
 h1,
 h2,
 h3,

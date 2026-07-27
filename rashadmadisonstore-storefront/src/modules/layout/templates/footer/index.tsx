@@ -3,15 +3,15 @@ import { faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons"
 import { listCategories } from "@lib/data/categories"
 import { listCollections } from "@lib/data/collections"
 import { Text, clx } from "@medusajs/ui"
-
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 
 export default async function Footer() {
+  const productCategories = await listCategories()
+
   const { collections } = await listCollections({
     fields: "*products",
   })
-  const productCategories = await listCategories()
 
   return (
     <footer className="border-t border-ui-border-base w-full bg-[url('/greenPatternTwo.jpg')] bg-repeat bg-[length:300px_auto]">
@@ -117,34 +117,32 @@ export default async function Footer() {
             )}
             <div className="flex flex-col gap-y-2">
               <span className="txt-small-plus txt-ui-fg-base text-white">Follow me</span>
-              <ul className="grid grid-cols-1 gap-y-2 text-ui-fg-subtle txt-small">
-                <li>
+              <div className="flex items-center gap-3">
+                <div className="text-white">
+                <a
+                  href="https://www.instagram.com/rashaddraws/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Instagram"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500 hover:text-yellow-300"
+                >
+                  <FontAwesomeIcon icon={faInstagram} className="text-xl" />
+                </a>
+                Instagram
+                </div>
+                <div className="text-white">
                   <a
-                    href="https://github.com/medusajs"
+                    href="https://www.facebook.com/rashad.madison.1/"
                     target="_blank"
                     rel="noreferrer"
-                    className="hover:text-white text-green-400"
+                    aria-label="Facebook"
+                    className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500 hover:text-yellow-300"
                   >
-                    <span className="mr-3">
-                      <FontAwesomeIcon icon={faInstagram} />
-                    </span>
-                    Instagram
+                    <FontAwesomeIcon icon={faFacebook} className="text-xl" />
                   </a>
-                </li>
-                <li>
-                  <a
-                    href="https://docs.medusajs.com"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="hover:text-white text-green-400"
-                  >
-                     <span className="mr-3">
-                      <FontAwesomeIcon icon={faFacebook} />
-                     </span>
-                    Facebook
-                  </a>
-                </li>
-              </ul>
+                  Facebook
+                </div>
+              </div>
             </div>
           </div>
         </div>
