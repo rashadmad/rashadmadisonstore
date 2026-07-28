@@ -5,6 +5,7 @@ import { getHasLoggedInBefore } from "@lib/data/cookies"
 import FeaturedProducts from "@modules/home/components/featured-products"
 import Hero from "@modules/home/components/hero"
 import HomeTicker from "@modules/home/components/home-ticker"
+import Purpose from "@modules/home/components/purpose"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
 import { HttpTypes } from "@medusajs/types"
@@ -40,8 +41,9 @@ export default async function Home(props: {
   }
 
   return (
-    <>
+    <div className="min-h-screen">
       <Hero customer={customer} hasLoggedInBefore={hasLoggedInBefore} />
+      <Purpose />
       <HomeTicker />
       {region && collections.length > 0 ? (
         <div className="py-12">
@@ -50,6 +52,6 @@ export default async function Home(props: {
           </ul>
         </div>
       ) : null}
-    </>
+    </div>
   )
 }

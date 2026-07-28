@@ -42,7 +42,10 @@ const Login = ({ setCurrentView }: Props) => {
           />
         </div>
         <ErrorMessage error={message} data-testid="login-error-message" />
-        <SubmitButton data-testid="sign-in-button" className="w-full mt-6">
+        <SubmitButton
+          data-testid="sign-in-button"
+          className="w-full mt-6 inline-flex items-center justify-center bg-green-500 hover:bg-green-400 text-white hover:text-yellow-300 font-bold py-2 px-4 border-b-4 border-green-700 hover:border-green-500 rounded"
+        >
           Sign in
         </SubmitButton>
       </form>
@@ -53,7 +56,7 @@ const Login = ({ setCurrentView }: Props) => {
           className="underline"
           data-testid="register-button"
         >
-          Join us
+          Sign up
         </button>
         .
       </span>

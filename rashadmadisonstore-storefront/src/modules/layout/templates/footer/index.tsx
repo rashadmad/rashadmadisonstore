@@ -14,30 +14,30 @@ export default async function Footer() {
   })
 
   return (
-    <footer className="border-t border-ui-border-base w-full bg-[url('/greenPatternTwo.jpg')] bg-repeat bg-[length:300px_auto]">
+    <footer className="border-t border-ui-border-base w-full bg-[url('/greenPatternTwo.jpg')] bg-repeat bg-[length:260px_auto]">
       <div className="content-container flex flex-col w-full">
-        <div className="flex flex-col gap-y-6 xsmall:flex-row items-start justify-between py-40">
-          <div className="flex flex-col items-start gap-y-3">
+        <div className="grid grid-cols-1 gap-y-12 py-20 sm:py-24 md:grid-cols-12 md:gap-x-10 md:items-start">
+          <div className="md:col-span-4 flex flex-col items-center md:items-start gap-y-4 md:max-w-xs">
             <LocalizedClientLink
               href="/"
-              className="txt-compact-xlarge-plus text-ui-fg-subtle hover:text-white uppercase text-white"
+              className="txt-compact-xlarge-plus hover:text-white uppercase text-white text-center md:text-left"
             >
               The Quintessential
             </LocalizedClientLink>
             <img
               src="/philosipher_symbol.svg"
               alt="The Quintessential"
-              className="h-52 w-auto block"
+              className="h-36 sm:h-40 w-auto block"
             />
           </div>
-          <div className="text-small-regular gap-10 md:gap-x-16 grid grid-cols-2 sm:grid-cols-3">
+          <div className="md:col-span-8 w-full text-small-regular grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-10 lg:grid-cols-3 lg:gap-x-14">
             {productCategories && productCategories?.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base text-white">
+              <div className="flex flex-col gap-y-3 min-w-0 items-center text-center sm:items-start sm:text-left">
+                <span className="txt-small-plus text-white">
                   Categories
                 </span>
                 <ul
-                  className="grid grid-cols-1 gap-2"
+                  className="grid grid-cols-1 gap-2 justify-items-center sm:justify-items-start"
                   data-testid="footer-categories"
                 >
                   {productCategories?.slice(0, 6).map((c) => {
@@ -68,7 +68,7 @@ export default async function Footer() {
                           {c.name}
                         </LocalizedClientLink>
                         {children && (
-                          <ul className="grid grid-cols-1 ml-3 gap-2">
+                          <ul className="grid grid-cols-1 gap-2 sm:pl-3 justify-items-center sm:justify-items-start">
                             {children &&
                               children.map((child) => (
                                 <li key={child.id}>
@@ -90,13 +90,13 @@ export default async function Footer() {
               </div>
             )}
             {collections && collections.length > 0 && (
-              <div className="flex flex-col gap-y-2">
-                <span className="txt-small-plus txt-ui-fg-base text-green-400">
+              <div className="flex flex-col gap-y-3 min-w-0 items-center text-center sm:items-start sm:text-left">
+                <span className="txt-small-plus text-white">
                   Collections
                 </span>
                 <ul
                   className={clx(
-                    "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small",
+                    "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small justify-items-center sm:justify-items-start",
                     {
                       "grid-cols-2": (collections?.length || 0) > 3,
                     }
@@ -115,39 +115,39 @@ export default async function Footer() {
                 </ul>
               </div>
             )}
-            <div className="flex flex-col gap-y-2">
-              <span className="txt-small-plus txt-ui-fg-base text-white">Follow me</span>
-              <div className="flex items-center gap-3">
-                <div className="text-white">
+            <div className="flex w-full flex-col gap-y-3 sm:col-span-2 lg:col-span-1 items-center sm:items-start text-center sm:text-left justify-self-center sm:justify-self-start">
+              <span className="txt-small-plus text-white">Follow me</span>
+              <div className="flex flex-wrap gap-3 items-center sm:items-start justify-center sm:justify-start">
                 <a
                   href="https://www.instagram.com/rashaddraws/"
                   target="_blank"
                   rel="noreferrer"
                   aria-label="Instagram"
-                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500 hover:text-yellow-300"
+                  className="inline-flex items-center gap-3 text-white hover:text-yellow-300 transition-colors"
                 >
-                  <FontAwesomeIcon icon={faInstagram} className="text-xl" />
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500">
+                    <FontAwesomeIcon icon={faInstagram} className="text-xl" />
+                  </span>
+                  <span className="txt-small-plus">Instagram</span>
                 </a>
-                Instagram
-                </div>
-                <div className="text-white">
-                  <a
-                    href="https://www.facebook.com/rashad.madison.1/"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="Facebook"
-                    className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500 hover:text-yellow-300"
-                  >
+                <a
+                  href="https://www.facebook.com/rashad.madison.1/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Facebook"
+                  className="inline-flex items-center gap-3 text-white hover:text-yellow-300 transition-colors"
+                >
+                  <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500">
                     <FontAwesomeIcon icon={faFacebook} className="text-xl" />
-                  </a>
-                  Facebook
-                </div>
+                  </span>
+                  <span className="txt-small-plus">Facebook</span>
+                </a>
               </div>
             </div>
           </div>
         </div>
-        <div className="flex w-full mb-16 justify-between text-ui-fg-muted">
-          <Text className="txt-compact-small text-white">
+        <div className="flex w-full border-t border-white/50 pt-8 mb-12 md:mb-14 flex-col items-center gap-4 md:flex-row md:justify-between text-ui-fg-muted">
+          <Text className="txt-compact-small text-white text-center md:text-left">
             © {new Date().getFullYear()} The Quintessential. All rights reserved.
           </Text>
           <MedusaCTA />

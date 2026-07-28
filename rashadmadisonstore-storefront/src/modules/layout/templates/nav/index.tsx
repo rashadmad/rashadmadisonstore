@@ -22,6 +22,12 @@ export default async function Nav({ customer, hasLoggedInBefore }: NavProps) {
     getLocale(),
   ])
 
+  const accountHref = customer
+    ? "/account"
+    : hasLoggedInBefore
+      ? "/account?view=sign-in"
+      : "/account?view=register"
+
   return (
     <div className="sticky top-0 inset-x-0 z-50 group">
       <header className="relative h-16 mx-auto border-b duration-200 bg-black border-ui-border-base">
@@ -70,7 +76,7 @@ export default async function Nav({ customer, hasLoggedInBefore }: NavProps) {
             <div className="hidden small:flex items-center gap-x-6 h-full">
               <LocalizedClientLink
                 className="hover:text-white text-green-400"
-                href="/account"
+                href={accountHref}
                 data-testid="nav-account-link"
               >
                 {customer ? "Account" : hasLoggedInBefore ? "Sign in" : "Sign up"}

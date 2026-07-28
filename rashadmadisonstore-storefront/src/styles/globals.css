@@ -238,6 +238,31 @@ h6 {
   font-weight: 400;
 }
 
+@layer base {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(:disabled),
+  select:not(:disabled),
+  textarea:not(:disabled) {
+    transition: border-color 150ms ease, box-shadow 150ms ease;
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(:disabled):hover,
+  select:not(:disabled):hover,
+  textarea:not(:disabled):hover {
+    border-color: rgb(34 197 94 / 0.65);
+  }
+
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(:disabled):focus,
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(:disabled):focus-visible,
+  select:not(:disabled):focus,
+  select:not(:disabled):focus-visible,
+  textarea:not(:disabled):focus,
+  textarea:not(:disabled):focus-visible {
+    outline: none;
+    border-color: rgb(34 197 94) !important;
+    box-shadow: 0 0 0 2px rgb(34 197 94 / 0.22) !important;
+  }
+}
+
 @keyframes bg-pan-slow {
   0% {
     background-position: 50% 50%;
@@ -302,6 +327,14 @@ h6 {
 }
 
 @layer components {
+  [data-testid="account-page"] form,
+  [data-testid="checkout-container"] form {
+    width: 100%;
+    max-width: 52rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
   .content-container {
     @apply max-w-[1440px] w-full mx-auto px-6;
   }

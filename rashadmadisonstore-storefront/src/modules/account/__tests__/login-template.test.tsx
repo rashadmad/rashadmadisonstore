@@ -88,10 +88,12 @@ describe('LoginTemplate Component', () => {
     const mainDiv = container.querySelector('.w-full')
     
     expect(mainDiv).toHaveClass('w-full')
+    expect(mainDiv).toHaveClass('min-h-[60vh]')
     expect(mainDiv).toHaveClass('flex')
-    expect(mainDiv).toHaveClass('justify-start')
-    expect(mainDiv).toHaveClass('px-8')
-    expect(mainDiv).toHaveClass('py-8')
+    expect(mainDiv).toHaveClass('items-center')
+    expect(mainDiv).toHaveClass('justify-center')
+    expect(mainDiv).toHaveClass('px-6')
+    expect(mainDiv).toHaveClass('py-10')
   })
 
   it('should pass setCurrentView function to Login component', () => {

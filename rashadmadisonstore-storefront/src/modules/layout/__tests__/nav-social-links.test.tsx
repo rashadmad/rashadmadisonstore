@@ -64,17 +64,20 @@ describe('Nav social icon links', () => {
     render(await Nav({ customer: signedOutCustomer, hasLoggedInBefore: false }))
 
     expect(screen.getByTestId('nav-account-link')).toHaveTextContent('Sign up')
+    expect(screen.getByTestId('nav-account-link')).toHaveAttribute('href', '/account?view=register')
   })
 
   it('shows Sign in for returning signed-out users', async () => {
     render(await Nav({ customer: signedOutCustomer, hasLoggedInBefore: true }))
 
     expect(screen.getByTestId('nav-account-link')).toHaveTextContent('Sign in')
+    expect(screen.getByTestId('nav-account-link')).toHaveAttribute('href', '/account?view=sign-in')
   })
 
   it('shows Account when customer is signed in', async () => {
     render(await Nav({ customer: mockCustomer, hasLoggedInBefore: true }))
 
     expect(screen.getByTestId('nav-account-link')).toHaveTextContent('Account')
+    expect(screen.getByTestId('nav-account-link')).toHaveAttribute('href', '/account')
   })
 })
