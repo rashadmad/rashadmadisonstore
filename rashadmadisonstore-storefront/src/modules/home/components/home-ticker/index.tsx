@@ -21,13 +21,13 @@ const HomeTicker = () => {
 
   return (
     <div className="w-full">
-      <div className="relative flex h-10 w-full items-center overflow-hidden bg-black pr-10 text-yellow-300 shadow-sm">
+      <div className="relative flex h-10 w-full items-center overflow-hidden bg-black pr-10 text-yellow-300">
         <div className="mx-auto w-full max-w-screen-2xl">
           <button
             type="button"
             onClick={() => setDismissed(true)}
             aria-label="Close ticker"
-            className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded bg-black px-2 py-0.5 text-yellow-300 shadow-sm"
+            className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded bg-black px-2 py-0.5 text-yellow-300"
           >
             ×
           </button>

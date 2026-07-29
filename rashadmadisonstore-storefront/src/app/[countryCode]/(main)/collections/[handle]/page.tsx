@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 import { getCollectionByHandle, listCollections } from "@lib/data/collections"
 import { listRegions } from "@lib/data/regions"
 import { StoreCollection, StoreRegion } from "@medusajs/types"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CollectionTemplate from "@modules/collections/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
@@ -52,7 +53,16 @@ export async function generateStaticParams() {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params
-  const collection = await getCollectionByHandle(params.handle)
+  let collection: StoreCollection | null = null
+
+  try {
+    collection = await getCollectionByHandle(params.handle)
+  } catch {
+    return {
+      title: "Collections | The Quintessential",
+      description: "Collection details are temporarily unavailable.",
+    }
+  }
 
   if (!collection) {
     notFound()
@@ -71,9 +81,30 @@ export default async function CollectionPage(props: Props) {
   const params = await props.params
   const { sortBy, page } = searchParams
 
-  const collection = await getCollectionByHandle(params.handle).then(
-    (collection: StoreCollection) => collection
-  )
+  let collection: StoreCollection | null = null
+
+  try {
+    collection = await getCollectionByHandle(params.handle).then(
+      (data: StoreCollection) => data
+    )
+  } catch {
+    return (
+      <div className="content-container py-12 sm:py-16">
+        <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-800">
+          <h1 className="text-2xl font-semibold">Could not load this collection</h1>
+          <p className="mt-2 text-sm">
+            We could not reach the backend right now. Please try again in a moment.
+          </p>
+          <LocalizedClientLink
+            href="/collections"
+            className="mt-4 inline-flex text-sm font-semibold text-red-900 underline"
+          >
+            Back to collections
+          </LocalizedClientLink>
+        </div>
+      </div>
+    )
+  }
 
   if (!collection) {
     notFound()

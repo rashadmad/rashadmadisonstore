@@ -7,7 +7,7 @@ type HeroProps = {
   hasLoggedInBefore: boolean
 }
 
-const Hero = ({ customer, hasLoggedInBefore }: HeroProps) => {
+export default function Hero({ customer, hasLoggedInBefore }: HeroProps) {
   return (
     <main className="min-h-[calc(100dvh-4rem)]">
       <div className="relative isolate h-full">
@@ -62,7 +62,7 @@ const Hero = ({ customer, hasLoggedInBefore }: HeroProps) => {
 
         {/* Main Hero Content */}
         <div className="h-full overflow-hidden">
-          <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-7xl items-center px-6 py-16 lg:px-8">
+          <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-7xl items-center px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
             <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
               <div className="relative w-full lg:max-w-xl lg:shrink-0 xl:max-w-2xl">
                 <div className="mt-4 flex w-full flex-col items-center gap-4 text-center sm:items-start sm:text-left lg:items-center lg:text-center">
@@ -72,17 +72,17 @@ const Hero = ({ customer, hasLoggedInBefore }: HeroProps) => {
                   >
                     This Is The Quintessential
                   </Heading>
-                  <p className="small:text-2xl block font-sans text-2xl leading-8 text-ui-fg-subtle">
+                  <p className="block max-w-[28ch] font-sans text-xl leading-7 text-ui-fg-subtle sm:text-2xl sm:leading-8">
                     as of right now this is the place to
                   </p>
-                  <p className="small:text-2xl block font-sans text-2xl leading-8 text-ui-fg-subtle">
+                  <p className="block max-w-[28ch] font-sans text-xl leading-7 text-ui-fg-subtle sm:text-2xl sm:leading-8">
                     celebrate and contribute to the Art projects
                   </p>
-                  <p className="small:text-2xl block font-sans text-2xl leading-8 text-ui-fg-subtle">
+                  <p className="block max-w-[28ch] font-sans text-xl leading-7 text-ui-fg-subtle sm:text-2xl sm:leading-8">
                     of Rashad Madison
                   </p>
 
-                  <div className="m-5 flex flex-col items-center gap-4 self-auto sm:items-start sm:self-start lg:items-center lg:self-auto">
+                  <div className="mt-4 mb-2 flex flex-col items-center gap-4 self-auto sm:mt-5 sm:mb-5 sm:items-start sm:self-start lg:items-center lg:self-auto">
                     <LocalizedClientLink
                       href="/collections"
                       className="inline-flex items-center rounded border-b-4 border-green-800 bg-green-600 px-4 py-2 font-bold text-white hover:border-green-600 hover:bg-green-500 hover:text-yellow-300"
@@ -118,8 +118,8 @@ const Hero = ({ customer, hasLoggedInBefore }: HeroProps) => {
               </div>
 
               {/* Gallery Grid Section */}
-              <div className="mt-14 flex justify-end gap-8 sm:-mt-44 sm:justify-start sm:pl-20 lg:mt-0 lg:pl-0">
-                <div className="ml-auto w-56 flex-none space-y-8 pt-32 sm:ml-0 sm:pt-80 lg:order-last lg:pt-36 xl:order-0 xl:pt-80">
+              <div className="mt-10 flex justify-center gap-3 sm:-mt-44 sm:justify-start sm:gap-8 sm:pl-20 lg:mt-0 lg:pl-0">
+                <div className="w-24 flex-none space-y-4 pt-12 sm:ml-0 sm:w-56 sm:space-y-8 sm:pt-80 lg:order-last lg:pt-36 xl:order-0 xl:pt-80">
                   <div className="hero-art-frame african-sunset-frame relative">
                     <img
                       alt="African Sunset"
@@ -128,7 +128,7 @@ const Hero = ({ customer, hasLoggedInBefore }: HeroProps) => {
                     />
                   </div>
                 </div>
-                <div className="mr-auto w-44 flex-none space-y-8 sm:mr-0 sm:pt-52 lg:pt-36">
+                <div className="w-20 flex-none space-y-4 pt-6 sm:mr-0 sm:w-44 sm:space-y-8 sm:pt-52 lg:pt-36">
                   <div className="hero-art-frame relative">
                     <img
                       alt="African Princess red"
@@ -144,7 +144,7 @@ const Hero = ({ customer, hasLoggedInBefore }: HeroProps) => {
                     />
                   </div>
                 </div>
-                <div className="w-44 flex-none space-y-8 pt-32 sm:pt-0">
+                <div className="w-20 flex-none space-y-4 pt-12 sm:w-44 sm:space-y-8 sm:pt-0">
                   <div className="hero-art-frame-v2 relative">
                     <img
                       alt="Prince"
@@ -168,5 +168,3 @@ const Hero = ({ customer, hasLoggedInBefore }: HeroProps) => {
     </main>
   )
 }
-
-export default Hero

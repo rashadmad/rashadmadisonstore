@@ -1,18 +1,10 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faFacebook, faInstagram } from "@fortawesome/free-brands-svg-icons"
-import { listCategories } from "@lib/data/categories"
-import { listCollections } from "@lib/data/collections"
-import { Text, clx } from "@medusajs/ui"
+import { Text } from "@medusajs/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import MedusaCTA from "@modules/layout/components/medusa-cta"
 
-export default async function Footer() {
-  const productCategories = await listCategories()
-
-  const { collections } = await listCollections({
-    fields: "*products",
-  })
-
+export default function Footer() {
   return (
     <footer className="border-t border-ui-border-base w-full bg-[url('/greenPatternTwo.jpg')] bg-repeat bg-[length:260px_auto]">
       <div className="content-container flex flex-col w-full">
@@ -31,90 +23,69 @@ export default async function Footer() {
             />
           </div>
           <div className="md:col-span-8 w-full text-small-regular grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-10 lg:grid-cols-3 lg:gap-x-14">
-            {productCategories && productCategories?.length > 0 && (
-              <div className="flex flex-col gap-y-3 min-w-0 items-center text-center sm:items-start sm:text-left">
-                <span className="txt-small-plus text-white">
-                  Categories
-                </span>
-                <ul
-                  className="grid grid-cols-1 gap-2 justify-items-center sm:justify-items-start"
-                  data-testid="footer-categories"
-                >
-                  {productCategories?.slice(0, 6).map((c) => {
-                    if (c.parent_category) {
-                      return
-                    }
-
-                    const children =
-                      c.category_children?.map((child) => ({
-                        name: child.name,
-                        handle: child.handle,
-                        id: child.id,
-                      })) || null
-
-                    return (
-                      <li
-                        className="flex flex-col gap-2 text-ui-fg-subtle txt-small"
-                        key={c.id}
-                      >
-                        <LocalizedClientLink
-                          className={clx(
-                            "hover:text-white text-green-400",
-                            children && "txt-small-plus"
-                          )}
-                          href={`/categories/${c.handle}`}
-                          data-testid="category-link"
-                        >
-                          {c.name}
-                        </LocalizedClientLink>
-                        {children && (
-                          <ul className="grid grid-cols-1 gap-2 sm:pl-3 justify-items-center sm:justify-items-start">
-                            {children &&
-                              children.map((child) => (
-                                <li key={child.id}>
-                                  <LocalizedClientLink
-                                    className="hover:text-white text-green-400"
-                                    href={`/categories/${child.handle}`}
-                                    data-testid="category-link"
-                                  >
-                                    {child.name}
-                                  </LocalizedClientLink>
-                                </li>
-                              ))}
-                          </ul>
-                        )}
-                      </li>
-                    )
-                  })}
-                </ul>
-              </div>
-            )}
-            {collections && collections.length > 0 && (
-              <div className="flex flex-col gap-y-3 min-w-0 items-center text-center sm:items-start sm:text-left">
-                <span className="txt-small-plus text-white">
-                  Collections
-                </span>
-                <ul
-                  className={clx(
-                    "grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small justify-items-center sm:justify-items-start",
-                    {
-                      "grid-cols-2": (collections?.length || 0) > 3,
-                    }
-                  )}
-                >
-                  {collections?.slice(0, 6).map((c) => (
-                    <li key={c.id}>
-                      <LocalizedClientLink
-                        className="hover:text-white text-green-400"
-                        href={`/collections/${c.handle}`}
-                      >
-                        {c.title}
-                      </LocalizedClientLink>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            <div className="flex flex-col gap-y-3 min-w-0 items-center text-center sm:items-start sm:text-left">
+              <span className="txt-small-plus text-white">
+                Collections
+              </span>
+              <ul
+                className="grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small justify-items-center sm:justify-items-start"
+                data-testid="footer-categories"
+              >
+                <li>
+                  <LocalizedClientLink
+                    className="hover:text-white text-green-400"
+                    href="/collections"
+                  >
+                    African Princess
+                  </LocalizedClientLink>
+                </li>
+                <li>
+                  <LocalizedClientLink
+                    className="hover:text-white text-green-400"
+                    href="/collections"
+                  >
+                    Prince
+                  </LocalizedClientLink>
+                </li>
+                <li>
+                  <LocalizedClientLink
+                    className="hover:text-white text-green-400"
+                    href="/collections"
+                  >
+                    Tender Head
+                  </LocalizedClientLink>
+                </li>
+                <li>
+                  <LocalizedClientLink
+                    className="hover:text-white text-green-400"
+                    href="/collections"
+                  >
+                    African sunset
+                  </LocalizedClientLink>
+                </li>
+              </ul>
+            </div>
+            <div className="flex flex-col gap-y-3 min-w-0 items-center text-center sm:items-start sm:text-left">
+              <span className="txt-small-plus text-white">Contact info</span>
+              <ul className="grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small justify-items-center sm:justify-items-start">
+                <li>
+                  <a
+                    className="hover:text-white text-green-400"
+                    href="tel:773320579"
+                  >
+                    773320579
+                  </a>
+                </li>
+                <li>
+                  <a
+                    className="hover:text-white text-green-400"
+                    href="mailto:rashadmad@gmail.com"
+                  >
+                    rashadmad@gmail.com
+                  </a>
+                </li>
+              </ul>
+            </div>
             <div className="flex w-full flex-col gap-y-3 sm:col-span-2 lg:col-span-1 items-center sm:items-start text-center sm:text-left justify-self-center sm:justify-self-start">
               <span className="txt-small-plus text-white">Follow me</span>
               <div className="flex flex-wrap gap-3 items-center sm:items-start justify-center sm:justify-start">
