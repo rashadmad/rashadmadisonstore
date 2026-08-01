@@ -24,7 +24,7 @@ export default async function CollectionsPage() {
     <div className="content-container py-12 sm:py-16">
       <div className="mb-10">
         <h1 className="text-3xl font-semibold text-ui-fg-base sm:text-4xl">
-          Collections
+          Collection
         </h1>
         <p className="mt-3 max-w-2xl text-base text-ui-fg-subtle">
           Explore each product line and open a collection to view pricing,
@@ -34,13 +34,13 @@ export default async function CollectionsPage() {
 
       {loadError ? (
         <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-red-800">
-          <h2 className="text-lg font-semibold">Could not load collections</h2>
+          <h2 className="text-lg font-semibold">Could not load collection</h2>
           <p className="mt-2 text-sm">
             The backend data source is unavailable right now. Please try again shortly.
           </p>
         </div>
       ) : collections.length === 0 ? (
-        <p className="text-base text-ui-fg-subtle">No collections are available right now.</p>
+        <p className="text-base text-ui-fg-subtle">No collection is available right now.</p>
       ) : (
         <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {collections.map((collection) => (

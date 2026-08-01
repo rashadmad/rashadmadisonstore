@@ -115,22 +115,26 @@ export default async function CollectionTemplate({
 
   return (
     <div className="content-container py-10 sm:py-16">
-      <div className="mb-10 sm:mb-14">
+      <div className="mb-8 sm:mb-10">
         <h1 className="text-3xl font-semibold text-ui-fg-base sm:text-4xl">
           {collection.title}
         </h1>
+        {collectionDescription ? (
+          <p className="mt-4 max-w-3xl text-base leading-7 text-ui-fg-subtle sm:text-lg">
+            {collectionDescription}
+          </p>
+        ) : null}
       </div>
 
       {productsLoadError ? (
-        <div className="rounded-xl border border-red-200 bg-red-50 p-5 text-red-800">
-          <h2 className="text-lg font-semibold">Could not load collection products</h2>
-          <p className="mt-2 text-sm">
-            The backend data is unavailable right now. Please try again in a moment.
+        <div className="mb-8 rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-800 sm:p-5">
+          <p className="text-sm font-medium">
+            Product details are temporarily unavailable, but the collection page is still visible.
           </p>
         </div>
-      ) : products.length === 0 ? (
-        <p className="text-base text-ui-fg-subtle">No products found in this collection yet.</p>
-      ) : (
+      ) : null}
+
+      {products.length > 0 ? (
         <div className="space-y-10 sm:space-y-14">
           {products.map((product) => {
             const priceColumns = getPriceColumns(product)
@@ -222,14 +226,16 @@ export default async function CollectionTemplate({
             )
           })}
         </div>
-      )}
+      ) : !productsLoadError ? (
+        <p className="text-base text-ui-fg-subtle">No products found in this collection yet.</p>
+      ) : null}
 
       <div className="mt-12">
         <LocalizedClientLink
-          href="/collections"
+          href="/gallery"
           className="text-sm font-semibold text-green-600 hover:text-green-500"
         >
-          Back to all collections
+          Back to all galleries
         </LocalizedClientLink>
       </div>
     </div>

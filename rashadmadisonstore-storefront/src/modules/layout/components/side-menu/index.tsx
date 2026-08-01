@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 const SideMenuItems = {
   Home: "/",
   Account: "/account",
-  Collection: "/collection",
+  Gallery: "/gallery",
   Apparel: "/apparel",
   Blog: "/blog",
   Cart: "/cart",
@@ -87,6 +87,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                               href={href}
                               className="block w-full text-3xl leading-10 hover:text-yellow-300 text-white"
                               onClick={close}
+                              prefetch={href === "/gallery" ? false : undefined}
                               data-testid={`${name.toLowerCase()}-link`}
                             >
                               {name}

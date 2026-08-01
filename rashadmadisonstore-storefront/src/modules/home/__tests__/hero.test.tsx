@@ -14,17 +14,17 @@ jest.mock('@modules/common/components/localized-client-link', () => {
 })
 
 describe('Hero component', () => {
-  it('renders browse collections and donate buttons for signed-out users', () => {
+  it('renders browse gallery and donate buttons for signed-out users', () => {
     render(<Hero customer={null} hasLoggedInBefore={false} />)
 
-    expect(screen.getByRole('link', { name: 'Browse Collection' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Browse Gallery' })).toHaveAttribute(
       'href',
-      '/collections'
+      '/gallery'
     )
 
     expect(screen.getByRole('link', { name: 'Donate materials' })).toHaveAttribute(
       'href',
-      'https://stripe.com/'
+      'https://buy.stripe.com/aFa8wQ0fV4bAa509rJ0RG0d'
     )
   })
 

@@ -90,8 +90,8 @@ body {
 
 .hero-art-frame-v2 {
   display: inline-block;
-  padding: 40px;
-  border-width: 20px;
+  padding: 16px;
+  border-width: 10px;
   border-style: solid;
   border-color: #2f2d2d #434040 #4f4c4c #434040;
   background: #f5f5f5;
@@ -270,6 +270,133 @@ h6 {
 
   100% {
     background-position: 62% 50%;
+  }
+}
+
+@keyframes loader-gradient-sweep {
+  0% {
+    transform: translateX(-65%) skewX(-12deg);
+  }
+
+  100% {
+    transform: translateX(165%) skewX(-12deg);
+  }
+}
+
+@keyframes loader-bar-fill {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  50% {
+    transform: translateX(-15%);
+  }
+
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+.collections-loading-screen,
+.gallery-loading-screen {
+  min-height: clamp(26rem, 74vh, 46rem);
+  width: 100%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(2.5rem, 8vw, 5rem) 1.5rem;
+}
+
+.collections-loading-shell,
+.gallery-loading-shell {
+  width: min(30rem, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.collections-loading-icon-wrap,
+.gallery-loading-icon-wrap {
+  position: relative;
+  isolation: isolate;
+  width: clamp(7.5rem, 19vw, 11rem);
+  aspect-ratio: 1;
+  border-radius: 1.5rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: linear-gradient(145deg, #f8f8f8, #ffffff);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08);
+}
+
+.collections-loading-icon,
+.gallery-loading-icon {
+  width: 74%;
+  height: auto;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+.collections-loading-gradient,
+.gallery-loading-gradient {
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -70%;
+  width: 45%;
+  background: linear-gradient(
+    90deg,
+    rgba(14, 165, 233, 0),
+    rgba(14, 165, 233, 0.22),
+    rgba(34, 197, 94, 0.28),
+    rgba(251, 191, 36, 0.2),
+    rgba(251, 191, 36, 0)
+  );
+  filter: blur(2px);
+  mix-blend-mode: multiply;
+  z-index: 2;
+  animation: loader-gradient-sweep 1.9s ease-in-out infinite;
+}
+
+.collections-loading-label,
+.gallery-loading-label {
+  color: #111827;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.collections-loading-bar-track,
+.gallery-loading-bar-track {
+  width: min(24rem, 100%);
+  height: 0.42rem;
+  border-radius: 9999px;
+  background: linear-gradient(90deg, #f3f4f6, #eceff3);
+  overflow: hidden;
+  position: relative;
+}
+
+.collections-loading-bar-fill,
+.gallery-loading-bar-fill {
+  position: absolute;
+  inset: 0;
+  width: 44%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #16a34a, #22c55e, #0ea5e9, #facc15);
+  background-size: 180% 100%;
+  animation: loader-bar-fill 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .collections-loading-gradient,
+  .gallery-loading-gradient,
+  .collections-loading-bar-fill,
+  .gallery-loading-bar-fill {
+    animation: none;
   }
 }
 

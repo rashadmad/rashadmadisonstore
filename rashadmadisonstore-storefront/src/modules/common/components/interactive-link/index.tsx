@@ -6,6 +6,7 @@ type InteractiveLinkProps = {
   href: string
   children?: React.ReactNode
   onClick?: () => void
+  [x: string]: any
 }
 
 const InteractiveLink = ({

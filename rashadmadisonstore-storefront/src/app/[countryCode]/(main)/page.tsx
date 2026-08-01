@@ -4,16 +4,15 @@ import { retrieveCustomer } from "@lib/data/customer"
 import { getHasLoggedInBefore } from "@lib/data/cookies"
 import FeaturedProducts from "@modules/home/components/featured-products"
 import Hero from "@modules/home/components/hero"
-import HomeTicker from "@modules/home/components/home-ticker"
 import Purpose from "@modules/home/components/purpose"
 import { listCollections } from "@lib/data/collections"
 import { getRegion } from "@lib/data/regions"
+import { appCopy } from "@lib/copy"
 import { HttpTypes } from "@medusajs/types"
 
 export const metadata: Metadata = {
-  title: "The Quintessential - Afrocentric Art Storefront",
-  description:
-    "A collection of art and merch from the artist Rashad Madison.",
+  title: appCopy.metadata.home.title,
+  description: appCopy.metadata.home.description,
 }
 
 export default async function Home(props: {
@@ -44,7 +43,6 @@ export default async function Home(props: {
     <div className="min-h-screen">
       <Hero customer={customer} hasLoggedInBefore={hasLoggedInBefore} />
       <Purpose />
-      <HomeTicker />
       {region && collections.length > 0 ? (
         <div className="py-12">
           <ul className="flex flex-col gap-x-6">

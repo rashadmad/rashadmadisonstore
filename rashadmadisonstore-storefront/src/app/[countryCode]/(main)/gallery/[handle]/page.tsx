@@ -4,7 +4,6 @@ import { notFound } from "next/navigation"
 import { getCollectionByHandle, listCollections } from "@lib/data/collections"
 import { listRegions } from "@lib/data/regions"
 import { StoreCollection, StoreRegion } from "@medusajs/types"
-import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import CollectionTemplate from "@modules/collections/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 
@@ -59,8 +58,8 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     collection = await getCollectionByHandle(params.handle)
   } catch {
     return {
-      title: "Collections | The Quintessential",
-      description: "Collection details are temporarily unavailable.",
+      title: "Gallery | The Quintessential",
+      description: "Gallery details are temporarily unavailable.",
     }
   }
 
@@ -69,14 +68,14 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 
   const metadata = {
-    title: `${collection.title} | Medusa Store`,
-    description: `${collection.title} collection`,
+    title: `${collection.title} | The Quintessential`,
+    description: `${collection.title} gallery entry`,
   } as Metadata
 
   return metadata
 }
 
-export default async function CollectionPage(props: Props) {
+export default async function GalleryEntryPage(props: Props) {
   const searchParams = await props.searchParams
   const params = await props.params
   const { sortBy, page } = searchParams

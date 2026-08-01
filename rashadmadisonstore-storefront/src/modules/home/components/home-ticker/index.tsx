@@ -1,17 +1,13 @@
 "use client"
 
 import { useMemo, useState } from "react"
-
-const messages = [
-  "New original works and limited prints are being added weekly, so check back often for fresh pieces from Rashad Madison.",
-  "Thank you for supporting independent Afrocentric art. Every order helps fund new collections, community projects, and future exhibitions.",
-]
+import { appCopy } from "@lib/copy"
 
 const HomeTicker = () => {
   const [dismissed, setDismissed] = useState(false)
 
   const tickerText = useMemo(
-    () => `${messages[0]}  •  ${messages[1]}  •  `,
+    () => `${appCopy.homeTicker.messages[0]}  •  ${appCopy.homeTicker.messages[1]}  •  `,
     []
   )
 
@@ -20,13 +16,13 @@ const HomeTicker = () => {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full m-0 p-0">
       <div className="relative flex h-10 w-full items-center overflow-hidden bg-black pr-10 text-yellow-300">
         <div className="mx-auto w-full max-w-screen-2xl">
           <button
             type="button"
             onClick={() => setDismissed(true)}
-            aria-label="Close ticker"
+            aria-label={appCopy.homeTicker.closeLabel}
             className="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded bg-black px-2 py-0.5 text-yellow-300"
           >
             ×

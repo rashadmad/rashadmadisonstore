@@ -13,7 +13,7 @@ export default function CollectionsError({ error, reset }: Props) {
   return (
     <div className="content-container py-12 sm:py-16">
       <div className="rounded-xl border border-red-200 bg-red-50 p-6 text-red-800">
-        <h1 className="text-2xl font-semibold">Collections are temporarily unavailable</h1>
+        <h1 className="text-2xl font-semibold">Collection is temporarily unavailable</h1>
         <p className="mt-2 text-sm">
           Something failed while loading this page. You can try again or return to home.
         </p>

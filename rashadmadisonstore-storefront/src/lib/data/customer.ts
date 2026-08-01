@@ -16,6 +16,27 @@ import {
   setAuthToken,
 } from "./cookies"
 
+const getActionErrorMessage = (error: unknown): string => {
+  if (error && typeof error === "object") {
+    const typedError = error as {
+      message?: string
+      response?: { data?: { message?: string } }
+    }
+
+    return (
+      typedError.response?.data?.message ||
+      typedError.message ||
+      "Unable to sign in. Please try again."
+    )
+  }
+
+  if (typeof error === "string") {
+    return error
+  }
+
+  return "Unable to sign in. Please try again."
+}
+
 export const retrieveCustomer =
   async (): Promise<HttpTypes.StoreCustomer | null> => {
     const authHeaders = await getAuthHeaders()
@@ -117,23 +138,27 @@ export async function login(_currentState: unknown, formData: FormData) {
   const password = formData.get("password") as string
 
   try {
-    await sdk.auth
-      .login("customer", "emailpass", { email, password })
-      .then(async (token) => {
-        await setAuthToken(token as string)
-        await setHasLoggedInBefore()
-        const customerCacheTag = await getCacheTag("customers")
-        revalidateTag(customerCacheTag)
-      })
-  } catch (error: any) {
-    return error.toString()
+    const token = await sdk.auth.login("customer", "emailpass", {
+      email,
+      password,
+    })
+
+    await setAuthToken(token as string)
+    await setHasLoggedInBefore()
+    const customerCacheTag = await getCacheTag("customers")
+    revalidateTag(customerCacheTag)
+  } catch (error) {
+    return getActionErrorMessage(error)
   }
 
   try {
     await transferCart()
-  } catch (error: any) {
-    return error.toString()
+  } catch (error) {
+    // A stale guest cart should not block successful customer authentication.
+    console.warn("Unable to transfer cart after login", error)
   }
+
+  redirect("/account")
 }
 
 export async function signout(countryCode: string) {
