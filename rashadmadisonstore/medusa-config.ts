@@ -33,5 +33,8 @@ module.exports = defineConfig({
         providers: stripeProvider,
       },
     },
+    {
+      resolve: './src/modules/blog',
+    },
   ],
 })

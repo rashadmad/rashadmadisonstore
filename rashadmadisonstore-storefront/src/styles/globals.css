@@ -297,6 +297,29 @@ h6 {
   }
 }
 
+@keyframes image-gradient-pan {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.image-gradient-placeholder {
+  background: linear-gradient(
+    100deg,
+    rgba(215, 219, 221, 0.92) 8%,
+    rgba(242, 244, 245, 0.96) 22%,
+    rgba(221, 226, 227, 0.92) 38%,
+    rgba(237, 239, 240, 0.95) 52%,
+    rgba(215, 219, 221, 0.92) 68%
+  );
+  background-size: 220% 100%;
+  animation: image-gradient-pan 1.45s linear infinite;
+}
+
 .collections-loading-screen,
 .gallery-loading-screen {
   min-height: clamp(26rem, 74vh, 46rem);
@@ -395,7 +418,8 @@ h6 {
   .collections-loading-gradient,
   .gallery-loading-gradient,
   .collections-loading-bar-fill,
-  .gallery-loading-bar-fill {
+  .gallery-loading-bar-fill,
+  .image-gradient-placeholder {
     animation: none;
   }
 }

@@ -25,18 +25,18 @@ export default function Footer() {
           </div>
           <div className="md:col-span-8 w-full text-small-regular grid grid-cols-1 gap-10 sm:grid-cols-2 sm:gap-x-10 lg:grid-cols-3 lg:gap-x-14">
             <div className="flex flex-col gap-y-3 min-w-0 items-center text-center sm:items-start sm:text-left">
-              <span className="txt-small-plus text-white">{appCopy.footer.headings.collections}</span>
+              <span className="txt-small-plus text-white">{appCopy.footer.headings.explore}</span>
               <ul
                 className="grid grid-cols-1 gap-2 text-ui-fg-subtle txt-small justify-items-center sm:justify-items-start"
                 data-testid="footer-categories"
               >
-                {appCopy.footer.collections.map((collection) => (
-                  <li key={collection}>
+                {appCopy.footer.exploreLinks.map((link) => (
+                  <li key={link.href}>
                     <LocalizedClientLink
                       className="hover:text-white text-green-400"
-                      href="/gallery"
+                      href={link.href}
                     >
-                      {collection}
+                      {link.label}
                     </LocalizedClientLink>
                   </li>
                 ))}

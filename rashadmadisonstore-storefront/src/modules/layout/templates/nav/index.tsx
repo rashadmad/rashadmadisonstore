@@ -76,6 +76,20 @@ export default async function Nav({ customer, hasLoggedInBefore }: NavProps) {
             <div className="hidden small:flex items-center gap-x-6 h-full">
               <LocalizedClientLink
                 className="hover:text-white text-green-400"
+                href="/blog"
+                data-testid="nav-blog-link"
+              >
+                Blog
+              </LocalizedClientLink>
+              <LocalizedClientLink
+                className="inline-flex items-center rounded-full border border-green-500 bg-green-500 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-black transition hover:border-yellow-300 hover:bg-yellow-300"
+                href="/about"
+                data-testid="nav-about-link"
+              >
+                About
+              </LocalizedClientLink>
+              <LocalizedClientLink
+                className="hover:text-white text-green-400"
                 href={accountHref}
                 data-testid="nav-account-link"
               >

@@ -123,3 +123,64 @@ You'll also need to setup the integrations in your Medusa server. See the [Medus
 - [Website](https://nextjs.org/)
 - [GitHub](https://github.com/vercel/next.js)
 - [Documentation](https://nextjs.org/docs)
+
+# Mastodon Cross-Posting
+
+This storefront now supports Mastodon blog sync in two directions:
+
+- Mastodon -> Site: the Blog page automatically pulls recent public posts from your Mastodon profile.
+- Site -> Mastodon: a secure API endpoint can publish site-originated posts to Mastodon.
+
+## Required environment variables
+
+Add these to your `.env.local`:
+
+```shell
+NEXT_PUBLIC_MASTODON_PROFILE_URL=https://mastodon.social/@rashadmad
+MASTODON_API_BASE_URL=https://mastodon.social
+MASTODON_ACCOUNT_ACCT=rashadmad
+
+# Required for site -> Mastodon cross-post publishing
+MASTODON_ACCESS_TOKEN=<your-mastodon-access-token>
+BLOG_CROSSPOST_KEY=<a-long-random-secret>
+```
+
+## Cross-post endpoint
+
+Endpoint:
+
+```text
+POST /api/mastodon/cross-post
+```
+
+Headers:
+
+```text
+Content-Type: application/json
+x-crosspost-key: <BLOG_CROSSPOST_KEY>
+```
+
+Body:
+
+```json
+{
+  "title": "New post title",
+  "content": "Post body text",
+  "canonicalUrl": "https://your-site/blog/slug",
+  "visibility": "public"
+}
+```
+
+Example:
+
+```shell
+curl -X POST http://localhost:8000/api/mastodon/cross-post \
+  -H "Content-Type: application/json" \
+  -H "x-crosspost-key: $BLOG_CROSSPOST_KEY" \
+  -d '{
+    "title": "Studio Update",
+    "content": "A new blog update just went live.",
+    "canonicalUrl": "https://example.com/us/blog",
+    "visibility": "public"
+  }'
+```

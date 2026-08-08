@@ -31,7 +31,7 @@ describe("GalleryPage", () => {
     render(page)
 
     expect(screen.getByRole("heading", { name: /gallery/i })).toBeInTheDocument()
-    expect(screen.getByText("Sample Artwork")).toBeInTheDocument()
+    expect(screen.getByText(/featuring:\s*sample artwork/i)).toBeInTheDocument()
     expect(screen.getByText("$25.00")).toBeInTheDocument()
   })
 

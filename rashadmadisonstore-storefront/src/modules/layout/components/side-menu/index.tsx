@@ -15,6 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 const SideMenuItems = {
   Home: "/",
+  About: "/about",
   Account: "/account",
   Gallery: "/gallery",
   Apparel: "/apparel",

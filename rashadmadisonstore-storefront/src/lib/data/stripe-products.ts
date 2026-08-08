@@ -3,6 +3,7 @@ import "server-only"
 export type StripeGalleryProduct = {
   id: string
   name: string
+  design: string
   description: string | null
   images: string[]
   active: boolean
@@ -66,6 +67,40 @@ const formatPrice = (price: StripePrice | string | null) => {
     style: "currency",
     currency: price.currency.toUpperCase(),
   }).format(price.unit_amount / 100)
+}
+
+const getMetadataValue = (
+  metadata: Record<string, string> | undefined,
+  key: string
+) => {
+  if (!metadata) {
+    return ""
+  }
+
+  const found = Object.entries(metadata).find(
+    ([entryKey]) => entryKey.toLowerCase() === key.toLowerCase()
+  )
+
+  return found?.[1]?.trim() ?? ""
+}
+
+const getDesignLabel = (product: StripeProductResponse) => {
+  const metadataDesign =
+    getMetadataValue(product.metadata, "design") ||
+    getMetadataValue(product.metadata, "series") ||
+    getMetadataValue(product.metadata, "collection") ||
+    getMetadataValue(product.metadata, "theme")
+
+  if (metadataDesign) {
+    return metadataDesign
+  }
+
+  const nameParts = product.name
+    .split(/[-|:]/)
+    .map((part) => part.trim())
+    .filter(Boolean)
+
+  return nameParts[0] || "Ungrouped"
 }
 
 export const listStripeProducts = async (): Promise<StripeProductsResult> => {
@@ -135,6 +170,7 @@ export const listStripeProducts = async (): Promise<StripeProductsResult> => {
         allProducts.push({
           id: product.id,
           name: product.name,
+          design: getDesignLabel(product),
           description: product.description,
           images: product.images ?? [],
           active: product.active,

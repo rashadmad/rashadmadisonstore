@@ -1,6 +1,7 @@
 import { listProducts } from "@lib/data/products"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import AnimatedImage from "@modules/common/components/animated-image"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { getPricesForVariant } from "@lib/util/get-product-price"
 
@@ -152,30 +153,35 @@ export default async function CollectionTemplate({
                 <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-10">
                   <div className="order-1 lg:order-2 lg:col-span-6">
                     <div className="grid h-[290px] grid-cols-6 grid-rows-2 gap-2 sm:h-[380px] sm:gap-3">
-                      <img
+                      <AnimatedImage
                         src={bentoImages[0]}
                         alt={`${product.title} image 1`}
-                        className="col-span-3 row-span-2 h-full w-full rounded-xl object-cover"
+                        wrapperClassName="col-span-3 row-span-2 h-full w-full rounded-xl"
+                        className="h-full w-full rounded-xl object-cover"
                       />
-                      <img
+                      <AnimatedImage
                         src={bentoImages[1]}
                         alt={`${product.title} image 2`}
-                        className="col-span-3 row-span-1 h-full w-full rounded-xl object-cover"
+                        wrapperClassName="col-span-3 row-span-1 h-full w-full rounded-xl"
+                        className="h-full w-full rounded-xl object-cover"
                       />
-                      <img
+                      <AnimatedImage
                         src={bentoImages[2]}
                         alt={`${product.title} image 3`}
-                        className="col-start-4 row-start-2 h-full w-full rounded-xl object-cover"
+                        wrapperClassName="col-start-4 row-start-2 h-full w-full rounded-xl"
+                        className="h-full w-full rounded-xl object-cover"
                       />
-                      <img
+                      <AnimatedImage
                         src={bentoImages[3]}
                         alt={`${product.title} image 4`}
-                        className="col-start-5 row-start-2 h-full w-full rounded-xl object-cover"
+                        wrapperClassName="col-start-5 row-start-2 h-full w-full rounded-xl"
+                        className="h-full w-full rounded-xl object-cover"
                       />
-                      <img
+                      <AnimatedImage
                         src={bentoImages[4]}
                         alt={`${product.title} image 5`}
-                        className="col-start-6 row-start-2 h-full w-full rounded-xl object-cover"
+                        wrapperClassName="col-start-6 row-start-2 h-full w-full rounded-xl"
+                        className="h-full w-full rounded-xl object-cover"
                       />
                     </div>
                   </div>

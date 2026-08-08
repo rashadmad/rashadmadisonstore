@@ -1,4 +1,6 @@
 import { appCopy } from "@lib/copy"
+import AnimatedImage from "@modules/common/components/animated-image"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 const Purpose = () => {
   return (
@@ -6,9 +8,10 @@ const Purpose = () => {
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div className="flex justify-center lg:justify-start">
-            <img
+            <AnimatedImage
               src="/artistProfile.png"
               alt="Artist portrait"
+              wrapperClassName="h-auto w-full max-w-md rounded-2xl"
               className="h-auto w-full max-w-md rounded-2xl border border-gray-200/80 object-cover shadow-[0_20px_60px_rgba(0,0,0,0.18)]"
             />
           </div>
@@ -22,12 +25,12 @@ const Purpose = () => {
               {appCopy.purpose.body}
             </p>
             <div className="mt-8">
-              <a
-                href="/gallery"
+              <LocalizedClientLink
+                href="/about"
                 className="inline-flex items-center rounded border-b-4 border-green-700 bg-green-500 px-4 py-2 font-bold text-white hover:border-green-500 hover:bg-green-400 hover:text-yellow-300"
               >
                 {appCopy.purpose.cta}
-              </a>
+              </LocalizedClientLink>
             </div>
           </div>
         </div>
