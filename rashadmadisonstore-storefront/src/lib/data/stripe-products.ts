@@ -3,7 +3,8 @@ import "server-only"
 export type StripeGalleryProduct = {
   id: string
   name: string
-  design: string
+  medium: string
+  theme: string
   description: string | null
   images: string[]
   active: boolean
@@ -84,12 +85,14 @@ const getMetadataValue = (
   return found?.[1]?.trim() ?? ""
 }
 
-const getDesignLabel = (product: StripeProductResponse) => {
-  const metadataDesign =
-    getMetadataValue(product.metadata, "design") ||
-    getMetadataValue(product.metadata, "series") ||
-    getMetadataValue(product.metadata, "collection") ||
-    getMetadataValue(product.metadata, "theme")
+const getThemeLabel = (product: StripeProductResponse) => {
+  const metadataTheme = getMetadataValue(product.metadata, "theme")
+
+  if (metadataTheme) {
+    return metadataTheme
+  }
+
+  const metadataDesign = getMetadataValue(product.metadata, "design")
 
   if (metadataDesign) {
     return metadataDesign
@@ -101,6 +104,18 @@ const getDesignLabel = (product: StripeProductResponse) => {
     .filter(Boolean)
 
   return nameParts[0] || "Ungrouped"
+}
+
+const getMediumLabel = (product: StripeProductResponse) => {
+  const metadataMedium =
+    getMetadataValue(product.metadata, "medium") ||
+    getMetadataValue(product.metadata, "material")
+
+  if (metadataMedium) {
+    return metadataMedium
+  }
+
+  return "Unspecified Medium"
 }
 
 export const listStripeProducts = async (): Promise<StripeProductsResult> => {
@@ -170,7 +185,8 @@ export const listStripeProducts = async (): Promise<StripeProductsResult> => {
         allProducts.push({
           id: product.id,
           name: product.name,
-          design: getDesignLabel(product),
+          medium: getMediumLabel(product),
+          theme: getThemeLabel(product),
           description: product.description,
           images: product.images ?? [],
           active: product.active,

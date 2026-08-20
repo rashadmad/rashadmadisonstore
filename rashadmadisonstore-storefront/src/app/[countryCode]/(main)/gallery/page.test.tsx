@@ -14,6 +14,8 @@ describe("GalleryPage", () => {
         {
           id: "prod_1",
           name: "Sample Artwork",
+          medium: "Oil",
+          theme: "Identity",
           description: "A vivid piece for the gallery.",
           images: ["https://example.com/thumb.jpg"],
           active: true,
@@ -32,7 +34,7 @@ describe("GalleryPage", () => {
 
     expect(screen.getByRole("heading", { name: /gallery/i })).toBeInTheDocument()
     expect(screen.getByText(/featuring:\s*sample artwork/i)).toBeInTheDocument()
-    expect(screen.getByText("$25.00")).toBeInTheDocument()
+    expect(screen.getAllByText("$25.00").length).toBeGreaterThan(0)
   })
 
   it("shows Stripe configuration guidance when secret key is missing", async () => {

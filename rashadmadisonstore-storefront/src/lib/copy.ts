@@ -4,6 +4,10 @@ export const appCopy = {
       title: "The Quintessential - Afrocentric Art Storefront",
       description: "A collection of art and merch from the artist Rashad Madison.",
     },
+    gallery: {
+      title: "Gallery | The Quintessential",
+      description: "Browse all artwork in the gallery.",
+    },
     about: {
       title: "About | The Quintessential",
       description:
@@ -134,6 +138,21 @@ export const appCopy = {
       },
     ],
     closing: "More essays, release notes, and studio updates will live here as new work develops.",
+  },
+  gallery: {
+    heading: "Gallery",
+    intro:
+      "Explore themes of identity, culture, symbology and the black form in screen printed and Risograph artworks of Rashad Madison.",
+    states: {
+      loadErrorTitle: "Could not load gallery",
+      loadErrorBody:
+        "Stripe product data is unavailable right now. Please try again shortly.",
+      loadErrorDetailsPrefix: "Details:",
+      missingKeyTitle: "Stripe is not configured",
+      missingKeyBody:
+        "Add STRIPE_SECRET_KEY to your environment to load gallery products from Stripe.",
+      empty: "No gallery pieces are available right now.",
+    },
   },
   newsletter: {
     heading: "Subscribe to our newsletter",
