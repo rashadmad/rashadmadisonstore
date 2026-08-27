@@ -45,7 +45,7 @@ export default async function Nav({ customer, hasLoggedInBefore }: NavProps) {
               data-testid="nav-store-link"
             >
               <img
-                src="/philosipher_symbol.svg"
+                src="/images/philosipher_symbol.svg"
                 alt="The Quintessential"
                 className="h-8 w-auto"
               />

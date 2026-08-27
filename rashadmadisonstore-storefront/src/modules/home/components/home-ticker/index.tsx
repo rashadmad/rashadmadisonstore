@@ -1,10 +1,22 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { appCopy } from "@lib/copy"
 
 const HomeTicker = () => {
   const [dismissed, setDismissed] = useState(false)
+  const [isAtTop, setIsAtTop] = useState(true)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsAtTop(window.scrollY <= 0)
+    }
+
+    handleScroll()
+    window.addEventListener("scroll", handleScroll, { passive: true })
+
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [])
 
   const tickerText = useMemo(
     () => `${appCopy.homeTicker.messages[0]}  •  ${appCopy.homeTicker.messages[1]}  •  `,
@@ -16,8 +28,8 @@ const HomeTicker = () => {
   }
 
   return (
-    <div className="w-full m-0 p-0">
-      <div className="relative flex h-10 w-full items-center overflow-hidden bg-black pr-10 text-yellow-300">
+    <div className={isAtTop ? "pointer-events-none fixed inset-x-0 bottom-0 z-50 w-full m-0 p-0" : "w-full m-0 p-0"}>
+      <div className="pointer-events-auto relative flex h-10 w-full items-center overflow-hidden bg-black pr-10 text-yellow-300">
         <div className="mx-auto w-full max-w-screen-2xl">
           <button
             type="button"

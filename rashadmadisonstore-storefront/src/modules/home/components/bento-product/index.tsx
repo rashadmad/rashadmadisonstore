@@ -1,15 +1,18 @@
+import { appCopy } from "@lib/copy"
 import { StripeGalleryProduct } from "@lib/data/stripe-products"
 import AnimatedImage from "@modules/common/components/animated-image"
+import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 type BentoProductGridProps = {
   products: StripeGalleryProduct[]
 }
 
-const PLACEHOLDER_IMAGE = "/placeholder-art.jpg"
+const PLACEHOLDER_IMAGE = "/images/placeHolderProfile.png"
 
 type BentoTile = {
   src: string
   name: string
+  handle: string
   price: string
 }
 
@@ -32,6 +35,7 @@ const getBentoTiles = (products: StripeGalleryProduct[]) => {
       return {
         src: PLACEHOLDER_IMAGE,
         name: fallbackProduct?.name || "Untitled",
+        handle: fallbackProduct?.handle || "untitled",
         price: fallbackProduct?.displayPrice || "Price available on request",
       }
     })
@@ -58,6 +62,7 @@ const getBentoTiles = (products: StripeGalleryProduct[]) => {
       selected.push({
         src: pool.images.shift() as string,
         name: pool.product.name,
+        handle: pool.product.handle,
         price: pool.product.displayPrice,
       })
       addedImageThisRound = true
@@ -77,6 +82,7 @@ const getBentoTiles = (products: StripeGalleryProduct[]) => {
     selected.push({
       src: PLACEHOLDER_IMAGE,
       name: fallbackProduct?.name || "Untitled",
+      handle: fallbackProduct?.handle || "untitled",
       price: fallbackProduct?.displayPrice || "Price available on request",
     })
   }
@@ -92,6 +98,25 @@ const sortByName = (a: StripeGalleryProduct, b: StripeGalleryProduct) =>
 const sortByLabel = (a: string, b: string) =>
   a.localeCompare(b, undefined, { sensitivity: "base" })
 
+const getMediumDescription = (medium: string) => {
+  const normalized = medium.trim().toLowerCase().replace(/[_-]+/g, " ")
+  const directMatch =
+    appCopy.gallery.mediumDescriptions[
+      normalized as keyof typeof appCopy.gallery.mediumDescriptions
+    ]
+
+  if (directMatch) {
+    return directMatch
+  }
+
+  const compactMatch =
+    appCopy.gallery.mediumDescriptions[
+      normalized.replace(/\s+/g, "") as keyof typeof appCopy.gallery.mediumDescriptions
+    ]
+
+  return compactMatch || appCopy.gallery.mediumDescriptions.default
+}
+
 const renderBentoTile = (
   tile: BentoTile,
   alt: string,
@@ -101,23 +126,25 @@ const renderBentoTile = (
   key: string
 ) => (
   <div key={key} className={`relative ${wrapperClassName}`}>
-    <AnimatedImage
-      src={tile.src}
-      alt={alt}
-      wrapperClassName="h-full w-full"
-      className={`h-full w-full object-cover ${objectPositionClass}`}
-    />
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-2 py-2 sm:px-3">
-      <p
-        className="line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-white sm:text-xs"
-        data-testid={`bento-image-name-${index}`}
-      >
-        {tile.name}
-      </p>
-      <p className="text-[11px] font-bold text-yellow-300 sm:text-xs" data-testid={`bento-image-price-${index}`}>
-        {tile.price}
-      </p>
-    </div>
+    <LocalizedClientLink href={`/products/${tile.handle}`} className="block h-full w-full">
+      <AnimatedImage
+        src={tile.src}
+        alt={alt}
+        wrapperClassName="h-full w-full"
+        className={`h-full w-full object-cover ${objectPositionClass}`}
+      />
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-2 py-2 sm:px-3">
+        <p
+          className="line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-white sm:text-xs"
+          data-testid={`bento-image-name-${index}`}
+        >
+          {tile.name}
+        </p>
+        <p className="text-[11px] font-bold text-yellow-300 sm:text-xs" data-testid={`bento-image-price-${index}`}>
+          {tile.price}
+        </p>
+      </div>
+    </LocalizedClientLink>
   </div>
 )
 
@@ -213,21 +240,24 @@ const BentoProductGrid = ({ products }: BentoProductGridProps) => {
     <div className="space-y-12 sm:space-y-16">
       {mediumSections.map((mediumSection) => (
         <section key={mediumSection.mediumKey} className="space-y-8">
-          <h2 className="text-2xl font-semibold text-ui-fg-base sm:text-3xl">{mediumSection.title}</h2>
+          <div>
+            <h2 className="text-2xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-3xl">{mediumSection.title}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-ui-fg-subtle sm:text-base">
+              {getMediumDescription(mediumSection.title)}
+            </p>
+          </div>
 
           {mediumSection.themes.map((themeSection) => (
             <div key={`${mediumSection.mediumKey}-${themeSection.themeKey}`} className="space-y-5">
-              <h3 className="text-xl font-semibold text-ui-fg-base sm:text-2xl">{themeSection.title}</h3>
-
               <ul className="space-y-8">
                 {(() => {
                   const bentoTiles = getBentoTiles(themeSection.products)
-                  const featuringText = themeSection.products.map((product) => product.name).join(", ")
-                  const groupDescription =
-                    themeSection.products.find((product) => product.description)?.description ||
-                    "Original artwork and curated prints available to purchase."
                   const primaryTiles = bentoTiles.slice(0, 5)
                   const extraTiles = bentoTiles.slice(5)
+                  const themeDescription =
+                    appCopy.gallery.themeDescriptions[
+                      normalizeLabel(themeSection.title) as keyof typeof appCopy.gallery.themeDescriptions
+                    ] || appCopy.gallery.themeDescriptions.default
 
                   return (
                     <li
@@ -263,13 +293,10 @@ const BentoProductGrid = ({ products }: BentoProductGridProps) => {
                         ) : null}
                       </div>
 
-                      <div className="mt-5">
-                        <h4 className="text-xl font-semibold text-ui-fg-base sm:text-2xl">{themeSection.title}</h4>
-                        <p className="mt-1 text-xs uppercase tracking-wide text-ui-fg-subtle sm:text-sm">
-                          Featuring: {featuringText}
-                        </p>
-                        <p className="mt-2 line-clamp-3 text-sm text-ui-fg-subtle sm:text-base">
-                          {groupDescription}
+                      <div className="mt-5 flex flex-col gap-2">
+                        <h4 className="text-xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-2xl">{themeSection.title}</h4>
+                        <p className="line-clamp-3 text-sm text-ui-fg-subtle sm:text-base">
+                          {themeDescription}
                         </p>
                       </div>
                     </li>

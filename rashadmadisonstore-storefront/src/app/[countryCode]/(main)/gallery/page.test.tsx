@@ -33,6 +33,9 @@ describe("GalleryPage", () => {
     render(page)
 
     expect(screen.getByRole("heading", { name: /gallery/i })).toBeInTheDocument()
+    expect(screen.getByText("buy black art")).toBeInTheDocument()
+    expect(screen.getByRole("list", { name: /gallery highlights/i })).toBeInTheDocument()
+    expect(screen.getByText(/no ai involved in its production/i)).toBeInTheDocument()
     expect(screen.getByText(/featuring:\s*sample artwork/i)).toBeInTheDocument()
     expect(screen.getAllByText("$25.00").length).toBeGreaterThan(0)
   })

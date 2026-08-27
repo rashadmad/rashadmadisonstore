@@ -9,7 +9,7 @@ export default function GalleryLoading() {
       <div className="gallery-loading-shell">
         <div className="gallery-loading-icon-wrap" aria-hidden="true">
           <img
-            src="/loadingicon.svg"
+            src="/images/loadingicon.svg"
             alt=""
             className="gallery-loading-icon"
           />

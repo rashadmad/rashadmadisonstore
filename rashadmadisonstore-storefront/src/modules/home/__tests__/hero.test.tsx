@@ -22,7 +22,7 @@ describe('Hero component', () => {
       '/gallery'
     )
 
-    expect(screen.getByRole('link', { name: 'Donate materials' })).toHaveAttribute(
+    expect(screen.getByRole('link', { name: 'Donate resources' })).toHaveAttribute(
       'href',
       'https://buy.stripe.com/aFa8wQ0fV4bAa509rJ0RG0d'
     )
@@ -43,6 +43,31 @@ describe('Hero component', () => {
     expect(screen.getByRole('link', { name: 'Sign back in' })).toHaveAttribute(
       'href',
       '/account?view=sign-in'
+    )
+  })
+
+  it('links hero artwork images to their product pages', () => {
+    render(<Hero customer={null} hasLoggedInBefore={false} />)
+
+    expect(screen.getByRole('link', { name: 'African Sunset' })).toHaveAttribute(
+      'href',
+      '/products/african-sunset'
+    )
+    expect(screen.getByRole('link', { name: 'African Princess red' })).toHaveAttribute(
+      'href',
+      '/products/african-princess-red'
+    )
+    expect(screen.getByRole('link', { name: 'Tender Head' })).toHaveAttribute(
+      'href',
+      '/products/tender-head'
+    )
+    expect(screen.getByRole('link', { name: 'Prince' })).toHaveAttribute(
+      'href',
+      '/products/prince'
+    )
+    expect(screen.getByRole('link', { name: 'Zulu Husband' })).toHaveAttribute(
+      'href',
+      '/products/zulu-husband'
     )
   })
 

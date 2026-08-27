@@ -46,9 +46,9 @@ export const appCopy = {
   },
   about: {
     eyebrow: "About the artist",
-    heading: "Rashad Madison builds images that carry memory, symbol, and black presence forward.",
-    intro:
-      "The Quintessential is the storefront for Rashad Madison's visual practice: screen prints, Risograph editions, and original works shaped by identity, ancestry, ritual, and the architecture of feeling.",
+    heading: "Rashad was classically trained in fine arts at the Savanna University Of Art and Design",
+    intro: 
+      "I see things others don't, like the shamans of our ancestors its my job as an artist, not to sell art, but to communicate to my community my insights into the world.",
     story: [
       "Each body of work begins with research, reflection, and lived experience. Rashad's compositions bring together portraiture, pattern, and symbolic language to create images that feel both intimate and ceremonial.",
       "The goal is not simply to decorate a wall. The work is meant to affirm, to provoke, and to make space for black imagination to be seen with clarity and scale.",
@@ -57,20 +57,20 @@ export const appCopy = {
       "Art can document where we come from while insisting on where we deserve to go.",
     pillars: [
       {
-        title: "Identity",
-        body: "Portrait-driven work that centers black form, self-definition, and the dignity of being fully seen.",
+        title: "Step 1 | Drawing",
+        body: "My designs are started by drawing with a mechanical pencil. I purposely use this kind of pencil because I have no intention of shading is a traditional sense. I create depth in my work through crosshatching. I do this because I want my designs to be transferable to any medium. Also this has become my style. Pencil is my strongest medium but graphite has its limitations. I particularly don’t like the sheen left over by it. I prefer the darkness of ink.",
       },
       {
-        title: "Symbolism",
-        body: "Repeating icons, color systems, and visual motifs that build continuity across collections.",
+        title: "Step 2 | Inking",
+        body: "I use a backlight to help me trace over the pencil design onto another paper. The goal here is to create a 0 to 1 black and white design. This aspect is very much a challenge and I admit the graphite drawing still holds a lot of softness and energy that is lost with the ink design. With that said the ink design is perfect for burning onto a screenprinting screen.",
       },
       {
-        title: "Craft",
-        body: "Layered print processes and material decisions that keep each release tactile, deliberate, and collectible.",
+        title: "Step 3 | Screen Printing",
+        body: "This step I add my portrait design onto a screen. The positive of this is I have endless color options with screen printing ink. I print this onto a white canvas that I stretch on reclaimed wood and treat with gesso. Depending on the portrait design I put a simple design in the background.",
       },
     ],
     closing:
-      "Supporting The Quintessential means backing an independent practice committed to ambitious image-making, cultural memory, and new work still in motion.",
+      "Supporting The Quintessential means backing an independent practice committed to ambitious, unapologetic, contributions to black culture. ",
     ctaPrimary: "Browse the gallery",
     ctaSecondary: "View collections",
   },
@@ -141,8 +141,26 @@ export const appCopy = {
   },
   gallery: {
     heading: "Gallery",
+    tagline: "buy black art",
     intro:
-      "Explore themes of identity, culture, symbology and the black form in screen printed and Risograph artworks of Rashad Madison.",
+      "All my artwork comes entirely from me, with no AI involved in its production. This gallery is a visceral celebration of Black beauty, heritage, and identity. Intricate, high-detail compositions honor the profound strength and radiance of our people. Majestic curves, full lips, and broad noses are portrayed with reverence and pride. The work carries forward an enduring cultural legacy.",
+    highlights: [
+      "Fine art made with the best materials, tools and processes to ensure longevity and quality.",
+      "Risograph and screenprints numbered limited editions.",
+      "Every piece is a visual anthem to Black expression and Black power.",
+    ],
+    mediumDescriptions: {
+      risograph:
+        "Risography utilizes a specialized printer that gives a distinct vibrant color that cannot be replicated through other types of printers.",
+      "screen print":
+        "Screen printing (also known as silkscreening or serigraphy) is a printing technique where a mesh is used to transfer paint ink onto a canvas, creating a print.",
+    },
+    themeDescriptions: {
+      african:
+        "African art is a foundational piece of all art through out history it inspired Picasso and many Avant-garde movements. Displaying African art in your home or work place communicates a knowledge of self, sophistication and class.",
+      music:
+        "Join me in celebrating Musicians and the cultural icons of music. Show your love of great musicians in your home. Listen to the music of your favorite artist while displaying their image. Show your company your pride and style.",
+    },
     states: {
       loadErrorTitle: "Could not load gallery",
       loadErrorBody:

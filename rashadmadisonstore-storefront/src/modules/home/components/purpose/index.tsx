@@ -9,7 +9,7 @@ const Purpose = () => {
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div className="flex justify-center lg:justify-start">
             <AnimatedImage
-              src="/artistProfile.png"
+              src="/images/artistProfile.png"
               alt="Artist portrait"
               wrapperClassName="h-auto w-full max-w-md rounded-2xl"
               className="h-auto w-full max-w-md rounded-2xl border border-gray-200/80 object-cover shadow-[0_20px_60px_rgba(0,0,0,0.18)]"

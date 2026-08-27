@@ -2,6 +2,7 @@ import "server-only"
 
 export type StripeGalleryProduct = {
   id: string
+  handle: string
   name: string
   medium: string
   theme: string
@@ -9,6 +10,7 @@ export type StripeGalleryProduct = {
   images: string[]
   active: boolean
   displayPrice: string
+  purchaseUrl?: string
 }
 
 type StripeProductsResult = {
@@ -118,6 +120,48 @@ const getMediumLabel = (product: StripeProductResponse) => {
   return "Unspecified Medium"
 }
 
+const getProductHandle = (product: StripeProductResponse) => {
+  const metadataHandle =
+    getMetadataValue(product.metadata, "handle") ||
+    getMetadataValue(product.metadata, "slug") ||
+    getMetadataValue(product.metadata, "product_handle")
+
+  if (metadataHandle) {
+    return metadataHandle
+  }
+
+  return (
+    product.name
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || product.id
+  )
+}
+
+const getPurchaseUrl = (product: StripeProductResponse) => {
+  const urlKeys = [
+    "purchase_url",
+    "purchaseurl",
+    "buy_url",
+    "buyurl",
+    "checkout_url",
+    "checkouturl",
+    "product_url",
+    "producturl",
+    "url",
+  ]
+
+  for (const key of urlKeys) {
+    const value = getMetadataValue(product.metadata, key)
+    if (value) {
+      return value
+    }
+  }
+
+  return ""
+}
+
 export const listStripeProducts = async (): Promise<StripeProductsResult> => {
   const configuredKey = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_API_KEY
   const secretKey = configuredKey ? configuredKey.trim().replace(/^['\"]|['\"]$/g, "") : ""
@@ -184,6 +228,7 @@ export const listStripeProducts = async (): Promise<StripeProductsResult> => {
 
         allProducts.push({
           id: product.id,
+          handle: getProductHandle(product),
           name: product.name,
           medium: getMediumLabel(product),
           theme: getThemeLabel(product),
@@ -191,6 +236,7 @@ export const listStripeProducts = async (): Promise<StripeProductsResult> => {
           images: product.images ?? [],
           active: product.active,
           displayPrice: formatPrice(product.default_price ?? null),
+          purchaseUrl: getPurchaseUrl(product),
         })
       }
 

@@ -99,7 +99,7 @@ const CartDropdown = ({
         >
           <PopoverPanel
             static
-            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-[url('/greenPatternThree.jpg')] bg-cover bg-center bg-no-repeat bg-pan-slow border-x border-b border-gray-200 rounded-b-2xl overflow-hidden w-[420px] text-white"
+            className="hidden small:block absolute top-[calc(100%+1px)] right-0 bg-[url('/images/greenPatternThree.jpg')] bg-cover bg-center bg-no-repeat bg-pan-slow border-x border-b border-gray-200 rounded-b-2xl overflow-hidden w-[420px] text-white"
             data-testid="nav-cart-dropdown"
           >
             <div className="h-full bg-[linear-gradient(46deg,rgba(0,0,0,0.72)_0%,rgba(196,196,196,0.45)_63%,rgba(255,255,255,0.28)_100%)]">

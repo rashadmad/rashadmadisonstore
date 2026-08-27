@@ -8,7 +8,7 @@ const MedusaCTA = () => {
       Powered by
       <a href="https://www.rashadmadison.com" target="_blank" rel="noreferrer">
         <img
-          src="/rashadmadisoncom_logo.svg"
+          src="/images/rashadmadisoncom_logo.svg"
           alt="Rashad Madison"
           className="h-8 w-auto"
         />

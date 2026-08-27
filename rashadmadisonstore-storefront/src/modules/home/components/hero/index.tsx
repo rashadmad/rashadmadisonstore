@@ -5,12 +5,42 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import HomeTicker from "@modules/home/components/home-ticker"
 import NewsletterSubscription from "../newsletter"
 
+type HeroArtworkHandle =
+  | "african-sunset"
+  | "african-princess-red"
+  | "tender-head"
+  | "prince"
+  | "zulu-husband"
+
+type HeroArtworkSources = Partial<Record<HeroArtworkHandle, string>>
+
+const DEFAULT_HERO_ARTWORK_SOURCES: Record<HeroArtworkHandle, string> = {
+  "african-sunset":
+    "https://res.cloudinary.com/dxj8b6h12/image/upload/v1784665145/7034_akrxuz.jpg",
+  "african-princess-red":
+    "https://res.cloudinary.com/dxj8b6h12/image/upload/v1784772775/africanPrincess_atuxqk.jpg",
+  "tender-head":
+    "https://res.cloudinary.com/dxj8b6h12/image/upload/v1747342820/tenderhead_vgseur.jpg",
+  prince:
+    "https://res.cloudinary.com/dxj8b6h12/image/upload/v1747342819/prince_dczlzy.jpg",
+  "zulu-husband":
+    "https://res.cloudinary.com/dxj8b6h12/image/upload/v1784773272/ZuluHusband_mr2por.png",
+}
+
+const getHeroArtworkSrc = (sources: HeroArtworkSources | undefined, handle: HeroArtworkHandle) =>
+  sources?.[handle] || DEFAULT_HERO_ARTWORK_SOURCES[handle]
+
 type HeroProps = {
   customer: HttpTypes.StoreCustomer | null
   hasLoggedInBefore: boolean
+  heroArtworkSources?: HeroArtworkSources
 }
 
-export default function Hero({ customer, hasLoggedInBefore }: HeroProps) {
+export default function Hero({
+  customer,
+  hasLoggedInBefore,
+  heroArtworkSources,
+}: HeroProps) {
   return (
     <main>
       <section className="min-h-[calc(100dvh-4rem)]">
@@ -124,45 +154,55 @@ export default function Hero({ customer, hasLoggedInBefore }: HeroProps) {
                 {/* Gallery Grid Section */}
                 <div className="mt-10 flex justify-center gap-3 sm:-mt-44 sm:justify-start sm:gap-8 sm:pl-20 lg:mt-0 lg:pl-0">
                   <div className="w-24 flex-none space-y-4 pt-12 sm:ml-0 sm:w-56 sm:space-y-8 sm:pt-80 lg:order-last lg:pt-36 xl:order-0 xl:pt-80">
-                    <div className="hero-art-frame african-sunset-frame relative">
-                      <img
-                        alt={appCopy.hero.gallery.africanSunsetAlt}
-                        src="https://res.cloudinary.com/dxj8b6h12/image/upload/v1784665145/7034_akrxuz.jpg"
-                        className="hero-art-frame-image african-sunset-frame-image aspect-2/3 w-full bg-gray-900/5 object-cover dark:bg-gray-700/5"
-                      />
-                    </div>
+                    <LocalizedClientLink href="/products/african-sunset" className="block">
+                      <div className="hero-art-frame african-sunset-frame relative">
+                        <img
+                          alt={appCopy.hero.gallery.africanSunsetAlt}
+                          src={getHeroArtworkSrc(heroArtworkSources, "african-sunset")}
+                          className="hero-art-frame-image african-sunset-frame-image aspect-2/3 w-full bg-gray-900/5 object-cover dark:bg-gray-700/5"
+                        />
+                      </div>
+                    </LocalizedClientLink>
                   </div>
                   <div className="w-20 flex-none space-y-4 pt-6 sm:mr-0 sm:w-44 sm:space-y-8 sm:pt-52 lg:pt-36">
-                    <div className="hero-art-frame relative">
-                      <img
-                        alt={appCopy.hero.gallery.africanPrincessRedAlt}
-                        src="https://res.cloudinary.com/dxj8b6h12/image/upload/v1784772775/africanPrincess_atuxqk.jpg"
-                        className="hero-art-frame-image aspect-2/3 w-full bg-gray-900/5 object-cover dark:bg-gray-700/5"
-                      />
-                    </div>
-                    <div className="artFrame-v3 relative">
-                      <img
-                        alt={appCopy.hero.gallery.tenderHeadAlt}
-                        src="https://res.cloudinary.com/dxj8b6h12/image/upload/v1747342820/tenderhead_vgseur.jpg"
-                        className="hero-art-frame-image aspect-2/3 w-full bg-gray-900/5 object-cover dark:bg-gray-700/5"
-                      />
-                    </div>
+                    <LocalizedClientLink href="/products/african-princess-red" className="block">
+                      <div className="hero-art-frame relative">
+                        <img
+                          alt={appCopy.hero.gallery.africanPrincessRedAlt}
+                          src={getHeroArtworkSrc(heroArtworkSources, "african-princess-red")}
+                          className="hero-art-frame-image aspect-2/3 w-full bg-gray-900/5 object-cover dark:bg-gray-700/5"
+                        />
+                      </div>
+                    </LocalizedClientLink>
+                    <LocalizedClientLink href="/products/tender-head" className="block">
+                      <div className="artFrame-v3 relative">
+                        <img
+                          alt={appCopy.hero.gallery.tenderHeadAlt}
+                          src={getHeroArtworkSrc(heroArtworkSources, "tender-head")}
+                          className="hero-art-frame-image aspect-2/3 w-full bg-gray-900/5 object-cover dark:bg-gray-700/5"
+                        />
+                      </div>
+                    </LocalizedClientLink>
                   </div>
                   <div className="w-[7.5rem] flex-none space-y-4 pt-12 sm:w-[13rem] sm:space-y-8 sm:pt-0 lg:w-[16rem] xl:w-[18rem]">
-                    <div className="hero-art-frame-v2 relative mx-auto max-w-[10rem] p-5 sm:max-w-[11.5rem] sm:p-6 lg:max-w-[13rem] lg:p-8 xl:max-w-[14rem] xl:p-10">
-                      <img
-                        alt={appCopy.hero.gallery.princeAlt}
-                        src="https://res.cloudinary.com/dxj8b6h12/image/upload/v1747342819/prince_dczlzy.jpg"
-                        className="hero-art-frame-image aspect-[2/3] w-full scale-[0.9] bg-gray-900/5 object-cover dark:bg-gray-700/5"
-                      />
-                    </div>
-                    <div className="hero-art-frame relative">
-                      <img
-                        alt={appCopy.hero.gallery.zuluHusbandAlt}
-                        src="https://res.cloudinary.com/dxj8b6h12/image/upload/v1784773272/ZuluHusband_mr2por.png"
-                        className="hero-art-frame-image aspect-2/3 w-full bg-gray-900/5 object-cover dark:bg-gray-700/5"
-                      />
-                    </div>
+                    <LocalizedClientLink href="/products/prince" className="block">
+                      <div className="hero-art-frame-v2 relative mx-auto max-w-[10rem] p-5 sm:max-w-[11.5rem] sm:p-6 lg:max-w-[13rem] lg:p-8 xl:max-w-[14rem] xl:p-10">
+                        <img
+                          alt={appCopy.hero.gallery.princeAlt}
+                          src={getHeroArtworkSrc(heroArtworkSources, "prince")}
+                          className="hero-art-frame-image aspect-[2/3] w-full scale-[0.9] bg-gray-900/5 object-cover dark:bg-gray-700/5"
+                        />
+                      </div>
+                    </LocalizedClientLink>
+                    <LocalizedClientLink href="/products/zulu-husband" className="block">
+                      <div className="hero-art-frame relative overflow-hidden">
+                        <img
+                          alt={appCopy.hero.gallery.zuluHusbandAlt}
+                          src={getHeroArtworkSrc(heroArtworkSources, "zulu-husband")}
+                          className="hero-art-frame-image aspect-2/3 w-full scale-[1.2] bg-gray-900/5 object-cover object-center dark:bg-gray-700/5"
+                        />
+                      </div>
+                    </LocalizedClientLink>
                   </div>
                 </div>
               </div>

@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen } from "@testing-library/react"
 
 import AboutPage from "./page"
 
@@ -17,7 +17,7 @@ describe("AboutPage", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /rashad madison builds images that carry memory, symbol, and black presence forward/i,
+        name: /I see things others don't/i,
       })
     ).toBeInTheDocument()
 
@@ -25,13 +25,39 @@ describe("AboutPage", () => {
       "href",
       "/gallery"
     )
+    expect(screen.getByRole("link", { name: /browse the gallery/i })).toHaveClass(
+      "border-b-4",
+      "border-green-800",
+      "bg-green-600",
+      "text-white"
+    )
     expect(screen.getByRole("link", { name: /view collections/i })).toHaveAttribute(
       "href",
       "/collections"
+    )
+    expect(screen.getByRole("link", { name: /view collections/i })).toHaveClass(
+      "border-b-4",
+      "border-green-700",
+      "bg-green-500",
+      "text-white"
     )
     expect(screen.getByRole("link", { name: /visit the store/i })).toHaveAttribute(
       "href",
       "/store"
     )
+    expect(screen.getByRole("link", { name: /visit the store/i })).toHaveClass(
+      "border-b-4",
+      "border-green-800",
+      "bg-green-600",
+      "text-white"
+    )
+  })
+
+  it("opens a larger modal when clicking a practice image", () => {
+    render(<AboutPage />)
+
+    fireEvent.click(screen.getByRole("button", { name: /view identity image/i }))
+
+    expect(screen.getByRole("img", { name: /tender head drawing study/i })).toBeInTheDocument()
   })
 })

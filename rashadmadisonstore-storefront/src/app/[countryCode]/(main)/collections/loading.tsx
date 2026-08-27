@@ -9,7 +9,7 @@ export default function CollectionsLoading() {
       <div className="collections-loading-shell">
         <div className="collections-loading-icon-wrap" aria-hidden="true">
           <img
-            src="/loadingicon.svg"
+            src="/images/loadingicon.svg"
             alt=""
             className="collections-loading-icon"
           />

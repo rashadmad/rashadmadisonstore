@@ -1,5 +1,6 @@
 import { render, screen, within } from "@testing-library/react"
 
+import { appCopy } from "@lib/copy"
 import BentoProductGrid from "./index"
 
 const makeProduct = (overrides: Partial<any> = {}) => ({
@@ -124,5 +125,20 @@ describe("BentoProductGrid", () => {
       .getAllByRole("heading", { level: 3 })
       .map((heading) => heading.textContent)
     expect(oilThemeHeadings).toEqual(["Ancestors", "Zulu"])
+  })
+
+  it("uses the music description for music themes", () => {
+    render(
+      <BentoProductGrid
+        products={[makeProduct({ id: "prod_music", theme: "Music" })]}
+      />
+    )
+
+    expect(
+      screen.getByText(appCopy.gallery.themeDescriptions.music)
+    ).toBeInTheDocument()
+    expect(
+      screen.queryByText(appCopy.gallery.themeDescriptions.african)
+    ).not.toBeInTheDocument()
   })
 })
