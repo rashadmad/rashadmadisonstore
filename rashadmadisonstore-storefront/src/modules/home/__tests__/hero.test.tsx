@@ -71,6 +71,16 @@ describe('Hero component', () => {
     )
   })
 
+  it('uses the local ZuluMan image for the Zulu Husband artwork', () => {
+    render(<Hero customer={null} hasLoggedInBefore={false} />)
+
+    expect(screen.getByAltText('Zulu Husband')).toHaveAttribute(
+      'src',
+      '/images/ZuluMan.jpeg'
+    )
+    expect(screen.getByAltText('Zulu Husband')).toHaveClass('zulu-husband-frame-image')
+  })
+
   it('hides signed-out CTA button for signed-in users', () => {
     const signedInCustomer = {
       id: 'customer_123',

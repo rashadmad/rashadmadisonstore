@@ -7,7 +7,7 @@ This directory contains unit tests for the products module components and templa
 ### `product-template.test.tsx`
 Tests the main ProductTemplate component that displays a single product with all related sections.
 - Product container rendering
-- Component section visibility (ImageGallery, ProductActions, ProductTabs, etc.)
+- Component section visibility (ImageGallery, ProductInfo, ProductActions, etc.)
 - Error handling with `notFound()` when product is missing or has no ID
 - Multiple image handling
 
@@ -45,20 +45,9 @@ Tests the Thumbnail component that renders product images with proper sizing and
 
 **Tests**: 12
 
-### `product-tabs.test.tsx`
-Tests the ProductTabs component that displays product information in tabbed format.
-- Tabs container rendering
-- Description tab display
-- Product description content
-- Tab switching functionality
-- Multiple tabs for metadata
-- Graceful handling of missing descriptions
-
-**Tests**: 7
-
 ## Total Test Count
 
-**Total Tests**: ~44 tests across 5 test files
+**Total Tests**: ~37 tests across 4 test files
 
 ## Running Tests
 
@@ -100,7 +89,7 @@ npm test -- --coverage src/modules/products/__tests__
 - **Pricing**: ProductPrice shows correct pricing with sales and variants
 - **Images**: Thumbnail handles multiple sizes and aspect ratios
 - **Product Discovery**: ProductPreview works in listings
-- **Information Display**: ProductTabs shows product details
+- **Information Display**: ProductInfo shows material and dimensions
 - **Error Handling**: Missing products, images, and prices are handled gracefully
 - **Props**: Custom className, data-testid, and other props are applied correctly
 - **Accessibility**: Elements have proper roles and testid attributes

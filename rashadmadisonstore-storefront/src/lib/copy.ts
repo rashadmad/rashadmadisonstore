@@ -149,26 +149,10 @@ export const appCopy = {
       "Risograph and screenprints numbered limited editions.",
       "Every piece is a visual anthem to Black expression and Black power.",
     ],
-    mediumDescriptions: {
-      risograph:
-        "Risography utilizes a specialized printer that gives a distinct vibrant color that cannot be replicated through other types of printers.",
-      "screen print":
-        "Screen printing (also known as silkscreening or serigraphy) is a printing technique where a mesh is used to transfer paint ink onto a canvas, creating a print.",
-    },
-    themeDescriptions: {
-      african:
-        "African art is a foundational piece of all art through out history it inspired Picasso and many Avant-garde movements. Displaying African art in your home or work place communicates a knowledge of self, sophistication and class.",
-      music:
-        "Join me in celebrating Musicians and the cultural icons of music. Show your love of great musicians in your home. Listen to the music of your favorite artist while displaying their image. Show your company your pride and style.",
-    },
     states: {
       loadErrorTitle: "Could not load gallery",
       loadErrorBody:
-        "Stripe product data is unavailable right now. Please try again shortly.",
-      loadErrorDetailsPrefix: "Details:",
-      missingKeyTitle: "Stripe is not configured",
-      missingKeyBody:
-        "Add STRIPE_SECRET_KEY to your environment to load gallery products from Stripe.",
+        "Medusa product data is unavailable right now. Please try again shortly.",
       empty: "No gallery pieces are available right now.",
     },
   },

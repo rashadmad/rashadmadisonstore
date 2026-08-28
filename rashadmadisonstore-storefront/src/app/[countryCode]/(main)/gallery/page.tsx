@@ -3,8 +3,9 @@ import { faHandFist, faHeart, faPalette, faPencil } from "@fortawesome/free-soli
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 
 import { appCopy } from "@lib/copy"
-import { listStripeProducts } from "@lib/data/stripe-products"
+import { listProducts } from "@lib/data/products"
 import BentoProductGrid from "@modules/home/components/bento-product"
+import { HttpTypes } from "@medusajs/types"
 
 export const metadata: Metadata = {
   title: appCopy.metadata.gallery.title,
@@ -18,9 +19,23 @@ export default async function GalleryPage({
 }: {
   params: Promise<{ countryCode: string }> | { countryCode: string }
 }) {
-  await params
+  const { countryCode } = await params
 
-  const { products, loadError, missingKey, errorMessage } = await listStripeProducts()
+  let products: HttpTypes.StoreProduct[] = []
+  let loadError = false
+
+  try {
+    products = (await listProducts({
+      countryCode,
+      queryParams: {
+        limit: 100,
+        fields:
+          "*variants.calculated_price,*variants.images,+width,+height,+length,*categories,*collection,",
+      },
+    })).response.products
+  } catch {
+    loadError = true
+  }
 
   return (
     <div className="pb-12 sm:pb-16">
@@ -67,18 +82,6 @@ export default async function GalleryPage({
           <h2 className="text-lg font-semibold uppercase tracking-wide">{appCopy.gallery.states.loadErrorTitle}</h2>
           <p className="mt-2 text-sm">
             {appCopy.gallery.states.loadErrorBody}
-          </p>
-          {errorMessage ? (
-            <p className="mt-2 text-xs text-red-900/90">
-              {appCopy.gallery.states.loadErrorDetailsPrefix} {errorMessage}
-            </p>
-          ) : null}
-        </div>
-      ) : missingKey ? (
-        <div className="rounded-xl border border-amber-200 bg-amber-50 p-5 text-amber-800">
-          <h2 className="text-lg font-semibold uppercase tracking-wide">{appCopy.gallery.states.missingKeyTitle}</h2>
-          <p className="mt-2 text-sm">
-            {appCopy.gallery.states.missingKeyBody}
           </p>
         </div>
       ) : products.length === 0 ? (

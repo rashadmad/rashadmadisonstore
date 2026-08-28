@@ -7,6 +7,18 @@ type ProductInfoProps = {
 }
 
 const ProductInfo = ({ product }: ProductInfoProps) => {
+  const dimensions = product as HttpTypes.StoreProduct & {
+    width?: number | null
+    height?: number | null
+    length?: number | null
+  }
+  const dimensionParts = [
+    dimensions.width ? `W ${dimensions.width}` : null,
+    dimensions.height ? `H ${dimensions.height}` : null,
+    dimensions.length ? `L ${dimensions.length}` : null,
+  ].filter(Boolean)
+  const material = product.material || "-"
+
   return (
     <div id="product-info">
       <div className="mx-auto flex flex-col gap-y-4 lg:max-w-[500px]">
@@ -33,6 +45,22 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
         >
           {product.description}
         </Text>
+
+        <div className="border-y border-[#e6dfd0] py-3" data-testid="product-material">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700">
+            Material
+          </p>
+          <p className="mt-1 text-base text-[#4f524b]">{material}</p>
+        </div>
+
+        {dimensionParts.length > 0 && (
+          <div className="border-y border-[#e6dfd0] py-3" data-testid="product-dimensions">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700">
+              Dimensions
+            </p>
+            <p className="mt-1 text-base text-[#4f524b]">{dimensionParts.join(" x ")}</p>
+          </div>
+        )}
       </div>
     </div>
   )

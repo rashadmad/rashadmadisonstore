@@ -63,7 +63,7 @@ export const listProducts = async ({
           offset,
           region_id: region?.id,
           fields:
-            "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,",
+            "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+variants.width,+variants.height,+variants.length,+width,+height,+length,*categories,*collection,",
           ...queryParams,
         },
         headers,
@@ -89,74 +89,6 @@ export const listProducts = async ({
  * This will fetch 100 products to the Next.js cache and sort them based on the sortBy parameter.
  * It will then return the paginated products based on the page and limit parameters.
  */
-export const findMedusaProductForStripe = async ({
-  countryCode,
-  stripeProduct,
-  listProductsFn = listProducts,
-}: {
-  countryCode: string
-  stripeProduct: {
-    handle?: string
-    name?: string
-    metadata?: Record<string, string>
-  }
-  listProductsFn?: typeof listProducts
-}): Promise<HttpTypes.StoreProduct | null> => {
-  const candidates = new Set<string>()
-
-  const normalizeHandle = (value?: string) =>
-    value?.trim().toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || ""
-
-  const metadataHandle =
-    stripeProduct.metadata?.product_handle ||
-    stripeProduct.metadata?.handle ||
-    stripeProduct.metadata?.slug ||
-    stripeProduct.metadata?.productHandle ||
-    stripeProduct.metadata?.product_handle_name
-
-  ;[stripeProduct.handle, metadataHandle, stripeProduct.name].forEach((value) => {
-    const normalized = normalizeHandle(value)
-    if (normalized) {
-      candidates.add(normalized)
-    }
-  })
-
-  if (candidates.size === 0) {
-    return null
-  }
-
-  const { response } = await listProductsFn({
-    countryCode,
-    queryParams: {
-      limit: 200,
-      fields: "id,handle,title,metadata,*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,",
-    },
-  })
-
-  for (const product of response.products) {
-    const medusaHandles = new Set<string>()
-
-    ;[product.handle, product.metadata?.product_handle, product.metadata?.handle, product.metadata?.slug].forEach((value) => {
-      const normalized = normalizeHandle(String(value ?? ""))
-      if (normalized) {
-        medusaHandles.add(normalized)
-      }
-    })
-
-    const titleKey = normalizeHandle(product.title)
-    if (titleKey) {
-      medusaHandles.add(titleKey)
-    }
-
-    const matched = [...candidates].some((candidate) => medusaHandles.has(candidate))
-    if (matched) {
-      return product
-    }
-  }
-
-  return null
-}
-
 export const listProductsWithSort = async ({
   page = 0,
   queryParams,
@@ -186,18 +118,12 @@ export const listProductsWithSort = async ({
   })
 
   const sortedProducts = sortProducts(products, sortBy)
-
   const pageParam = (page - 1) * limit
-
   const nextPage = count > pageParam + limit ? pageParam + limit : null
-
   const paginatedProducts = sortedProducts.slice(pageParam, pageParam + limit)
 
   return {
-    response: {
-      products: paginatedProducts,
-      count,
-    },
+    response: { products: paginatedProducts, count },
     nextPage,
     queryParams,
   }

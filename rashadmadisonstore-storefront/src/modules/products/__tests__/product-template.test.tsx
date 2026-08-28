@@ -27,11 +27,6 @@ jest.mock('@modules/products/components/product-onboarding-cta', () => ({
   default: () => React.createElement('div', { 'data-testid': 'onboarding-cta' }, 'Onboarding CTA'),
 }))
 
-jest.mock('@modules/products/components/product-tabs', () => ({
-  __esModule: true,
-  default: () => React.createElement('div', { 'data-testid': 'product-tabs' }, 'Product Tabs'),
-}))
-
 jest.mock('@modules/products/components/related-products', () => ({
   __esModule: true,
   default: () => React.createElement('div', { 'data-testid': 'related-products' }, 'Related Products'),
@@ -92,11 +87,6 @@ describe('Product Template', () => {
   it('should render product info', () => {
     render(React.createElement(ProductTemplate, defaultProps))
     expect(screen.getByTestId('product-info')).toBeInTheDocument()
-  })
-
-  it('should render product tabs', () => {
-    render(React.createElement(ProductTemplate, defaultProps))
-    expect(screen.getByTestId('product-tabs')).toBeInTheDocument()
   })
 
   it('should render image gallery', () => {

@@ -1,17 +1,11 @@
 import { render, screen } from "@testing-library/react"
 
 import ProductPage, { generateMetadata } from "./page"
-import { listProducts, findMedusaProductForStripe } from "@lib/data/products"
-import { listStripeProducts } from "@lib/data/stripe-products"
+import { listProducts } from "@lib/data/products"
 import { getRegion } from "@lib/data/regions"
 
 jest.mock("@lib/data/products", () => ({
   listProducts: jest.fn(),
-  findMedusaProductForStripe: jest.fn(),
-}))
-
-jest.mock("@lib/data/stripe-products", () => ({
-  listStripeProducts: jest.fn(),
 }))
 
 jest.mock("@lib/data/regions", () => ({
@@ -24,37 +18,24 @@ jest.mock("@modules/products/templates", () => ({
   default: ({ product }: any) => <div data-testid="medusa-template">{product?.title}</div>,
 }))
 
-jest.mock("@modules/products/templates/stripe-product-template", () => ({
-  __esModule: true,
-  default: ({ product }: any) => (
-    <div data-testid="stripe-template">{product?.name || product?.handle}</div>
-  ),
-}))
-
 jest.mock("next/navigation", () => ({
   notFound: jest.fn(() => {
     throw new Error("NEXT_NOT_FOUND")
   }),
 }))
 
-describe("Product page hero fallback handling", () => {
+describe("Medusa product page", () => {
   beforeEach(() => {
     jest.clearAllMocks()
-
     ;(getRegion as jest.Mock).mockResolvedValue({ id: "reg_test" })
-    ;(listProducts as jest.Mock).mockResolvedValue({
-      response: { products: [], count: 0 },
-      nextPage: null,
-    })
-    ;(listStripeProducts as jest.Mock).mockResolvedValue({
-      products: [],
-      loadError: false,
-      missingKey: true,
-    })
-    ;(findMedusaProductForStripe as jest.Mock).mockResolvedValue(null)
   })
 
-  it("uses hero fallback metadata when Stripe products are unavailable", async () => {
+  it("uses the Medusa product for metadata", async () => {
+    ;(listProducts as jest.Mock).mockResolvedValue({
+      response: { products: [{ title: "African Sunset", thumbnail: "image.jpg", description: "A print" }], count: 1 },
+      nextPage: null,
+    })
+
     const metadata = await generateMetadata({
       params: Promise.resolve({ countryCode: "us", handle: "african-sunset" }),
       searchParams: Promise.resolve({}),
@@ -63,14 +44,18 @@ describe("Product page hero fallback handling", () => {
     expect(metadata.title).toBe("African Sunset | The Quintessential")
   })
 
-  it("renders Stripe template from hero fallback when lookup misses", async () => {
+  it("renders the Medusa product template", async () => {
+    ;(listProducts as jest.Mock).mockResolvedValue({
+      response: { products: [{ id: "medusa_1", title: "Prince", images: [], variants: [] }], count: 1 },
+      nextPage: null,
+    })
+
     const page = await ProductPage({
       params: Promise.resolve({ countryCode: "us", handle: "prince" }),
       searchParams: Promise.resolve({}),
     } as any)
 
     render(page)
-
-    expect(screen.getByTestId("stripe-template")).toHaveTextContent("Prince")
+    expect(screen.getByTestId("medusa-template")).toHaveTextContent("Prince")
   })
 })

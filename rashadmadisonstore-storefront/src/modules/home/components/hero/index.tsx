@@ -28,7 +28,9 @@ const DEFAULT_HERO_ARTWORK_SOURCES: Record<HeroArtworkHandle, string> = {
 }
 
 const getHeroArtworkSrc = (sources: HeroArtworkSources | undefined, handle: HeroArtworkHandle) =>
-  sources?.[handle] || DEFAULT_HERO_ARTWORK_SOURCES[handle]
+  handle === "zulu-husband"
+    ? "/images/ZuluMan.jpeg"
+    : sources?.[handle] || DEFAULT_HERO_ARTWORK_SOURCES[handle]
 
 type HeroProps = {
   customer: HttpTypes.StoreCustomer | null
@@ -195,11 +197,11 @@ export default function Hero({
                       </div>
                     </LocalizedClientLink>
                     <LocalizedClientLink href="/products/zulu-husband" className="block">
-                      <div className="hero-art-frame relative overflow-hidden">
+                      <div className="hero-art-frame zulu-husband-frame relative overflow-hidden">
                         <img
                           alt={appCopy.hero.gallery.zuluHusbandAlt}
                           src={getHeroArtworkSrc(heroArtworkSources, "zulu-husband")}
-                          className="hero-art-frame-image aspect-2/3 w-full scale-[1.2] bg-gray-900/5 object-cover object-center dark:bg-gray-700/5"
+                            className="hero-art-frame-image zulu-husband-frame-image aspect-2/3 w-full bg-gray-900/5 object-cover object-center dark:bg-gray-700/5"
                         />
                       </div>
                     </LocalizedClientLink>
