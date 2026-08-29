@@ -24,7 +24,9 @@ sdk.client.fetch = async <T>(
   let localeHeader: Record<string, string | null> | undefined
   try {
     localeHeader = await getLocaleHeader()
-    headers["x-medusa-locale"] ??= localeHeader["x-medusa-locale"]
+    if (localeHeader["x-medusa-locale"]) {
+      headers["x-medusa-locale"] ??= localeHeader["x-medusa-locale"]
+    }
   } catch {}
 
   const newHeaders = {

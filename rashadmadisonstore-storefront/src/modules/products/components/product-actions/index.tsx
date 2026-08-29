@@ -35,18 +35,19 @@ export default function ProductActions({
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const requestedVariantId = searchParams.get("v_id")
 
-  const [options, setOptions] = useState<Record<string, string | undefined>>({})
+  const initialVariant =
+    product.variants?.find((variant) => variant.id === requestedVariantId) ||
+    product.variants?.find((variant) =>
+      variant.images?.some((image) => image.url === product.thumbnail)
+    ) ||
+    (product.variants?.length === 1 ? product.variants[0] : undefined)
+  const [options, setOptions] = useState<Record<string, string | undefined>>(
+    optionsAsKeymap(initialVariant?.options) ?? {}
+  )
   const [isAdding, setIsAdding] = useState(false)
   const countryCode = useParams().countryCode as string
-
-  // If there is only 1 variant, preselect the options
-  useEffect(() => {
-    if (product.variants?.length === 1) {
-      const variantOptions = optionsAsKeymap(product.variants[0].options)
-      setOptions(variantOptions ?? {})
-    }
-  }, [product.variants])
 
   const selectedVariant = useMemo(() => {
     if (!product.variants || product.variants.length === 0) {

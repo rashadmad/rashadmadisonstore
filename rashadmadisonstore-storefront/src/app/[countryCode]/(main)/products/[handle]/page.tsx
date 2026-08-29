@@ -56,17 +56,51 @@ function getImagesForVariant(
   product: HttpTypes.StoreProduct,
   selectedVariantId?: string
 ) {
-  if (!selectedVariantId || !product.variants) {
-    return product.images
+  const includeThumbnail = (images: HttpTypes.StoreProductImage[]) => {
+    if (!product.thumbnail || images.some((image) => image.url === product.thumbnail)) {
+      return images
+    }
+
+    return [
+      {
+        id: `${product.id}-thumbnail`,
+        url: product.thumbnail,
+        rank: -1,
+      } as HttpTypes.StoreProductImage,
+      ...images,
+    ]
   }
 
-  const variant = product.variants!.find((v) => v.id === selectedVariantId)
+  if (!product.variants || product.variants.length <= 1) {
+    return includeThumbnail(product.images ?? [])
+  }
+
+  const defaultVariant = product.variants.find((variant) =>
+    variant.images?.some((image) => image.url === product.thumbnail)
+  )
+  const variantId = selectedVariantId || defaultVariant?.id
+
+  if (!variantId) {
+    return []
+  }
+
+  const variant = product.variants.find((v) => v.id === variantId)
   if (!variant || !variant.images?.length) {
-    return product.images
+    return includeThumbnail([])
   }
 
   const imageIdsMap = new Map(variant.images.map((i) => [i.id, true]))
-  return (product.images ?? []).filter((i) => imageIdsMap.has(i.id))
+  const associatedImages = (product.images ?? []).filter((i) => imageIdsMap.has(i.id))
+  const optionValues = (variant.options ?? [])
+    .map((option) => option.value?.trim().toLowerCase().replace(/[^a-z0-9]+/g, ""))
+    .filter(Boolean)
+  const optionMatchedImages = associatedImages.filter((image) => {
+    const imageName = image.url.toLowerCase().replace(/[^a-z0-9]+/g, "")
+    return optionValues.some((value) => imageName.includes(value))
+  })
+  const variantImages = optionMatchedImages.length > 0 ? optionMatchedImages : associatedImages
+
+  return selectedVariantId ? variantImages : includeThumbnail(variantImages)
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {

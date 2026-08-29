@@ -8,6 +8,10 @@ export const appCopy = {
       title: "Gallery | The Quintessential",
       description: "Browse all artwork in the gallery.",
     },
+    apparel: {
+      title: "Apparel | The Quintessential",
+      description: "Browse apparel from The Quintessential.",
+    },
     about: {
       title: "About | The Quintessential",
       description:
@@ -155,6 +159,17 @@ export const appCopy = {
         "Medusa product data is unavailable right now. Please try again shortly.",
       empty: "No gallery pieces are available right now.",
     },
+  },
+  apparel: {
+    heading: "Apparel",
+    tagline: "wear the work",
+    intro:
+      "Apparel carrying the visual language of The Quintessential. Each piece is made to bring the artwork into daily life.",
+    highlights: [
+      "Artwork translated into wearable pieces.",
+      "Made for everyday expression.",
+      "New releases added as they become available.",
+    ],
   },
   newsletter: {
     heading: "Subscribe to our newsletter",
