@@ -5,61 +5,49 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 
 type BentoProductGridProps = {
   products: HttpTypes.StoreProduct[]
+  variant?: "default" | "apparel"
 }
 
 type BentoTile = {
   src: string
+  backSrc?: string
   name: string
   handle: string
   price: string
 }
 
-const PLACEHOLDER_IMAGE = "/images/placeHolderProfile.png"
-
 const getPrice = (product: HttpTypes.StoreProduct) =>
   getProductPrice({ product }).cheapestPrice?.calculated_price || "Price available on request"
 
-const getBentoTiles = (products: HttpTypes.StoreProduct[]) => {
-  const targetTileCount = products.length > 3 ? Math.min(12, products.length * 2) : 5
-  const pools = products.map((product) => ({
-    product,
-    images: Array.from(new Set((product.images ?? []).map((image) => image.url).filter(Boolean))),
-  }))
-  const imageCount = pools.reduce((total, pool) => total + pool.images.length, 0)
-  const maxTiles = Math.max(5, Math.min(targetTileCount, imageCount))
-  const selected: BentoTile[] = []
-
-  while (selected.length < maxTiles) {
-    let addedImage = false
-
-    for (const pool of pools) {
-      const image = pool.images.shift()
-      if (!image) continue
-
-      selected.push({
-        src: image,
-        name: pool.product.title,
-        handle: pool.product.handle,
-        price: getPrice(pool.product),
-      })
-      addedImage = true
-      if (selected.length === maxTiles) break
+const getProductImages = (product: HttpTypes.StoreProduct): string[] => {
+  const urls: string[] = []
+  if (product.thumbnail) {
+    urls.push(product.thumbnail)
+  }
+  if (product.images && Array.isArray(product.images)) {
+    for (const img of product.images) {
+      if (img?.url && !urls.includes(img.url)) {
+        urls.push(img.url)
+      }
     }
-
-    if (!addedImage) break
   }
+  return urls
+}
 
-  while (selected.length < maxTiles) {
-    const product = products[selected.length % products.length]
-    selected.push({
-      src: PLACEHOLDER_IMAGE,
-      name: product?.title || "Untitled",
-      handle: product?.handle || "untitled",
-      price: product ? getPrice(product) : "Price available on request",
-    })
-  }
+const getBentoTiles = (products: HttpTypes.StoreProduct[], isApparel = false) => {
+  return products.map((product) => {
+    const urls = getProductImages(product)
+    const frontImage = urls[0] || product.thumbnail || ""
+    const backImage = isApparel && urls.length > 1 ? urls[1] : undefined
 
-  return selected
+    return {
+      src: frontImage,
+      backSrc: backImage,
+      name: product.title,
+      handle: product.handle,
+      price: getPrice(product),
+    }
+  })
 }
 
 const normalizeLabel = (value: string) => value.trim().toLowerCase()
@@ -72,16 +60,36 @@ const tileLayout = [
   { wrapper: "col-start-6 row-start-2 h-full w-full", position: "object-[50%_24%]" },
 ] as const
 
-const renderTile = (tile: BentoTile, alt: string, index: number, key: string) => (
-  <div key={key} className={`relative ${tileLayout[index]?.wrapper || "aspect-square h-full w-full"}`}>
+const getGridClassName = (tileCount: number) => {
+  if (tileCount === 1) return "grid min-h-[280px] grid-cols-1 bg-white sm:min-h-[360px] lg:min-h-[420px]"
+  if (tileCount === 2) return "grid min-h-[280px] grid-cols-1 gap-1 bg-white sm:min-h-[360px] sm:grid-cols-2 lg:min-h-[420px]"
+  if (tileCount === 3) return "grid min-h-[280px] grid-cols-1 gap-1 bg-white sm:min-h-[360px] sm:grid-cols-3 lg:min-h-[420px]"
+  if (tileCount === 4) return "grid min-h-[220px] grid-cols-2 gap-1 bg-white sm:grid-cols-4 sm:min-h-[280px] lg:min-h-[320px]"
+
+  return "grid h-[360px] grid-cols-6 grid-rows-2 gap-1 bg-white sm:h-[440px] lg:h-[520px]"
+}
+
+const renderTile = (
+  tile: BentoTile,
+  alt: string,
+  index: number,
+  tileCount: number,
+  key: string
+) => (
+  <div
+    key={key}
+    className={`group relative ${tileCount >= 5 ? tileLayout[index]?.wrapper : "h-full w-full"}`}
+  >
     <LocalizedClientLink href={`/products/${tile.handle}`} className="block h-full w-full">
       <AnimatedImage
         src={tile.src}
         alt={alt}
-        wrapperClassName="h-full w-full"
-        className={`h-full w-full object-cover ${tileLayout[index]?.position || "object-[50%_22%]"}`}
+        wrapperClassName="h-full w-full overflow-hidden"
+        className={`h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 ${
+          tileCount >= 5 ? tileLayout[index]?.position : "object-[50%_22%]"
+        }`}
       />
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-2 py-2 sm:px-3">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-2 py-2 sm:px-3 z-20">
         <p className="line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-white sm:text-xs">
           {tile.name}
         </p>
@@ -91,7 +99,49 @@ const renderTile = (tile: BentoTile, alt: string, index: number, key: string) =>
   </div>
 )
 
-export default function BentoProductGrid({ products }: BentoProductGridProps) {
+const renderApparelTile = (
+  tile: BentoTile,
+  alt: string,
+  key: string
+) => (
+  <div
+    key={key}
+    className="group relative flex flex-col rounded-2xl border border-ui-border-base bg-white p-2 sm:p-3 shadow-sm transition-all duration-200 hover:shadow-md"
+  >
+    <LocalizedClientLink href={`/apparel/${tile.handle}`} className="block h-full w-full">
+      <div className="relative aspect-[3/4] w-full overflow-hidden rounded-xl bg-[#f8f6f0]">
+        <AnimatedImage
+          src={tile.src}
+          alt={alt}
+          wrapperClassName="h-full w-full"
+          className="h-full w-full object-cover object-[50%_18%] transition-transform duration-300 group-hover:scale-105"
+        />
+        {tile.backSrc && (
+          <AnimatedImage
+            src={tile.backSrc}
+            alt={`${alt} back view`}
+            wrapperClassName="absolute inset-0 h-full w-full z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+            className="h-full w-full object-cover object-[50%_18%] transition-transform duration-300 group-hover:scale-105"
+          />
+        )}
+        {tile.backSrc && (
+          <span className="absolute top-2 right-2 rounded-full bg-neutral-900/80 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-yellow-300 shadow-sm z-20">
+            <span className="group-hover:hidden">Front</span>
+            <span className="hidden group-hover:inline">Back</span>
+          </span>
+        )}
+      </div>
+      <div className="mt-3 flex items-center justify-between gap-2 px-1">
+        <p className="line-clamp-1 text-xs font-semibold uppercase tracking-wider text-ui-fg-base">
+          {tile.name}
+        </p>
+        <p className="shrink-0 text-xs font-bold text-green-700">{tile.price}</p>
+      </div>
+    </LocalizedClientLink>
+  </div>
+)
+
+export default function BentoProductGrid({ products, variant = "default" }: BentoProductGridProps) {
   const grouped = products.reduce<
     Record<string, { category: string; collection: string; products: HttpTypes.StoreProduct[] }>
   >((groups, product) => {
@@ -110,10 +160,42 @@ export default function BentoProductGrid({ products }: BentoProductGridProps) {
     })
   )
 
+  if (variant === "apparel") {
+    return (
+      <div className="space-y-12 sm:space-y-16">
+        {sections.map((section) => {
+          const tiles = getBentoTiles(section.products, true)
+
+          return (
+            <section key={`${section.category}-${section.collection}`} className="space-y-6">
+              <h2 className="text-2xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-3xl">
+                {section.category}
+              </h2>
+              <div className="w-full rounded-3xl border border-ui-border-base bg-white p-4 shadow-sm sm:p-6">
+                <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                  {tiles.map((tile, index) =>
+                    renderApparelTile(
+                      tile,
+                      `${section.collection} apparel ${index + 1}`,
+                      `${section.collection}-apparel-${index}`
+                    )
+                  )}
+                </div>
+                <h4 className="mt-6 text-xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-2xl">
+                  {section.collection}
+                </h4>
+              </div>
+            </section>
+          )
+        })}
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-12 sm:space-y-16">
       {sections.map((section) => {
-        const tiles = getBentoTiles(section.products)
+        const tiles = getBentoTiles(section.products, false)
         const primaryTiles = tiles.slice(0, 5)
         const extraTiles = tiles.slice(5)
 
@@ -124,22 +206,34 @@ export default function BentoProductGrid({ products }: BentoProductGridProps) {
             </h2>
             <div className="w-full rounded-3xl border border-ui-border-base bg-white p-4 shadow-sm sm:p-6">
               <div className="overflow-hidden rounded-2xl">
-                <div className="grid h-[360px] grid-cols-6 grid-rows-2 gap-1 bg-white sm:h-[440px] lg:h-[520px]">
+                <div className={getGridClassName(primaryTiles.length)}>
                   {primaryTiles.map((tile, index) =>
-                    renderTile(tile, `${section.collection} image ${index + 1}`, index, `${section.collection}-${index}`)
+                    renderTile(
+                      tile,
+                      `${section.collection} image ${index + 1}`,
+                      index,
+                      primaryTiles.length,
+                      `${section.collection}-${index}`
+                    )
                   )}
                 </div>
                 {extraTiles.length > 0 ? (
                   <div className="mt-1 grid grid-cols-2 gap-1 bg-white sm:grid-cols-3 lg:grid-cols-4">
                     {extraTiles.map((tile, index) => (
-                      <div key={`${section.collection}-extra-${index}`} className="relative aspect-square h-full w-full">
+                      <div key={`${section.collection}-extra-${index}`} className="group relative aspect-square h-full w-full overflow-hidden">
                         <LocalizedClientLink href={`/products/${tile.handle}`} className="block h-full w-full">
                           <AnimatedImage
                             src={tile.src}
                             alt={`${section.collection} image ${index + 6}`}
                             wrapperClassName="h-full w-full"
-                            className="h-full w-full object-cover object-[50%_22%]"
+                            className="h-full w-full object-cover object-[50%_22%] transition-transform duration-300 group-hover:scale-105"
                           />
+                          <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-2 py-2 sm:px-3 z-20">
+                            <p className="line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-white sm:text-xs">
+                              {tile.name}
+                            </p>
+                            <p className="text-[11px] font-bold text-yellow-300 sm:text-xs">{tile.price}</p>
+                          </div>
                         </LocalizedClientLink>
                       </div>
                     ))}

@@ -33,14 +33,14 @@ export default function AboutPageClient() {
 
   return (
     <div className="bg-[#f6f1e7] text-[#17120d]">
-      <section className="relative overflow-hidden border-b border-black/10 bg-[radial-gradient(circle_at_top_left,rgba(214,168,66,0.22),transparent_34%),linear-gradient(135deg,#102315_0%,#1b361f_55%,#0f1813_100%)] text-white">
+      <section id="about" aria-labelledby="about-heading" className="relative overflow-hidden border-b border-black/10 bg-[radial-gradient(circle_at_top_left,rgba(214,168,66,0.22),transparent_34%),linear-gradient(135deg,#102315_0%,#1b361f_55%,#0f1813_100%)] text-white">
         <div className="absolute inset-0 bg-[url('/images/greenPatternTwo.jpg')] opacity-10 mix-blend-screen" />
         <div className="content-container relative grid gap-10 py-16 sm:py-20 lg:grid-cols-[minmax(0,1.15fr)_420px] lg:items-center lg:py-24">
           <div>
             <p className="text-sm uppercase tracking-[0.28em] text-yellow-300/90">
               {appCopy.about.eyebrow}
             </p>
-            <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
+            <h1 id="about-heading" className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
               {appCopy.about.heading}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/78 sm:text-xl">
@@ -76,30 +76,55 @@ export default function AboutPageClient() {
         </div>
       </section>
 
-      <section className="content-container py-14 sm:py-16 lg:py-20">
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-12">
-          <div className="space-y-6">
-            {appCopy.about.story.map((paragraph) => (
-              <p key={paragraph} className="max-w-3xl text-lg leading-8 text-[#3b3024] sm:text-xl">
-                {paragraph}
-              </p>
-            ))}
-          </div>
+      <section id="about-story" aria-labelledby="about-story-heading" className="relative overflow-hidden py-14 sm:py-16 lg:py-20">
+        <div
+          className="pointer-events-none absolute inset-0 z-0 bg-[url('/images/portterHall.webp')] bg-cover bg-center bg-no-repeat opacity-25"
+          aria-hidden="true"
+        />
+        <div className="content-container relative z-10">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-center lg:gap-12">
+            <div className="space-y-6">
+              <h2 id="about-story-heading" className="sr-only">Artist story</h2>
+              {appCopy.about.story.map((paragraph) => (
+                <p key={paragraph} className="max-w-3xl text-lg leading-8 text-[#3b3024] font-medium sm:text-xl">
+                  {paragraph}
+                </p>
+              ))}
+            </div>
 
-          <aside className="rounded-[1.75rem] border border-[#204025]/15 bg-[#ede0c8] p-6 shadow-[0_18px_40px_rgba(23,18,13,0.08)] sm:p-8">
-            <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">Studio note</p>
-            <p className="mt-4 text-2xl font-semibold leading-tight text-[#17120d]">
-              {appCopy.about.quote}
-            </p>
-          </aside>
+            <aside className="w-full max-w-sm mx-auto lg:max-w-none lg:mx-0 rounded-[1.75rem] border border-[#204025]/15 bg-white p-5 sm:p-6 shadow-[0_18px_40px_rgba(23,18,13,0.08)] self-start">
+              <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">
+                {appCopy.about.education.label}
+              </p>
+              <a
+                href="https://www.scad.edu/"
+                target="_blank"
+                rel="noreferrer"
+                aria-label="Savannah College of Art and Design"
+                className="mt-3 block text-[#17120d] transition hover:text-[#2f6b3b]"
+              >
+                <span className="text-sm font-bold uppercase leading-5 tracking-[0.08em]">
+                  {appCopy.about.education.schoolName}
+                </span>
+              </a>
+              <div className="mt-4 flex justify-center">
+                <AnimatedImage
+                  src="/images/Savannah_College_of_Art_and_Design_seal.png"
+                  alt="Savannah College of Art and Design Seal"
+                  wrapperClassName="h-auto w-36 sm:w-44"
+                  className="h-auto w-36 sm:w-44 object-contain"
+                />
+              </div>
+            </aside>
+          </div>
         </div>
       </section>
 
-      <section className="border-y border-black/10 bg-[#e7dcc9]">
+      <section id="process" aria-labelledby="process-heading" className="border-y border-black/10 bg-[#e7dcc9]">
         <div className="content-container py-14 sm:py-16 lg:py-20">
           <div className="mb-8 max-w-2xl">
             <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">Practice</p>
-            <h2 className="mt-3 text-3xl font-semibold text-[#17120d] sm:text-4xl">
+            <h2 id="process-heading" className="mt-3 text-3xl font-semibold text-[#17120d] sm:text-4xl">
               This is my process for my screen prints
             </h2>
           </div>
@@ -139,7 +164,7 @@ export default function AboutPageClient() {
         </div>
       </section>
 
-      <section className="content-container py-14 sm:py-16 lg:py-20">
+      <section id="about-support" aria-label="Support the practice" className="content-container py-14 sm:py-16 lg:py-20">
         <div className="rounded-[2rem] border border-black/10 bg-[#132017] px-6 py-10 text-white shadow-[0_26px_80px_rgba(0,0,0,0.18)] sm:px-10 sm:py-12 lg:flex lg:items-end lg:justify-between lg:gap-10">
           <div className="max-w-3xl">
             <p className="text-sm uppercase tracking-[0.24em] text-yellow-300">Why it matters</p>

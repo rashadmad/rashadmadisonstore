@@ -45,7 +45,7 @@ export default function Hero({
 }: HeroProps) {
   return (
     <main>
-      <section className="min-h-[calc(100dvh-4rem)]">
+      <section id="hero" aria-labelledby="hero-heading" className="min-h-[calc(100dvh-4rem)]">
         <div className="relative isolate h-full">
           {/* Background Grid Pattern */}
           <svg
@@ -103,6 +103,7 @@ export default function Hero({
                 <div className="relative w-full lg:max-w-xl lg:shrink-0 xl:max-w-2xl">
                   <div className="mt-4 flex w-full flex-col items-center gap-4 text-center sm:items-start sm:text-left lg:items-center lg:text-center">
                     <Heading
+                      id="hero-heading"
                       level="h1"
                       className="font-display mt-2 text-4xl font-semibold tracking-tight text-green-500 sm:text-5xl dark:text-white"
                     >
@@ -154,7 +155,10 @@ export default function Hero({
                 </div>
 
                 {/* Gallery Grid Section */}
-                <div className="mt-10 flex justify-center gap-3 sm:-mt-44 sm:justify-start sm:gap-8 sm:pl-20 lg:mt-0 lg:pl-0">
+                <div
+                  className="mt-10 flex justify-center gap-3 sm:-mt-44 sm:justify-start sm:gap-8 sm:pl-20 lg:mt-0 lg:pl-0"
+                  aria-label="Featured artwork gallery"
+                >
                   <div className="w-24 flex-none space-y-4 pt-12 sm:ml-0 sm:w-56 sm:space-y-8 sm:pt-80 lg:order-last lg:pt-36 xl:order-0 xl:pt-80">
                     <LocalizedClientLink href="/products/african-sunset" className="block">
                       <div className="hero-art-frame african-sunset-frame relative">

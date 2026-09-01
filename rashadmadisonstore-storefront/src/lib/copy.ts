@@ -54,11 +54,14 @@ export const appCopy = {
     intro: 
       "I see things others don't, like the shamans of our ancestors its my job as an artist, not to sell art, but to communicate to my community my insights into the world.",
     story: [
-      "Each body of work begins with research, reflection, and lived experience. Rashad's compositions bring together portraiture, pattern, and symbolic language to create images that feel both intimate and ceremonial.",
-      "The goal is not simply to decorate a wall. The work is meant to affirm, to provoke, and to make space for black imagination to be seen with clarity and scale.",
+      "I graduated from the Savannah College of Art and Design, a leading institution for art and design education. Its demanding studio culture and global creative community helped shape the discipline, ambition, and visual language I bring to every body of work.",
     ],
-    quote:
-      "Art can document where we come from while insisting on where we deserve to go.",
+    education: {
+      label: "Education",
+      schoolName: "Savannah College of Art and Design",
+      body:
+        "I graduated from the Savannah College of Art and Design, a leading institution for art and design education. Its demanding studio culture and global creative community helped shape the discipline, ambition, and visual language I bring to every body of work.",
+    },
     pillars: [
       {
         title: "Step 1 | Drawing",
@@ -172,27 +175,32 @@ export const appCopy = {
     ],
   },
   newsletter: {
-    heading: "Subscribe to our newsletter",
+    heading: "Stay close to the work",
     description:
-      "Stay hip about Rashad's art projects and new releases. We may occasionally share updates about new work and drops, but we will not spam you and you can unsubscribe at any time.",
+      "Get studio notes, release alerts, and first access to new work before it drops. Thoughtful updates only—no noise, no clutter, no spam.",
     labels: {
       email: "Email address",
-      submit: "Subscribe",
+      submit: "Join the list",
       emailPlaceholder: "Enter your email",
     },
     validation: {
       invalidEmail: "Please enter a valid email address.",
-      success: "Thanks for subscribing.",
+      success: "Thanks for joining the list.",
     },
     highlights: {
       first: {
-        title: "Monthly articles",
-        description: "I discuss my work in progress, mindset and sneak peeks to my work.",
+        title: "Monthly studio notes",
+        description: "Process updates, ideas, and early looks at what is being developed next.",
       },
       second: {
-        title: "No spam",
+        title: "New art for sale",
         description:
-          "Only meaningful updates. No clutter, no third-party sharing, and easy opt-out anytime.",
+          "Announcements for fresh drops, editions, and new available work I put up on the site.",
+      },
+      third: {
+        title: "No clutter",
+        description:
+          "Only meaningful updates, clear communication, and an easy opt-out whenever you need it.",
       },
     },
   },

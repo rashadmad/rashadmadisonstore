@@ -17,7 +17,7 @@ describe("AboutPage", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: /I see things others don't/i,
+        name: /Savanna University Of Art and Design/i,
       })
     ).toBeInTheDocument()
 
@@ -41,16 +41,21 @@ describe("AboutPage", () => {
       "bg-green-500",
       "text-white"
     )
-    expect(screen.getByRole("link", { name: /visit the store/i })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /visit the gallery/i })).toHaveAttribute(
       "href",
-      "/store"
+      "/gallery"
     )
-    expect(screen.getByRole("link", { name: /visit the store/i })).toHaveClass(
+    expect(screen.getByRole("link", { name: /visit the gallery/i })).toHaveClass(
       "border-b-4",
       "border-green-800",
       "bg-green-600",
       "text-white"
     )
+    expect(screen.getByText("SCAD")).toBeInTheDocument()
+    expect(
+      screen.getByRole("link", { name: /savannah college of art and design/i })
+    ).toHaveAttribute("href", "https://www.scad.edu/")
+    expect(screen.getByText(/I graduated from the Savannah College of Art and Design/i)).toBeInTheDocument()
   })
 
   it("opens a larger modal when clicking a practice image", () => {

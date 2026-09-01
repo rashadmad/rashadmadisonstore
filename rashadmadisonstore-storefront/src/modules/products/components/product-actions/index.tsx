@@ -42,7 +42,7 @@ export default function ProductActions({
     product.variants?.find((variant) =>
       variant.images?.some((image) => image.url === product.thumbnail)
     ) ||
-    (product.variants?.length === 1 ? product.variants[0] : undefined)
+    product.variants?.[0]
   const [options, setOptions] = useState<Record<string, string | undefined>>(
     optionsAsKeymap(initialVariant?.options) ?? {}
   )
@@ -95,25 +95,24 @@ export default function ProductActions({
 
   // check if the selected variant is in stock
   const inStock = useMemo(() => {
-    // If we don't manage inventory, we can always add to cart
-    if (selectedVariant && !selectedVariant.manage_inventory) {
+    if (!selectedVariant) {
+      return false
+    }
+
+    // If we don't manage inventory or allow backorders, we can add to cart
+    if (!selectedVariant.manage_inventory || selectedVariant.allow_backorder) {
       return true
     }
 
-    // If we allow back orders on the variant, we can add to cart
-    if (selectedVariant?.allow_backorder) {
-      return true
-    }
-
-    // If there is inventory available, we can add to cart
+    // If inventory quantity is defined and > 0, or if no explicit zero stock limit is set
     if (
-      selectedVariant?.manage_inventory &&
-      (selectedVariant?.inventory_quantity || 0) > 0
+      selectedVariant.inventory_quantity === undefined ||
+      selectedVariant.inventory_quantity === null ||
+      selectedVariant.inventory_quantity > 0
     ) {
       return true
     }
 
-    // Otherwise, we can't add to cart
     return false
   }, [selectedVariant])
 

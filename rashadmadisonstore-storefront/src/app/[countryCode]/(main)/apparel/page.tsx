@@ -29,7 +29,7 @@ export default async function ApparelPage({
       queryParams: {
         category_id: ["pcat_01M156N3KC165P2FA7SBQ9CG7B"],
         limit: 100,
-        fields: "*variants.calculated_price,*variants.images,*categories,*collection,",
+        fields: "*variants.calculated_price,*variants.prices,*variants.images,*categories,*collection,*images",
       },
     })).response.products
   } catch {
@@ -38,7 +38,7 @@ export default async function ApparelPage({
 
   return (
     <div className="pb-12 sm:pb-16">
-      <section className="relative mb-16 overflow-hidden bg-green-600 text-white sm:mb-20">
+      <section id="apparel" aria-labelledby="apparel-heading" className="relative mb-16 overflow-hidden bg-green-600 text-white sm:mb-20">
         <img
           src="/images/zuluHusband.jpeg"
           alt=""
@@ -48,7 +48,7 @@ export default async function ApparelPage({
         <div className="pointer-events-none absolute inset-0 z-10 bg-green-950/45" aria-hidden="true" />
 
         <div className="content-container relative z-20 grid gap-y-6 px-6 py-14 sm:grid-cols-2 sm:gap-x-12 sm:gap-y-8 sm:px-10 sm:py-16 lg:min-h-[620px] lg:px-16 lg:py-20">
-          <h1 className="font-display text-center text-4xl font-semibold tracking-tight text-yellow-300 sm:col-span-2 sm:text-5xl lg:text-6xl">
+          <h1 id="apparel-heading" className="font-display text-center text-4xl font-semibold tracking-tight text-yellow-300 sm:col-span-2 sm:text-5xl lg:text-6xl">
             {appCopy.apparel.heading}
           </h1>
           <p className="flex items-center justify-center gap-2 text-center text-xl font-semibold uppercase tracking-[0.08em] text-white sm:col-span-2 sm:row-start-2 sm:text-2xl">
@@ -84,7 +84,7 @@ export default async function ApparelPage({
         ) : products.length === 0 ? (
           <p className="text-base text-ui-fg-subtle">No apparel is available right now.</p>
         ) : (
-          <BentoProductGrid products={products} />
+          <BentoProductGrid products={products} variant="apparel" />
         )}
       </div>
     </div>

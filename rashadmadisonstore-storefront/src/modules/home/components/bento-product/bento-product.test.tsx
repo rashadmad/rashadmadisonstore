@@ -22,7 +22,7 @@ describe("BentoProductGrid", () => {
 
     expect(screen.getByRole("heading", { level: 2, name: "Fine Art" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { level: 4, name: "Identity" })).toBeInTheDocument()
-    expect(screen.getAllByRole("img")).toHaveLength(5)
+    expect(screen.getAllByRole("img")).toHaveLength(1)
   })
 
   it("keeps products in separate Medusa category sections", () => {
@@ -37,5 +37,50 @@ describe("BentoProductGrid", () => {
 
     expect(screen.getByRole("heading", { level: 2, name: "Prints" })).toBeInTheDocument()
     expect(screen.getByRole("heading", { level: 2, name: "Originals" })).toBeInTheDocument()
+  })
+
+  it("does not include front/back hover logic for non-apparel products", () => {
+    render(
+      <BentoProductGrid
+        products={[
+          product({
+            thumbnail: "https://example.com/default.jpg",
+            images: [
+              { id: "default", url: "https://example.com/default.jpg" },
+              { id: "variant", url: "https://example.com/variant.jpg" },
+            ],
+          }) as any,
+        ]}
+      />
+    )
+
+    const imgs = screen.getAllByRole("img")
+    expect(imgs).toHaveLength(1)
+    expect(imgs[0]).toHaveAttribute("src", "https://example.com/default.jpg")
+    expect(screen.queryByText("Front")).not.toBeInTheDocument()
+    expect(screen.queryByText("Back")).not.toBeInTheDocument()
+  })
+
+  it("includes front and back hover logic for apparel products", () => {
+    render(
+      <BentoProductGrid
+        variant="apparel"
+        products={[
+          product({
+            thumbnail: "https://example.com/default.jpg",
+            images: [
+              { id: "default", url: "https://example.com/default.jpg" },
+              { id: "variant", url: "https://example.com/variant.jpg" },
+            ],
+          }) as any,
+        ]}
+      />
+    )
+
+    const imgs = screen.getAllByRole("img")
+    expect(imgs[0]).toHaveAttribute("src", "https://example.com/default.jpg")
+    expect(imgs[1]).toHaveAttribute("src", "https://example.com/variant.jpg")
+    expect(screen.getByText("Front")).toBeInTheDocument()
+    expect(screen.getByText("Back")).toBeInTheDocument()
   })
 })

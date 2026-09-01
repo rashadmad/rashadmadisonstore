@@ -22,13 +22,13 @@ export default async function BlogPage() {
 
   return (
     <div className="bg-[#f6f1e7] text-[#17120d]">
-      <section className="border-b border-black/10 bg-[linear-gradient(135deg,#101b12_0%,#1f3822_60%,#0f1812_100%)] text-white">
+      <section id="blog" aria-labelledby="blog-heading" className="border-b border-black/10 bg-[linear-gradient(135deg,#101b12_0%,#1f3822_60%,#0f1812_100%)] text-white">
         <div className="content-container grid gap-8 py-16 sm:py-20 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end lg:py-24">
           <div>
             <p className="text-sm uppercase tracking-[0.28em] text-yellow-300/90">
               {appCopy.blog.eyebrow}
             </p>
-            <h1 className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
+            <h1 id="blog-heading" className="mt-4 max-w-4xl font-display text-4xl font-semibold leading-tight sm:text-5xl lg:text-6xl">
               {appCopy.blog.heading}
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/80 sm:text-xl">
@@ -56,7 +56,7 @@ export default async function BlogPage() {
         </div>
       </section>
 
-      <section className="content-container py-14 sm:py-16 lg:py-20">
+      <section id="blog-posts" aria-label="Latest posts and updates" className="content-container py-14 sm:py-16 lg:py-20">
         <div className="grid gap-6 lg:grid-cols-3">
           {blogPosts.map((post) => (
             <article

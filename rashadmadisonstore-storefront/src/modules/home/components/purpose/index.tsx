@@ -4,7 +4,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 
 const Purpose = () => {
   return (
-    <section className="relative isolate overflow-hidden bg-white py-16 sm:py-24 lg:py-32">
+    <section id="purpose" aria-labelledby="purpose-heading" className="relative isolate overflow-hidden bg-white py-16 sm:py-24 lg:py-32">
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
           <div className="flex justify-center lg:justify-start">
@@ -18,7 +18,7 @@ const Purpose = () => {
 
           <div className="md:ml-auto md:w-full md:pl-0 lg:pr-0 lg:pl-8 xl:pl-12">
             <h2 className="text-base font-semibold leading-7 text-green-700">{appCopy.purpose.eyebrow}</h2>
-            <p className="font-display mt-2 text-3xl font-semibold tracking-tight text-green-400 sm:text-4xl">
+            <p id="purpose-heading" className="font-display mt-2 text-3xl font-semibold tracking-tight text-green-400 sm:text-4xl">
               {appCopy.purpose.heading}
             </p>
             <p className="mt-4 block font-sans text-lg leading-7 text-gray-700 sm:text-xl sm:leading-8">

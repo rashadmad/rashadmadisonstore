@@ -7,7 +7,7 @@ import MedusaCTA from "@modules/layout/components/medusa-cta"
 
 export default function Footer() {
   return (
-    <footer className="border-t border-ui-border-base w-full bg-[url('/images/greenPatternTwo.jpg')] bg-repeat bg-[length:260px_auto]">
+    <footer id="footer" aria-label="Site footer" className="border-t border-ui-border-base w-full bg-[url('/images/greenPatternTwo.jpg')] bg-repeat bg-[length:260px_auto]">
       <div className="content-container flex flex-col w-full">
         <div className="grid grid-cols-1 gap-y-12 py-20 sm:py-24 md:grid-cols-12 md:gap-x-10 md:items-start">
           <div className="md:col-span-4 flex flex-col items-center md:items-start gap-y-4 md:max-w-xs">
