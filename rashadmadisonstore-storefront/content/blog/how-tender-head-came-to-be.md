@@ -29,7 +29,7 @@ When I create drawings of darker-skinned women and girls, it becomes an opportun
 
 Obviously, my art has a sacrifice of money and time, but the biggest cost is the spiritual work. I have a message I’m trying to convey about my people, myself, and my ancestors.
 
-I go into the technical process here:[here](/about#practice):
+I go into the technical process [here](/about#practice):
 
 I will admit that creating the work was painful, but I pushed so much of myself into it.
 

@@ -13,15 +13,15 @@ jest.mock("@modules/common/components/localized-client-link", () => ({
 }))
 
 describe("BlogPreview", () => {
-  it("shows three recent posts and links to the blog", async () => {
+  it("shows real posts first and fills remaining slots with coming soon cards", async () => {
     ;(listBlogPosts as jest.Mock).mockResolvedValue(
-      [1, 2, 3, 4].map((index) => ({
+      [1].map((index) => ({
         slug: `post-${index}`,
         category: "Process",
         title: `Post ${index}`,
         excerpt: `Excerpt ${index}`,
-        image: index === 1 ? "/images/tenderHeadScreenPrint.jpeg" : null,
-        imageAlt: index === 1 ? "Tender Head screen print" : `Post ${index}`,
+        image: "/images/tenderHeadScreenPrint.jpeg",
+        imageAlt: "Tender Head screen print",
         content: "",
       }))
     )
@@ -30,9 +30,9 @@ describe("BlogPreview", () => {
 
     expect(screen.getByRole("heading", { name: "From the studio journal" })).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Read all posts" })).toHaveAttribute("href", "/blog")
-    expect(screen.getAllByRole("link", { name: "Read post" })).toHaveLength(3)
     expect(screen.getByText("Post 1")).toBeInTheDocument()
+    expect(screen.getAllByText("Blog post coming soon")).toHaveLength(2)
     expect(screen.getByRole("img", { name: "Tender Head screen print" })).toBeInTheDocument()
-    expect(screen.queryByText("Post 4")).not.toBeInTheDocument()
+    expect(screen.getByText("Read post")).toBeInTheDocument()
   })
 })
