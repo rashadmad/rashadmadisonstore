@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 }
 
 const galleryHighlightIcons = [faPalette, faPencil, faHandFist]
+const APPAREL_CATEGORY_ID = "pcat_01M156N3KC165P2FA7SBQ9CG7B"
 
 export default async function GalleryPage({
   params,
@@ -25,14 +26,18 @@ export default async function GalleryPage({
   let loadError = false
 
   try {
-    products = (await listProducts({
+    const response = await listProducts({
       countryCode,
       queryParams: {
         limit: 100,
         fields:
           "*variants.calculated_price,*variants.prices,*variants.images,+width,+height,+length,*categories,*collection,",
       },
-    })).response.products
+    })
+
+    products = response.response.products.filter(
+      (product) => !product.categories?.some((category) => category.id === APPAREL_CATEGORY_ID)
+    )
   } catch {
     loadError = true
   }

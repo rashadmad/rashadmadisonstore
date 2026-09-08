@@ -47,6 +47,7 @@ describe("BlogPage", () => {
     expect(screen.getByRole("heading", { name: /from mastodon/i })).toBeInTheDocument()
     expect(screen.getByText(/a fresh update from mastodon/i)).toBeInTheDocument()
     expect(screen.getAllByRole("link", { name: /read post/i }).length).toBeGreaterThan(0)
+    expect(screen.getByRole("img", { name: /tender head screen print/i })).toBeInTheDocument()
 
     expect(screen.getByText(/more essays, release notes, and studio updates/i)).toBeInTheDocument()
   })

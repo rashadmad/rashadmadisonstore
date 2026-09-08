@@ -1,4 +1,5 @@
 import { Metadata } from "next"
+import Image from "next/image"
 
 import { appCopy } from "@lib/copy"
 import { listBlogPosts } from "@lib/data/blog"
@@ -61,19 +62,32 @@ export default async function BlogPage() {
           {blogPosts.map((post) => (
             <article
               key={post.slug}
-              className="rounded-[1.75rem] border border-[#204025]/15 bg-[#fbf7ef] p-6 shadow-[0_18px_35px_rgba(23,18,13,0.06)]"
+              className="overflow-hidden rounded-[1.75rem] border border-[#204025]/15 bg-[#fbf7ef] shadow-[0_18px_35px_rgba(23,18,13,0.06)]"
             >
-              <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">{post.category}</p>
-              <h2 className="mt-3 text-2xl font-semibold leading-tight text-[#17120d]">
-                {post.title}
-              </h2>
-              <p className="mt-4 text-base leading-8 text-[#3b3024]">{post.excerpt}</p>
-              <LocalizedClientLink
-                href={`/blog/${post.slug}`}
-                className="mt-5 inline-flex text-sm font-semibold text-[#2f6b3b] underline underline-offset-4"
-              >
-                Read post
-              </LocalizedClientLink>
+              {post.image ? (
+                <LocalizedClientLink href={`/blog/${post.slug}`} className="relative block aspect-[4/3] bg-[#e7dcc9]">
+                  <Image
+                    src={post.image}
+                    alt={post.imageAlt}
+                    fill
+                    className="object-cover transition-transform duration-500 hover:scale-[1.03]"
+                    sizes="(max-width: 1024px) 100vw, 33vw"
+                  />
+                </LocalizedClientLink>
+              ) : null}
+              <div className="p-6">
+                <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">{post.category}</p>
+                <h2 className="mt-3 text-2xl font-semibold leading-tight text-[#17120d]">
+                  {post.title}
+                </h2>
+                <p className="mt-4 text-base leading-8 text-[#3b3024]">{post.excerpt}</p>
+                <LocalizedClientLink
+                  href={`/blog/${post.slug}`}
+                  className="mt-5 inline-flex text-sm font-semibold text-[#2f6b3b] underline underline-offset-4"
+                >
+                  Read post
+                </LocalizedClientLink>
+              </div>
             </article>
           ))}
         </div>

@@ -48,6 +48,12 @@ export const appCopy = {
     body: "Art is a revolutionary act. Patronizing independent artists shelters a revolutionary, patronizing art work that looks like you stregnthens th  and admiring their work reminds you that you are also a creative that yarns to push boundaries. Lets push boundaries together!",
     cta: "Learn more",
   },
+  featuredProducts: {
+    eyebrow: "Collect the work",
+    heading: "Bring the vision home",
+    body: "Limited editions rooted in Black beauty, legacy, and self-determination.",
+    collectionCta: "Explore collection",
+  },
   about: {
     eyebrow: "About the artist",
     heading: "Rashad was classically trained in fine arts at the Savanna University Of Art and Design",
@@ -86,6 +92,11 @@ export const appCopy = {
     heading: "Writing from the practice behind The Quintessential.",
     intro:
       "A space for process notes, collection context, and short essays on the ideas shaping Rashad Madison's work.",
+    preview: {
+      heading: "From the studio journal",
+      cta: "Read all posts",
+      postCta: "Read post",
+    },
     featured: {
       label: "Featured post",
       title: "Why repetition matters in Afrocentric image-making",
@@ -94,56 +105,6 @@ export const appCopy = {
       href: "/about",
       cta: "Read the artist background",
     },
-    posts: [
-      {
-        slug: "mock-cross-post-test",
-        category: "Mock post",
-        title: "Mock post: cross-post test from The Quintessential",
-        excerpt:
-          "This is a mock post published on the site to verify two-way publishing with Mastodon. If setup is complete, this same message should also appear on @rashadmad.",
-        content: [
-          "This mock article is published on-site to validate blog routing, post detail pages, and comment support for readers.",
-          "It also helps verify social cross-posting behavior between The Quintessential storefront and Mastodon.",
-          "If everything is configured, this post should have a matching status update on Mastodon and provide a clean destination for replies here on the site.",
-        ],
-      },
-      {
-        slug: "print-from-sketch-to-final-layer",
-        category: "Process",
-        title: "Building a print from sketch to final layer",
-        excerpt:
-          "A look at how reference gathering, drawing, and layered print decisions shape the final emotional weight of a piece.",
-        content: [
-          "Every print begins with references and thumbnail sketches that test gesture, rhythm, and emotional direction before any final drawing begins.",
-          "From there, each layer is planned for function: where contrast should lead the eye, where color should hold atmosphere, and where symbol should repeat with intention.",
-          "The final piece is not a single image decision. It is the sum of many focused edits made to preserve story, clarity, and presence.",
-        ],
-      },
-      {
-        slug: "series-as-visual-language",
-        category: "Collections",
-        title: "How a series becomes a visual language",
-        excerpt:
-          "On carrying colors, motifs, and portrait energy from one release to the next without flattening the work.",
-        content: [
-          "A collection works when each piece feels independent but still speaks the same visual language.",
-          "Repeating motifs and disciplined color choices create continuity, while shifts in composition and character keep each release distinct.",
-          "That balance allows a series to feel cohesive in a room, not repetitive on a wall.",
-        ],
-      },
-      {
-        slug: "what-support-funds",
-        category: "Practice",
-        title: "What support for an independent artist actually funds",
-        excerpt:
-          "Print runs, experimentation, studio time, new tools, and the slower research work behind a serious art practice.",
-        content: [
-          "Support for independent artists directly funds material costs, production experiments, and the protected time needed to make serious work.",
-          "It also supports the research phase that most audiences never see but always feel in stronger finished pieces.",
-          "Each purchase helps sustain both current collections and the next wave of ideas still in development.",
-        ],
-      },
-    ],
     closing: "More essays, release notes, and studio updates will live here as new work develops.",
   },
   gallery: {
@@ -156,6 +117,12 @@ export const appCopy = {
       "Risograph and screenprints numbered limited editions.",
       "Every piece is a visual anthem to Black expression and Black power.",
     ],
+    mediumDescriptions: {
+      risograph:
+        "Risography is a fast, eco-friendly digital stencil printing process that blends the look of screen printing with the efficiency of a photocopier.",
+      screenprint:
+        "Screen printing is a printing method that uses a woven mesh screen, a stencil, and a squeegee to transfer ink onto a surface. These are hand produced limited edition screen Prints made",
+    },
     states: {
       loadErrorTitle: "Could not load gallery",
       loadErrorBody:

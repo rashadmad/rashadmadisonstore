@@ -1,5 +1,7 @@
 import { Metadata } from "next"
+import Image from "next/image"
 import { notFound } from "next/navigation"
+import ReactMarkdown from "react-markdown"
 
 import { appCopy } from "@lib/copy"
 import { getBlogPostBySlug, listBlogPosts } from "@lib/data/blog"
@@ -66,15 +68,24 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             {post.title}
           </h1>
           <p className="mt-4 text-sm uppercase tracking-[0.16em] text-[#7a6a57]">
-            Published {dateFormatter.format(new Date())}
+            Published {dateFormatter.format(new Date(post.publishedAt))}
           </p>
 
-          <div className="mt-8 space-y-5">
-            {post.content.map((paragraph) => (
-              <p key={paragraph} className="text-lg leading-8 text-[#3b3024]">
-                {paragraph}
-              </p>
-            ))}
+          {post.image ? (
+            <div className="relative mt-8 aspect-[16/9] overflow-hidden bg-[#e7dcc9]">
+              <Image
+                src={post.image}
+                alt={post.imageAlt}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 1280px) 100vw, 1200px"
+              />
+            </div>
+          ) : null}
+
+          <div className="mt-8 space-y-5 text-lg leading-8 text-[#3b3024] [&_a]:font-semibold [&_a]:text-[#2f6b3b] [&_a]:underline [&_a]:underline-offset-4 [&_blockquote]:border-l-4 [&_blockquote]:border-[#2f6b3b] [&_blockquote]:pl-5 [&_h2]:pt-5 [&_h2]:text-3xl [&_h2]:font-semibold [&_h3]:pt-3 [&_h3]:text-2xl [&_h3]:font-semibold [&_li]:ml-6 [&_li]:list-disc [&_ol_li]:list-decimal [&_strong]:font-semibold">
+            <ReactMarkdown>{post.content}</ReactMarkdown>
           </div>
         </div>
       </article>

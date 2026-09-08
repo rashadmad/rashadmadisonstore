@@ -8,8 +8,12 @@ export default async function FeaturedProducts({
   collections: HttpTypes.StoreCollection[]
   region: HttpTypes.StoreRegion
 }) {
-  return collections.map((collection) => (
-    <li key={collection.id}>
+  const organizedCollections = [...collections].sort((first, second) =>
+    first.title.localeCompare(second.title, undefined, { sensitivity: "base" })
+  )
+
+  return organizedCollections.map((collection) => (
+    <li key={collection.id} className="border-t border-white/15 first:border-t-0">
       <ProductRail collection={collection} region={region} />
     </li>
   ))

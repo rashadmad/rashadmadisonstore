@@ -1,62 +1,72 @@
 import "server-only"
 
-import { appCopy } from "@lib/copy"
-import { sdk } from "@lib/config"
+import { promises as fs } from "fs"
+import matter from "gray-matter"
+import path from "path"
 
-export type BlogPost = (typeof appCopy.blog.posts)[number]
+export type BlogPost = {
+  slug: string
+  category: string
+  title: string
+  excerpt: string
+  publishedAt: string
+  image: string | null
+  imageAlt: string
+  content: string
+}
 
-const normalizeBlogPost = (post: Partial<BlogPost> & { slug?: string }) => {
-  if (!post.slug) {
+const BLOG_DIRECTORY = path.join(process.cwd(), "content", "blog")
+
+const readBlogPost = async (fileName: string): Promise<BlogPost | null> => {
+  const slug = fileName.replace(/\.md$/, "")
+  const source = await fs.readFile(path.join(BLOG_DIRECTORY, fileName), "utf8")
+  const { data, content } = matter(source)
+
+  if (data.draft === true || !data.title) {
     return null
   }
 
   return {
-    slug: post.slug,
-    category: post.category || "Blog",
-    title: post.title || post.slug,
-    excerpt: post.excerpt || "",
-    content: Array.isArray(post.content) ? post.content : [],
-  } as BlogPost
-}
-
-export const listBlogPosts = async () => {
-  try {
-    const response = await sdk.client.fetch<{ posts?: BlogPost[] }>(
-      "/store/custom/blog/posts",
-      {
-        method: "GET",
-        cache: "no-store",
-      }
-    )
-
-    const posts = (response.posts || [])
-      .map((post) => normalizeBlogPost(post))
-      .filter(Boolean) as BlogPost[]
-
-    return posts.length > 0 ? posts : appCopy.blog.posts
-  } catch {
-    return appCopy.blog.posts
+    slug,
+    category: typeof data.category === "string" ? data.category : "Blog",
+    title: String(data.title),
+    excerpt: typeof data.excerpt === "string" ? data.excerpt : "",
+    publishedAt:
+      data.publishedAt instanceof Date
+        ? data.publishedAt.toISOString()
+        : String(data.publishedAt || "1970-01-01"),
+    image: typeof data.image === "string" ? data.image : null,
+    imageAlt: typeof data.imageAlt === "string" ? data.imageAlt : String(data.title),
+    content: content.trim(),
   }
 }
 
-export const getBlogPostBySlug = async (slug: string) => {
+export const listBlogPosts = async (): Promise<BlogPost[]> => {
   try {
-    const response = await sdk.client.fetch<{ post?: BlogPost }>(
-      `/store/custom/blog/posts/${slug}`,
-      {
-        method: "GET",
-        cache: "no-store",
-      }
+    const fileNames = (await fs.readdir(BLOG_DIRECTORY)).filter(
+      (fileName) => fileName.endsWith(".md") && !fileName.startsWith("_")
     )
+    const posts = await Promise.all(fileNames.map(readBlogPost))
 
-    const post = response.post ? normalizeBlogPost(response.post) : null
-
-    if (post) {
-      return post
-    }
+    return posts
+      .filter((post): post is BlogPost => post !== null)
+      .sort(
+        (first, second) =>
+          new Date(second.publishedAt).getTime() - new Date(first.publishedAt).getTime()
+      )
   } catch {
-    // Fall back to static copy below.
+    return []
+  }
+}
+
+export const getBlogPostBySlug = async (slug: string): Promise<BlogPost | null> => {
+  if (!/^[a-z0-9-]+$/.test(slug)) {
+    return null
   }
 
-  return appCopy.blog.posts.find((post) => post.slug === slug) || null
+  try {
+    return await readBlogPost(`${slug}.md`)
+  } catch {
+    return null
+  }
 }

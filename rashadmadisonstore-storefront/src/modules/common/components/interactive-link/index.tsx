@@ -6,6 +6,8 @@ type InteractiveLinkProps = {
   href: string
   children?: React.ReactNode
   onClick?: () => void
+  textClassName?: string
+  iconClassName?: string
   [x: string]: any
 }
 
@@ -13,6 +15,8 @@ const InteractiveLink = ({
   href,
   children,
   onClick,
+  textClassName,
+  iconClassName,
   ...props
 }: InteractiveLinkProps) => {
   return (
@@ -22,9 +26,9 @@ const InteractiveLink = ({
       onClick={onClick}
       {...props}
     >
-      <Text className="text-ui-fg-interactive group-hover:text-white transition-colors">{children}</Text>
+      <Text className={`text-ui-fg-interactive group-hover:text-white transition-colors ${textClassName || ""}`}>{children}</Text>
       <ArrowUpRightMini
-        className="group-hover:rotate-45 group-hover:text-white ease-in-out duration-150"
+        className={`group-hover:rotate-45 group-hover:text-white ease-in-out duration-150 ${iconClassName || ""}`}
       />
     </LocalizedClientLink>
   )

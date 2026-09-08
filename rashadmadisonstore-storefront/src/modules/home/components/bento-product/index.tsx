@@ -1,4 +1,5 @@
 import { getProductPrice } from "@lib/util/get-product-price"
+import { appCopy } from "@lib/copy"
 import { HttpTypes } from "@medusajs/types"
 import AnimatedImage from "@modules/common/components/animated-image"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
@@ -51,6 +52,28 @@ const getBentoTiles = (products: HttpTypes.StoreProduct[], isApparel = false) =>
 }
 
 const normalizeLabel = (value: string) => value.trim().toLowerCase()
+
+const getMediumDescription = (category: string) => {
+  const normalizedCategory = normalizeLabel(category)
+
+  if (normalizedCategory.includes("risograph")) {
+    return appCopy.gallery.mediumDescriptions.risograph
+  }
+
+  if (normalizedCategory.includes("screenprint") || normalizedCategory.includes("screen print")) {
+    return appCopy.gallery.mediumDescriptions.screenprint
+  }
+
+  if (normalizedCategory.includes("print")) {
+    return "Limited-edition prints made for collecting and living with the work."
+  }
+
+  if (normalizedCategory.includes("original") || normalizedCategory.includes("fine art")) {
+    return "One-of-one original works made with archival materials."
+  }
+
+  return `A curated selection of ${category.toLowerCase()} by Rashad Madison.`
+}
 
 const tileLayout = [
   { wrapper: "col-span-3 row-span-2 h-full w-full", position: "object-[50%_18%]" },
@@ -201,9 +224,14 @@ export default function BentoProductGrid({ products, variant = "default" }: Bent
 
         return (
           <section key={`${section.category}-${section.collection}`} className="space-y-8">
-            <h2 className="text-2xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-3xl">
-              {section.category}
-            </h2>
+            <div>
+              <h2 className="text-2xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-3xl">
+                {section.category}
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-ui-fg-subtle sm:text-base">
+                {getMediumDescription(section.category)}
+              </p>
+            </div>
             <div className="w-full rounded-3xl border border-ui-border-base bg-white p-4 shadow-sm sm:p-6">
               <div className="overflow-hidden rounded-2xl">
                 <div className={getGridClassName(primaryTiles.length)}>

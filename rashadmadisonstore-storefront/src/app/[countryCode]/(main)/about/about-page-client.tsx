@@ -120,11 +120,11 @@ export default function AboutPageClient() {
         </div>
       </section>
 
-      <section id="process" aria-labelledby="process-heading" className="border-y border-black/10 bg-[#e7dcc9]">
+      <section id="practice" aria-labelledby="practice-heading" className="border-y border-black/10 bg-[#e7dcc9]">
         <div className="content-container py-14 sm:py-16 lg:py-20">
           <div className="mb-8 max-w-2xl">
             <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">Practice</p>
-            <h2 id="process-heading" className="mt-3 text-3xl font-semibold text-[#17120d] sm:text-4xl">
+            <h2 id="practice-heading" className="mt-3 text-3xl font-semibold text-[#17120d] sm:text-4xl">
               This is my process for my screen prints
             </h2>
           </div>

@@ -21,6 +21,9 @@ describe("BentoProductGrid", () => {
     render(<BentoProductGrid products={[product() as any]} />)
 
     expect(screen.getByRole("heading", { level: 2, name: "Fine Art" })).toBeInTheDocument()
+    expect(
+      screen.getByText("One-of-one original works made with archival materials.")
+    ).toBeInTheDocument()
     expect(screen.getByRole("heading", { level: 4, name: "Identity" })).toBeInTheDocument()
     expect(screen.getAllByRole("img")).toHaveLength(1)
   })

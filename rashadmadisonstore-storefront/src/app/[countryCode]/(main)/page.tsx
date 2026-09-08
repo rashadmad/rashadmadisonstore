@@ -3,6 +3,7 @@ import { Metadata } from "next"
 import { retrieveCustomer } from "@lib/data/customer"
 import { getHasLoggedInBefore } from "@lib/data/cookies"
 import FeaturedProducts from "@modules/home/components/featured-products"
+import BlogPreview from "@modules/home/components/blog-preview"
 import Hero from "@modules/home/components/hero"
 import Purpose from "@modules/home/components/purpose"
 import { listCollections } from "@lib/data/collections"
@@ -76,12 +77,24 @@ export default async function Home(props: {
       />
       <Purpose />
       {region && collections.length > 0 ? (
-        <div className="py-12">
-          <ul className="flex flex-col gap-x-6">
+        <section aria-label="Featured collections" className="bg-black py-14 text-white sm:py-20">
+          <div className="content-container mb-8 sm:mb-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-yellow-300">
+              {appCopy.featuredProducts.eyebrow}
+            </p>
+            <h2 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">
+              {appCopy.featuredProducts.heading}
+            </h2>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-white/75 sm:text-lg">
+              {appCopy.featuredProducts.body}
+            </p>
+          </div>
+          <ul className="flex flex-col">
             <FeaturedProducts collections={collections} region={region} />
           </ul>
-        </div>
+        </section>
       ) : null}
+      <BlogPreview />
     </div>
   )
 }

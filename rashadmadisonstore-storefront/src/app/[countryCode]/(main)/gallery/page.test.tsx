@@ -42,6 +42,42 @@ describe("GalleryPage", () => {
     expect(screen.getAllByText("Sample Artwork").length).toBeGreaterThan(0)
   })
 
+  it("excludes apparel products from the gallery", async () => {
+    ;(listProducts as jest.Mock).mockResolvedValue({
+      response: {
+        products: [
+          {
+            id: "prod_art",
+            handle: "sample-artwork",
+            title: "Sample Artwork",
+            images: [{ id: "img_1", url: "https://example.com/art.jpg" }],
+            categories: [{ id: "cat_1", name: "Fine Art" }],
+            collection: { id: "collection_1", title: "Identity", handle: "identity" },
+            variants: [],
+          },
+          {
+            id: "prod_apparel",
+            handle: "classic-tee",
+            title: "Classic Tee",
+            images: [{ id: "img_2", url: "https://example.com/tee.jpg" }],
+            categories: [{ id: "pcat_01M156N3KC165P2FA7SBQ9CG7B", name: "Apparel" }],
+            collection: { id: "collection_2", title: "Wearables", handle: "wearables" },
+            variants: [],
+          },
+        ],
+        count: 2,
+      },
+      nextPage: null,
+    })
+
+    const page = await GalleryPage({ params: Promise.resolve({ countryCode: "us" }) })
+    render(page)
+
+    expect(screen.getByText("Sample Artwork")).toBeInTheDocument()
+    expect(screen.queryByText("Classic Tee")).not.toBeInTheDocument()
+    expect(screen.queryByText("Apparel")).not.toBeInTheDocument()
+  })
+
   it("shows a Medusa load error", async () => {
     ;(listProducts as jest.Mock).mockRejectedValue(new Error("Medusa unavailable"))
 
