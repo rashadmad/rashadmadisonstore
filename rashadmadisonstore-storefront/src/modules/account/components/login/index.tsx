@@ -1,7 +1,6 @@
 import { login } from "@lib/data/customer"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faGoogle } from "@fortawesome/free-brands-svg-icons"
+import GoogleAuthButton from "@modules/account/components/google-auth-button"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import Input from "@modules/common/components/input"
@@ -24,15 +23,11 @@ const Login = ({ setCurrentView, redirectTo }: Props) => {
       <p className="text-center text-base-regular text-ui-fg-base mb-8">
         Sign in to access an enhanced shopping experience.
       </p>
-      <button
-        type="button"
-        disabled
-        title="Google login is not configured yet."
-        className="mb-5 inline-flex w-full items-center justify-center gap-3 rounded border border-ui-border-base bg-white px-4 py-3 text-small-semi text-ui-fg-base opacity-60"
-      >
-        <FontAwesomeIcon icon={faGoogle} className="text-base" aria-hidden="true" />
-        Login with Google
-      </button>
+      <div className="mb-5 w-full">
+        <GoogleAuthButton title="Google login is not configured yet.">
+          Login with Google
+        </GoogleAuthButton>
+      </div>
       <p>Or sign in with your email</p>
       <br></br>
       <form className="w-full" action={formAction}>

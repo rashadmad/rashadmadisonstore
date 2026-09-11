@@ -129,17 +129,17 @@ describe("customer authentication actions", () => {
     expect(mockRevalidateTag).toHaveBeenCalledWith("customers-cache-id")
   })
 
-  it("creates default billing and shipping addresses when optional signup address is provided", async () => {
+  it("creates a default shipping address when optional signup address is provided", async () => {
     const customer = { id: "customer_1", email: "rashad@example.com" }
     const formData = createSignupForm()
-    formData.set("billing_address.company", "Studio")
-    formData.set("billing_address.address_1", "123 Main Street")
-    formData.set("billing_address.address_2", "Unit 4")
-    formData.set("billing_address.city", "Chicago")
-    formData.set("billing_address.province", "IL")
-    formData.set("billing_address.postal_code", "60601")
-    formData.set("billing_address.country_code", "US")
-    formData.set("shipping_same_as_billing", "yes")
+    formData.set("shipping_address.company", "Studio")
+    formData.set("shipping_address.address_1", "123 Main Street")
+    formData.set("shipping_address.address_2", "Unit 4")
+    formData.set("shipping_address.city", "Chicago")
+    formData.set("shipping_address.province", "IL")
+    formData.set("shipping_address.postal_code", "60601")
+    formData.set("shipping_address.country_code", "US")
+    formData.set("billing_same_as_shipping", "yes")
     mockRegister.mockResolvedValue("registration-token")
     mockCreateCustomer.mockResolvedValue({ customer })
     mockLogin.mockResolvedValue("login-token")
@@ -166,9 +166,32 @@ describe("customer authentication actions", () => {
     )
   })
 
+  it("does not make the shipping address default billing when the checkbox is unchecked", async () => {
+    const customer = { id: "customer_1", email: "rashad@example.com" }
+    const formData = createSignupForm()
+    formData.set("shipping_address.address_1", "123 Main Street")
+    formData.set("shipping_address.city", "Chicago")
+    formData.set("shipping_address.postal_code", "60601")
+    formData.set("shipping_address.country_code", "US")
+    mockRegister.mockResolvedValue("registration-token")
+    mockCreateCustomer.mockResolvedValue({ customer })
+    mockLogin.mockResolvedValue("login-token")
+
+    await expect(signup(null, formData)).resolves.toEqual(customer)
+
+    expect(mockCreateAddress).toHaveBeenCalledWith(
+      expect.objectContaining({
+        is_default_billing: false,
+        is_default_shipping: true,
+      }),
+      {},
+      { authorization: "Bearer login-token" }
+    )
+  })
+
   it("asks users to complete partially entered optional address fields", async () => {
     const formData = createSignupForm()
-    formData.set("billing_address.address_1", "123 Main Street")
+    formData.set("shipping_address.address_1", "123 Main Street")
     mockRegister.mockResolvedValue("registration-token")
     mockCreateCustomer.mockResolvedValue({ customer: { id: "customer_1" } })
     mockLogin.mockResolvedValue("login-token")

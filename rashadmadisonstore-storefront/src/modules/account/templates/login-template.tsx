@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useSearchParams } from "next/navigation"
 
 import { appCopy } from "@lib/copy"
 import Register from "@modules/account/components/register"
@@ -17,11 +18,18 @@ type LoginTemplateProps = {
 }
 
 const LoginTemplate = ({ initialView = LOGIN_VIEW.SIGN_IN, redirectTo }: LoginTemplateProps) => {
+  const searchParams = useSearchParams()
   const [currentView, setCurrentView] = useState<LOGIN_VIEW>(initialView)
 
   useEffect(() => {
-    setCurrentView(initialView)
-  }, [initialView])
+    const requestedView = searchParams.get("view")
+
+    setCurrentView(
+      requestedView === LOGIN_VIEW.REGISTER || requestedView === LOGIN_VIEW.SIGN_IN
+        ? requestedView
+        : initialView
+    )
+  }, [initialView, searchParams])
 
   return (
     <div className="w-full min-h-[60vh] px-6 py-10">

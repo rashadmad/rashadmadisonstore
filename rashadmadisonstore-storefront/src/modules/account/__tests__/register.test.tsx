@@ -44,6 +44,11 @@ jest.mock('@modules/common/components/localized-client-link', () => {
 describe('Register Component', () => {
   const mockSetCurrentView = jest.fn()
 
+  const renderEmailSignup = () => {
+    render(<Register setCurrentView={mockSetCurrentView} />)
+    fireEvent.click(screen.getByTestId('signup-email-button'))
+  }
+
   beforeEach(() => {
     jest.clearAllMocks()
   })
@@ -64,54 +69,55 @@ describe('Register Component', () => {
   })
 
   it('should render first name input', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByTestId('input-wrapper-first_name')).toBeInTheDocument()
   })
 
   it('should render last name input', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByTestId('input-wrapper-last_name')).toBeInTheDocument()
   })
 
   it('should render email input', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByTestId('input-wrapper-email')).toBeInTheDocument()
   })
 
   it('should render phone input', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByTestId('input-wrapper-phone')).toBeInTheDocument()
   })
 
   it('should render password input', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByTestId('input-wrapper-password')).toBeInTheDocument()
   })
 
   it('should render confirm password input', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByTestId('input-wrapper-confirm_password')).toBeInTheDocument()
   })
 
   it('should render join button', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByTestId('register-button')).toBeInTheDocument()
     expect(screen.getByText('Join')).toBeInTheDocument()
   })
 
   it('should render privacy policy link', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByText('Privacy Policy')).toBeInTheDocument()
   })
 
   it('should render terms of use link', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByText('Terms of Use')).toBeInTheDocument()
   })
 
   it('should display already a member prompt', () => {
     render(<Register setCurrentView={mockSetCurrentView} />)
     expect(screen.getByText(/Already a member\?/)).toBeInTheDocument()
+    expect(screen.getByTestId('register-sign-in-prompt')).toHaveClass('mt-auto')
   })
 
   it('should call setCurrentView with SIGN_IN when sign in button is clicked', () => {
@@ -127,6 +133,7 @@ describe('Register Component', () => {
 
   it('should have form element', () => {
     const { container } = render(<Register setCurrentView={mockSetCurrentView} />)
+    fireEvent.click(screen.getByTestId('signup-email-button'))
     const form = container.querySelector('form')
     expect(form).toBeInTheDocument()
   })
@@ -138,7 +145,7 @@ describe('Register Component', () => {
   })
 
   it('should render all input labels', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     expect(screen.getByText('First name')).toBeInTheDocument()
     expect(screen.getByText('Last name')).toBeInTheDocument()
     expect(screen.getByText('Email')).toBeInTheDocument()
@@ -152,27 +159,42 @@ describe('Register Component', () => {
     expect(screen.getByText('Sign up with Google')).toBeInTheDocument()
   })
 
-  it('hides shipping address fields when shipping matches billing', () => {
+  it('starts with the signup method choices before showing email fields', () => {
     render(<Register setCurrentView={mockSetCurrentView} />)
-    expect(screen.getByText('Same as billing')).toBeInTheDocument()
-    expect(screen.queryByText('Shipping address')).not.toBeInTheDocument()
+    expect(screen.getByTestId('signup-choice-actions')).not.toHaveClass('my-auto')
+    expect(screen.getByText('Sign up with your email')).toBeInTheDocument()
+    expect(screen.queryByTestId('input-wrapper-email')).not.toBeInTheDocument()
   })
 
-  it('shows shipping address fields when a different shipping address is selected', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
-    fireEvent.click(screen.getByLabelText('Use a different shipping address'))
+  it('shows the email signup form after choosing email signup', () => {
+    renderEmailSignup()
+    expect(screen.getByTestId('input-wrapper-email')).toBeInTheDocument()
+    expect(screen.getByTestId('register-button')).toBeInTheDocument()
+  })
+
+  it('renders optional shipping address fields', () => {
+    renderEmailSignup()
+    expect(screen.getByText('Shipping address optional')).toBeInTheDocument()
+    expect(screen.getByText('Shipping address')).toBeInTheDocument()
+    expect(screen.queryByText('Billing address optional')).not.toBeInTheDocument()
+  })
+
+  it('lets users mark billing as the same as shipping', () => {
+    renderEmailSignup()
+    expect(screen.getByLabelText('Is your billing address the same as your shipping address?')).toBeChecked()
+    expect(screen.queryByLabelText('Billing address is different')).not.toBeInTheDocument()
     expect(screen.getByText('Shipping address')).toBeInTheDocument()
   })
 
   it('should have correct privacy policy link href', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     const links = screen.getAllByRole('link')
     const privacyLink = links.find(link => link.textContent === 'Privacy Policy')
     expect(privacyLink).toHaveAttribute('href', '/content/privacy-policy')
   })
 
   it('should have correct terms link href', () => {
-    render(<Register setCurrentView={mockSetCurrentView} />)
+    renderEmailSignup()
     const links = screen.getAllByRole('link')
     const termsLink = links.find(link => link.textContent === 'Terms of Use')
     expect(termsLink).toHaveAttribute('href', '/content/terms-of-use')

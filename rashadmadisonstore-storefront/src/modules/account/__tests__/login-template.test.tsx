@@ -2,6 +2,12 @@ import React from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
 import LoginTemplate, { LOGIN_VIEW } from '../templates/login-template'
 
+const mockUseSearchParams = jest.fn(() => new URLSearchParams())
+
+jest.mock('next/navigation', () => ({
+  useSearchParams: () => mockUseSearchParams(),
+}))
+
 // Mock the Login component
 jest.mock('../components/login', () => {
   return function DummyComponent({ setCurrentView }: any) {
@@ -37,6 +43,10 @@ jest.mock('../components/register', () => {
 })
 
 describe('LoginTemplate Component', () => {
+  beforeEach(() => {
+    mockUseSearchParams.mockReturnValue(new URLSearchParams())
+  })
+
   it('should render the main container', () => {
     const { container } = render(<LoginTemplate />)
     const mainDiv = container.querySelector('.w-full')
@@ -50,6 +60,15 @@ describe('LoginTemplate Component', () => {
 
   it('should render Register component when initialView is REGISTER', () => {
     render(<LoginTemplate initialView={LOGIN_VIEW.REGISTER} />)
+    expect(screen.getByTestId('register-component')).toBeInTheDocument()
+  })
+
+  it('should render Register component when the URL requests register', () => {
+    mockUseSearchParams.mockReturnValue(new URLSearchParams('view=register'))
+
+    render(<LoginTemplate initialView={LOGIN_VIEW.SIGN_IN} />)
+
+    expect(screen.queryByTestId('login-component')).not.toBeInTheDocument()
     expect(screen.getByTestId('register-component')).toBeInTheDocument()
   })
 

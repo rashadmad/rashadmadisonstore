@@ -52,7 +52,7 @@ const getFormString = (formData: FormData, key: string): string => {
 
 const getOptionalAddress = (
   formData: FormData,
-  prefix: "billing_address" | "shipping_address",
+  prefix: "shipping_address",
   customerForm: { first_name: string; last_name: string; phone: string }
 ) => {
   const address_1 = getFormString(formData, `${prefix}.address_1`)
@@ -87,29 +87,14 @@ const createSignupAddresses = async (
   customerForm: { first_name: string; last_name: string; phone: string },
   headers: { authorization: string }
 ) => {
-  const billingAddress = getOptionalAddress(formData, "billing_address", customerForm)
-  const shippingMatchesBilling = formData.get("shipping_same_as_billing") !== "no"
-  const shippingAddress = shippingMatchesBilling
-    ? billingAddress
-    : getOptionalAddress(formData, "shipping_address", customerForm)
+  const shippingAddress = getOptionalAddress(formData, "shipping_address", customerForm)
+  const billingMatchesShipping = formData.get("billing_same_as_shipping") === "yes"
 
-  if (billingAddress) {
-    await sdk.store.customer.createAddress(
-      {
-        ...billingAddress,
-        is_default_billing: true,
-        is_default_shipping: shippingMatchesBilling,
-      },
-      {},
-      headers
-    )
-  }
-
-  if (shippingAddress && !shippingMatchesBilling) {
+  if (shippingAddress) {
     await sdk.store.customer.createAddress(
       {
         ...shippingAddress,
-        is_default_billing: false,
+        is_default_billing: billingMatchesShipping,
         is_default_shipping: true,
       },
       {},
