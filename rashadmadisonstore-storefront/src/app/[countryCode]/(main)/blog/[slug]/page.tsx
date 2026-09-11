@@ -62,31 +62,51 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           Back to blog
         </LocalizedClientLink>
 
-        <div className="mt-6 rounded-[1.75rem] border border-black/10 bg-[#fbf7ef] p-7 shadow-[0_18px_35px_rgba(23,18,13,0.06)] sm:p-10">
-          <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">{post.category}</p>
-          <h1 className="mt-3 max-w-4xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
-            {post.title}
-          </h1>
-          <p className="mt-4 text-sm uppercase tracking-[0.16em] text-[#7a6a57]">
-            Published {dateFormatter.format(new Date(post.publishedAt))}
-          </p>
-
-          {post.image ? (
-            <div className="relative mt-8 aspect-[16/9] overflow-hidden bg-[#e7dcc9]">
-              <Image
-                src={post.image}
-                alt={post.imageAlt}
-                fill
-                priority
-                className="object-cover"
-                sizes="(max-width: 1280px) 100vw, 1200px"
-              />
+        <div className="mt-6 lg:grid lg:grid-cols-[minmax(140px,180px)_minmax(0,1fr)_minmax(140px,180px)] lg:gap-6 xl:gap-8">
+          <aside aria-label="Advertisement" className="hidden lg:block">
+            <div className="sticky top-8 min-h-[600px] border border-dashed border-[#2f6b3b]/35 bg-[#e7dcc9]/45 p-4">
+              <p className="text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7a6a57]">
+                Advertisement
+              </p>
+              <div data-ad-slot="blog-sidebar-left" className="mt-4 min-h-[520px]" />
             </div>
-          ) : null}
+          </aside>
 
-          <div className="mt-8 space-y-5 text-lg leading-8 text-[#3b3024] [&_a]:font-semibold [&_a]:text-[#2f6b3b] [&_a]:underline [&_a]:underline-offset-4 [&_blockquote]:border-l-4 [&_blockquote]:border-[#2f6b3b] [&_blockquote]:pl-5 [&_h2]:pt-5 [&_h2]:text-3xl [&_h2]:font-semibold [&_h3]:pt-3 [&_h3]:text-2xl [&_h3]:font-semibold [&_li]:ml-6 [&_li]:list-disc [&_ol_li]:list-decimal [&_strong]:font-semibold">
-            <ReactMarkdown>{post.content}</ReactMarkdown>
+          <div className="rounded-[1.75rem] border border-black/10 bg-[#fbf7ef] p-7 shadow-[0_18px_35px_rgba(23,18,13,0.06)] sm:p-10">
+            <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">{post.category}</p>
+            <h1 className="mt-3 max-w-4xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
+              {post.title}
+            </h1>
+            <p className="mt-4 text-sm uppercase tracking-[0.16em] text-[#7a6a57]">
+              Published {dateFormatter.format(new Date(post.publishedAt))}
+            </p>
+
+            {post.image ? (
+              <div className="relative mt-8 aspect-[16/9] overflow-hidden bg-[#e7dcc9]">
+                <Image
+                  src={post.image}
+                  alt={post.imageAlt}
+                  fill
+                  priority
+                  className="object-cover"
+                  sizes="(max-width: 1280px) 100vw, 800px"
+                />
+              </div>
+            ) : null}
+
+            <div className="mt-8 space-y-5 text-lg leading-8 text-[#3b3024] [&_a]:font-semibold [&_a]:text-[#2f6b3b] [&_a]:underline [&_a]:underline-offset-4 [&_blockquote]:border-l-4 [&_blockquote]:border-[#2f6b3b] [&_blockquote]:pl-5 [&_h2]:pt-5 [&_h2]:text-3xl [&_h2]:font-semibold [&_h3]:pt-3 [&_h3]:text-2xl [&_h3]:font-semibold [&_li]:ml-6 [&_li]:list-disc [&_ol_li]:list-decimal [&_strong]:font-semibold">
+              <ReactMarkdown>{post.content}</ReactMarkdown>
+            </div>
           </div>
+
+          <aside aria-label="Advertisement" className="hidden lg:block">
+            <div className="sticky top-8 min-h-[600px] border border-dashed border-[#2f6b3b]/35 bg-[#e7dcc9]/45 p-4">
+              <p className="text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-[#7a6a57]">
+                Advertisement
+              </p>
+              <div data-ad-slot="blog-sidebar-right" className="mt-4 min-h-[520px]" />
+            </div>
+          </aside>
         </div>
       </article>
 

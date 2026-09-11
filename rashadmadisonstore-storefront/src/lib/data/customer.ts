@@ -37,6 +37,87 @@ const getActionErrorMessage = (error: unknown): string => {
   return "Unable to sign in. Please try again."
 }
 
+const getSafeRedirectPath = (value: FormDataEntryValue | null): string => {
+  if (typeof value !== "string" || !value.startsWith("/") || value.startsWith("//")) {
+    return "/account"
+  }
+
+  return value
+}
+
+const getFormString = (formData: FormData, key: string): string => {
+  const value = formData.get(key)
+  return typeof value === "string" ? value.trim() : ""
+}
+
+const getOptionalAddress = (
+  formData: FormData,
+  prefix: "billing_address" | "shipping_address",
+  customerForm: { first_name: string; last_name: string; phone: string }
+) => {
+  const address_1 = getFormString(formData, `${prefix}.address_1`)
+  const city = getFormString(formData, `${prefix}.city`)
+  const postal_code = getFormString(formData, `${prefix}.postal_code`)
+  const country_code = getFormString(formData, `${prefix}.country_code`).toLowerCase()
+
+  if (!address_1 && !city && !postal_code && !country_code) {
+    return null
+  }
+
+  if (!address_1 || !city || !postal_code || country_code.length !== 2) {
+    throw new Error("Please complete the optional address fields or leave them blank.")
+  }
+
+  return {
+    first_name: customerForm.first_name,
+    last_name: customerForm.last_name,
+    company: getFormString(formData, `${prefix}.company`),
+    address_1,
+    address_2: getFormString(formData, `${prefix}.address_2`),
+    city,
+    postal_code,
+    province: getFormString(formData, `${prefix}.province`),
+    country_code,
+    phone: customerForm.phone,
+  }
+}
+
+const createSignupAddresses = async (
+  formData: FormData,
+  customerForm: { first_name: string; last_name: string; phone: string },
+  headers: { authorization: string }
+) => {
+  const billingAddress = getOptionalAddress(formData, "billing_address", customerForm)
+  const shippingMatchesBilling = formData.get("shipping_same_as_billing") !== "no"
+  const shippingAddress = shippingMatchesBilling
+    ? billingAddress
+    : getOptionalAddress(formData, "shipping_address", customerForm)
+
+  if (billingAddress) {
+    await sdk.store.customer.createAddress(
+      {
+        ...billingAddress,
+        is_default_billing: true,
+        is_default_shipping: shippingMatchesBilling,
+      },
+      {},
+      headers
+    )
+  }
+
+  if (shippingAddress && !shippingMatchesBilling) {
+    await sdk.store.customer.createAddress(
+      {
+        ...shippingAddress,
+        is_default_billing: false,
+        is_default_shipping: true,
+      },
+      {},
+      headers
+    )
+  }
+}
+
 export const retrieveCustomer =
   async (): Promise<HttpTypes.StoreCustomer | null> => {
     const authHeaders = await getAuthHeaders()
@@ -122,6 +203,10 @@ export async function signup(_currentState: unknown, formData: FormData) {
     await setAuthToken(loginToken as string)
     await setHasLoggedInBefore()
 
+    await createSignupAddresses(formData, customerForm, {
+      authorization: `Bearer ${loginToken}`,
+    })
+
     const customerCacheTag = await getCacheTag("customers")
     revalidateTag(customerCacheTag)
 
@@ -136,6 +221,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
 export async function login(_currentState: unknown, formData: FormData) {
   const email = formData.get("email") as string
   const password = formData.get("password") as string
+  const redirectTo = getSafeRedirectPath(formData.get("redirect_to"))
 
   try {
     const token = await sdk.auth.login("customer", "emailpass", {
@@ -158,7 +244,7 @@ export async function login(_currentState: unknown, formData: FormData) {
     console.warn("Unable to transfer cart after login", error)
   }
 
-  redirect("/account")
+  redirect(redirectTo)
 }
 
 export async function signout(countryCode: string) {

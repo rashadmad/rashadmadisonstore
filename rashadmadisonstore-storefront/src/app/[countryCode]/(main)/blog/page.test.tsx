@@ -40,12 +40,13 @@ describe("BlogPage", () => {
       })
     ).toBeInTheDocument()
 
-    expect(
-      screen.getByRole("link", { name: /read the artist background/i })
-    ).toHaveAttribute("href", "/about")
+      expect(screen.getByRole("link", { name: /read the post/i })).toHaveAttribute(
+        "href",
+        "/blog/how-tender-head-came-to-be"
+      )
 
-    expect(screen.getByRole("heading", { name: /from mastodon/i })).toBeInTheDocument()
     expect(screen.getByText(/a fresh update from mastodon/i)).toBeInTheDocument()
+      expect(screen.getByRole("heading", { name: /from mastodon/i })).toBeInTheDocument()
     expect(screen.getAllByRole("link", { name: /read post/i }).length).toBeGreaterThan(0)
     expect(screen.getByRole("img", { name: /tender head screen print/i })).toBeInTheDocument()
 

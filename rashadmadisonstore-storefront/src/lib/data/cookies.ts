@@ -54,6 +54,7 @@ export const setAuthToken = async (token: string) => {
   cookies.set("_medusa_jwt", token, {
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
+    path: "/",
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
   })
@@ -63,6 +64,7 @@ export const removeAuthToken = async () => {
   const cookies = await nextCookies()
   cookies.set("_medusa_jwt", "", {
     maxAge: -1,
+    path: "/",
   })
 }
 
@@ -76,6 +78,7 @@ export const setCartId = async (cartId: string) => {
   cookies.set("_medusa_cart_id", cartId, {
     maxAge: 60 * 60 * 24 * 7,
     httpOnly: true,
+    path: "/",
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
   })
@@ -85,6 +88,7 @@ export const removeCartId = async () => {
   const cookies = await nextCookies()
   cookies.set("_medusa_cart_id", "", {
     maxAge: -1,
+    path: "/",
   })
 }
 
@@ -95,6 +99,7 @@ export const setHasLoggedInBefore = async () => {
   cookies.set(HAS_LOGGED_IN_COOKIE, "true", {
     maxAge: 60 * 60 * 24 * 365,
     httpOnly: true,
+    path: "/",
     sameSite: "strict",
     secure: process.env.NODE_ENV === "production",
   })

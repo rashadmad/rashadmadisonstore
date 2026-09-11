@@ -53,6 +53,15 @@ describe('LoginTemplate Component', () => {
     expect(screen.getByTestId('register-component')).toBeInTheDocument()
   })
 
+  it('should update the visible form when initialView changes', () => {
+    const { rerender } = render(<LoginTemplate initialView={LOGIN_VIEW.SIGN_IN} />)
+    expect(screen.getByTestId('login-component')).toBeInTheDocument()
+
+    rerender(<LoginTemplate initialView={LOGIN_VIEW.REGISTER} />)
+    expect(screen.queryByTestId('login-component')).not.toBeInTheDocument()
+    expect(screen.getByTestId('register-component')).toBeInTheDocument()
+  })
+
   it('should render Register component when switching views', () => {
     render(<LoginTemplate />)
     
@@ -89,11 +98,11 @@ describe('LoginTemplate Component', () => {
     
     expect(mainDiv).toHaveClass('w-full')
     expect(mainDiv).toHaveClass('min-h-[60vh]')
-    expect(mainDiv).toHaveClass('flex')
-    expect(mainDiv).toHaveClass('items-center')
-    expect(mainDiv).toHaveClass('justify-center')
     expect(mainDiv).toHaveClass('px-6')
     expect(mainDiv).toHaveClass('py-10')
+
+    const layout = container.querySelector('.grid')
+    expect(layout).toHaveClass('lg:grid-cols-[1.1fr_0.9fr]')
   })
 
   it('should pass setCurrentView function to Login component', () => {

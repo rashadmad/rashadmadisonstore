@@ -58,4 +58,29 @@ describe("Medusa product page", () => {
     render(page)
     expect(screen.getByTestId("medusa-template")).toHaveTextContent("Prince")
   })
+
+  it("requests product images in the product query", async () => {
+    ;(listProducts as jest.Mock).mockResolvedValue({
+      response: {
+        products: [{ id: "medusa_1", title: "Prince", images: [{ id: "img_1", url: "a.jpg" }], variants: [] }],
+        count: 1,
+      },
+      nextPage: null,
+    })
+
+    await ProductPage({
+      params: Promise.resolve({ countryCode: "us", handle: "prince" }),
+      searchParams: Promise.resolve({}),
+    } as any)
+
+    expect(listProducts).toHaveBeenCalledWith(
+      expect.objectContaining({
+        countryCode: "us",
+        queryParams: expect.objectContaining({
+          handle: "prince",
+          fields: expect.stringContaining("*images"),
+        }),
+      })
+    )
+  })
 })

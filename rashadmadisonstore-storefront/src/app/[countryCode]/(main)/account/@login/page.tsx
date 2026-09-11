@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 }
 
 export default async function Login(props: {
-  searchParams?: Promise<{ view?: string }>
+  searchParams?: Promise<{ view?: string; redirectTo?: string }>
 }) {
   const hasLoggedInBefore = await getHasLoggedInBefore()
   const searchParams = await props.searchParams
@@ -23,6 +23,6 @@ export default async function Login(props: {
         : LOGIN_VIEW.REGISTER
 
   return (
-    <LoginTemplate initialView={initialView} />
+    <LoginTemplate initialView={initialView} redirectTo={searchParams?.redirectTo} />
   )
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo, useState } from "react"
+import { usePathname } from "next/navigation"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 type PostCommentsProps = {
@@ -25,7 +26,22 @@ const dateFormatter = new Intl.DateTimeFormat("en-US", {
   minute: "2-digit",
 })
 
+const readJson = async <T,>(response: Response): Promise<T | null> => {
+  const text = await response.text()
+
+  if (!text) {
+    return null
+  }
+
+  try {
+    return JSON.parse(text) as T
+  } catch {
+    return null
+  }
+}
+
 const PostComments = ({ slug, defaultAuthor = "", isLoggedIn }: PostCommentsProps) => {
+  const pathname = usePathname()
   const [comments, setComments] = useState<BlogComment[]>([])
   const [author, setAuthor] = useState(defaultAuthor)
   const [message, setMessage] = useState("")
@@ -37,6 +53,8 @@ const PostComments = ({ slug, defaultAuthor = "", isLoggedIn }: PostCommentsProp
     return !isLoggedIn || isSubmitting || message.trim().length < 3
   }, [isLoggedIn, message, isSubmitting])
 
+  const signInHref = `/account?view=sign-in&redirectTo=${encodeURIComponent(pathname || "/blog")}`
+
   useEffect(() => {
     let isMounted = true
 
@@ -46,14 +64,14 @@ const PostComments = ({ slug, defaultAuthor = "", isLoggedIn }: PostCommentsProp
 
       try {
         const response = await fetch(`/api/blog/comments?slug=${encodeURIComponent(slug)}`)
-        const payload = (await response.json()) as { comments?: BlogComment[]; error?: string }
+        const payload = await readJson<{ comments?: BlogComment[]; error?: string }>(response)
 
         if (!response.ok) {
-          throw new Error(payload.error || "Failed to load comments.")
+          throw new Error(payload?.error || "Failed to load comments.")
         }
 
         if (isMounted) {
-          setComments(payload.comments || [])
+          setComments(payload?.comments || [])
         }
       } catch (error) {
         if (isMounted) {
@@ -91,10 +109,10 @@ const PostComments = ({ slug, defaultAuthor = "", isLoggedIn }: PostCommentsProp
         }),
       })
 
-      const payload = (await response.json()) as { comment?: BlogComment; error?: string }
+      const payload = await readJson<{ comment?: BlogComment; error?: string }>(response)
 
-      if (!response.ok || !payload.comment) {
-        throw new Error(payload.error || "Could not submit comment.")
+      if (!response.ok || !payload?.comment) {
+        throw new Error(payload?.error || "Could not submit comment.")
       }
 
       setComments((prev) => [payload.comment as BlogComment, ...prev])
@@ -148,7 +166,7 @@ const PostComments = ({ slug, defaultAuthor = "", isLoggedIn }: PostCommentsProp
               You must be signed in to leave a comment.
             </p>
             <LocalizedClientLink
-              href="/account?view=sign-in"
+              href={signInHref}
               className="mt-3 inline-flex text-sm font-semibold uppercase tracking-[0.16em] text-[#2f6b3b] underline underline-offset-4"
             >
               Sign in

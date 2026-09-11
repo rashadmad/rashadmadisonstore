@@ -7,21 +7,28 @@ export const runtime = "nodejs"
 const normalize = (value: string) => value.trim().replace(/\s+/g, " ")
 
 export async function GET(req: NextRequest) {
-  const slug = req.nextUrl.searchParams.get("slug")?.trim()
+  try {
+    const slug = req.nextUrl.searchParams.get("slug")?.trim()
 
-  if (!slug) {
-    return NextResponse.json({ error: "slug is required." }, { status: 400 })
-  }
-
-  const response = await sdk.client.fetch<{ comments?: unknown[] }>(
-    `/store/custom/blog/posts/${encodeURIComponent(slug)}/comments`,
-    {
-      method: "GET",
-      cache: "no-store",
+    if (!slug) {
+      return NextResponse.json({ error: "slug is required." }, { status: 400 })
     }
-  )
 
-  return NextResponse.json({ comments: response.comments || [] })
+    const response = await sdk.client.fetch<{ comments?: unknown[] }>(
+      `/store/custom/blog/posts/${encodeURIComponent(slug)}/comments`,
+      {
+        method: "GET",
+        cache: "no-store",
+      }
+    )
+
+    return NextResponse.json({ comments: response.comments || [] })
+  } catch {
+    return NextResponse.json(
+      { error: "Could not load comments." },
+      { status: 500 }
+    )
+  }
 }
 
 export async function POST(req: NextRequest) {

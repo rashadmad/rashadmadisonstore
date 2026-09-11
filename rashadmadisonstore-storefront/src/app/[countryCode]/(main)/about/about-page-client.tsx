@@ -125,7 +125,7 @@ export default function AboutPageClient() {
           <div className="mb-8 max-w-2xl">
             <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">Practice</p>
             <h2 id="practice-heading" className="mt-3 text-3xl font-semibold text-[#17120d] sm:text-4xl">
-              This is my process for my screen prints
+              {appCopy.about.practiceHeading}
             </h2>
           </div>
 

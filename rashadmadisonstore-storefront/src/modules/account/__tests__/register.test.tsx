@@ -134,7 +134,7 @@ describe('Register Component', () => {
   it('should have correct styling classes on main container', () => {
     render(<Register setCurrentView={mockSetCurrentView} />)
     const mainDiv = screen.getByTestId('register-page')
-    expect(mainDiv).toHaveClass('max-w-sm')
+    expect(mainDiv).toHaveClass('max-w-3xl')
   })
 
   it('should render all input labels', () => {
@@ -145,6 +145,23 @@ describe('Register Component', () => {
     expect(screen.getByText('Phone')).toBeInTheDocument()
     expect(screen.getByText('Password')).toBeInTheDocument()
     expect(screen.getByText('Confirm password')).toBeInTheDocument()
+  })
+
+  it('renders the Google signup button', () => {
+    render(<Register setCurrentView={mockSetCurrentView} />)
+    expect(screen.getByText('Sign up with Google')).toBeInTheDocument()
+  })
+
+  it('hides shipping address fields when shipping matches billing', () => {
+    render(<Register setCurrentView={mockSetCurrentView} />)
+    expect(screen.getByText('Same as billing')).toBeInTheDocument()
+    expect(screen.queryByText('Shipping address')).not.toBeInTheDocument()
+  })
+
+  it('shows shipping address fields when a different shipping address is selected', () => {
+    render(<Register setCurrentView={mockSetCurrentView} />)
+    fireEvent.click(screen.getByLabelText('Use a different shipping address'))
+    expect(screen.getByText('Shipping address')).toBeInTheDocument()
   })
 
   it('should have correct privacy policy link href', () => {

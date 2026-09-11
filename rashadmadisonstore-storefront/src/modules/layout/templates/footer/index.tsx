@@ -18,7 +18,7 @@ export default function Footer() {
               {appCopy.footer.brandName}
             </LocalizedClientLink>
             <img
-              src="/images/philosipher_symbol.svg"
+              src="/images/philosopher_symbol.svg"
               alt={appCopy.footer.brandName}
               className="h-36 sm:h-40 w-auto block"
             />

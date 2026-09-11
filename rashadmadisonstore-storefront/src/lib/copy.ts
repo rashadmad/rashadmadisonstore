@@ -54,6 +54,12 @@ export const appCopy = {
     body: "Limited editions rooted in Black beauty, legacy, and self-determination.",
     collectionCta: "Explore collection",
   },
+  auth: {
+    artwork: {
+      label: "The Quintessential",
+      heading: "Handcrafted in the studio for your lifestyle",
+    },
+  },
   about: {
     eyebrow: "About the artist",
     heading: "Rashad was classically trained in fine arts at the Savanna University Of Art and Design",
@@ -68,6 +74,7 @@ export const appCopy = {
       body:
         "I graduated from the Savannah College of Art and Design, a leading institution for art and design education. Its demanding studio culture and global creative community helped shape the discipline, ambition, and visual language I bring to every body of work.",
     },
+    practiceHeading: "This is my process for my screen-printing",
     pillars: [
       {
         title: "Step 1 | Drawing",
@@ -88,7 +95,7 @@ export const appCopy = {
     ctaSecondary: "View collections",
   },
   blog: {
-    eyebrow: "Studio journal",
+    eyebrow: "Studio journals",
     heading: "Writing from the practice behind The Quintessential.",
     intro:
       "A space for process notes, collection context, and short essays on the ideas shaping Rashad Madison's work.",
@@ -99,11 +106,11 @@ export const appCopy = {
     },
     featured: {
       label: "Featured post",
-      title: "Why repetition matters in Afrocentric image-making",
+      title: "How Tenderhead came to be",
       excerpt:
-        "Repeating symbols are not decorative filler. They build visual memory, reinforce lineage, and let a body of work speak across multiple pieces at once.",
-      href: "/about",
-      cta: "Read the artist background",
+        "A personal look at the origins of the piece, the emotional weight behind it, and the visual language that made it resonate.",
+      href: "/blog/how-tender-head-came-to-be",
+      cta: "Read the post",
     },
     closing: "More essays, release notes, and studio updates will live here as new work develops.",
   },
@@ -142,7 +149,7 @@ export const appCopy = {
     ],
   },
   newsletter: {
-    heading: "Stay close to the work",
+    heading: "Handcrafted in the studio for your lifestyle",
     description:
       "Get studio notes, release alerts, and first access to new work before it drops. Thoughtful updates only—no noise, no clutter, no spam.",
     labels: {

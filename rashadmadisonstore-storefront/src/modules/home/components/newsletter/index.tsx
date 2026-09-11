@@ -108,7 +108,7 @@ export default function NewsletterSubscription() {
                 <div className="rounded-md bg-white/90 p-2 ring-1 ring-gray-200">
                   <CalendarDaysIcon aria-hidden="true" className="size-6 text-[#0d160f]" />
                 </div>
-                <dt className="mt-4 text-lg font-semibold text-white">
+                <dt className="mt-4 text-lg font-semibold text-yellow-300">
                   {appCopy.newsletter.highlights.first.title}
                 </dt>
                 <dd className="mt-2 text-base leading-7 text-white/80">
@@ -119,7 +119,7 @@ export default function NewsletterSubscription() {
                 <div className="rounded-md bg-white/90 p-2 ring-1 ring-gray-200">
                   <PaintBrushIcon aria-hidden="true" className="size-6 text-[#0d160f]" />
                 </div>
-                <dt className="mt-4 text-lg font-semibold text-white">
+                <dt className="mt-4 text-lg font-semibold text-yellow-300">
                   {appCopy.newsletter.highlights.second.title}
                 </dt>
                 <dd className="mt-2 text-base leading-7 text-white/80">
@@ -130,7 +130,7 @@ export default function NewsletterSubscription() {
                 <div className="rounded-md bg-white/90 p-2 ring-1 ring-gray-200">
                   <HandRaisedIcon aria-hidden="true" className="size-6 text-[#0d160f]" />
                 </div>
-                <dt className="mt-4 text-lg font-semibold text-white">
+                <dt className="mt-4 text-lg font-semibold text-yellow-300">
                   {appCopy.newsletter.highlights.third.title}
                 </dt>
                 <dd className="mt-2 text-base leading-7 text-white/80">

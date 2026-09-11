@@ -114,7 +114,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
 
   const product = await listProducts({
     countryCode: params.countryCode,
-    queryParams: { handle, fields: "+width,+height,+length,*categories,*collection,*variants.images,*variants.calculated_price," },
+    queryParams: { handle, fields: "*images,+width,+height,+length,*categories,*collection,*variants.images,*variants.calculated_price," },
   }).then(({ response }) => response.products[0])
 
   if (!product) {
@@ -145,7 +145,7 @@ export default async function ProductPage(props: Props) {
 
   const pricedProduct = await listProducts({
     countryCode: params.countryCode,
-    queryParams: { handle: params.handle, fields: "+width,+height,+length,*categories,*collection,*variants.images,*variants.calculated_price," },
+    queryParams: { handle: params.handle, fields: "*images,+width,+height,+length,*categories,*collection,*variants.images,*variants.calculated_price," },
   }).then(({ response }) => response.products[0])
 
   if (!pricedProduct) {

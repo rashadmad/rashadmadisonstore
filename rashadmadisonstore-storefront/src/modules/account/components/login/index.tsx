@@ -1,5 +1,7 @@
 import { login } from "@lib/data/customer"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faGoogle } from "@fortawesome/free-brands-svg-icons"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import Input from "@modules/common/components/input"
@@ -7,9 +9,10 @@ import { useActionState } from "react"
 
 type Props = {
   setCurrentView: (view: LOGIN_VIEW) => void
+  redirectTo?: string
 }
 
-const Login = ({ setCurrentView }: Props) => {
+const Login = ({ setCurrentView, redirectTo }: Props) => {
   const [message, formAction] = useActionState(login, null)
 
   return (
@@ -21,7 +24,19 @@ const Login = ({ setCurrentView }: Props) => {
       <p className="text-center text-base-regular text-ui-fg-base mb-8">
         Sign in to access an enhanced shopping experience.
       </p>
+      <button
+        type="button"
+        disabled
+        title="Google login is not configured yet."
+        className="mb-5 inline-flex w-full items-center justify-center gap-3 rounded border border-ui-border-base bg-white px-4 py-3 text-small-semi text-ui-fg-base opacity-60"
+      >
+        <FontAwesomeIcon icon={faGoogle} className="text-base" aria-hidden="true" />
+        Login with Google
+      </button>
+      <p>Or sign in with your email</p>
+      <br></br>
       <form className="w-full" action={formAction}>
+        {redirectTo ? <input type="hidden" name="redirect_to" value={redirectTo} /> : null}
         <div className="flex flex-col w-full gap-y-2">
           <Input
             label="Email"

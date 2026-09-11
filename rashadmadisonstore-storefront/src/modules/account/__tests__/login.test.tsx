@@ -72,6 +72,11 @@ describe('Login Component', () => {
     expect(screen.getByText('Sign in')).toBeInTheDocument()
   })
 
+  it('should render Google login button', () => {
+    render(<Login setCurrentView={mockSetCurrentView} />)
+    expect(screen.getByText('Login with Google')).toBeInTheDocument()
+  })
+
   it('should render register button/link', () => {
     render(<Login setCurrentView={mockSetCurrentView} />)
     const buttons = screen.getAllByRole('button')

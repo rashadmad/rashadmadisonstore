@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import Image from "next/image"
+import { Fragment } from "react"
 
 import { appCopy } from "@lib/copy"
 import { listBlogPosts } from "@lib/data/blog"
@@ -59,86 +60,88 @@ export default async function BlogPage() {
 
       <section id="blog-posts" aria-label="Latest posts and updates" className="content-container py-14 sm:py-16 lg:py-20">
         <div className="grid gap-6 lg:grid-cols-3">
-          {blogPosts.map((post) => (
-            <article
-              key={post.slug}
-              className="overflow-hidden rounded-[1.75rem] border border-[#204025]/15 bg-[#fbf7ef] shadow-[0_18px_35px_rgba(23,18,13,0.06)]"
-            >
-              {post.image ? (
-                <LocalizedClientLink href={`/blog/${post.slug}`} className="relative block aspect-[4/3] bg-[#e7dcc9]">
-                  <Image
-                    src={post.image}
-                    alt={post.imageAlt}
-                    fill
-                    className="object-cover transition-transform duration-500 hover:scale-[1.03]"
-                    sizes="(max-width: 1024px) 100vw, 33vw"
-                  />
-                </LocalizedClientLink>
-              ) : null}
-              <div className="p-6">
-                <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">{post.category}</p>
-                <h2 className="mt-3 text-2xl font-semibold leading-tight text-[#17120d]">
-                  {post.title}
-                </h2>
-                <p className="mt-4 text-base leading-8 text-[#3b3024]">{post.excerpt}</p>
-                <LocalizedClientLink
-                  href={`/blog/${post.slug}`}
-                  className="mt-5 inline-flex text-sm font-semibold text-[#2f6b3b] underline underline-offset-4"
-                >
-                  Read post
-                </LocalizedClientLink>
-              </div>
-            </article>
-          ))}
+          {Array.from({ length: Math.max(blogPosts.length, mastodonPosts.length) }).map((_, index) => {
+            const blogPost = blogPosts[index]
+            const mastodonPost = mastodonPosts[index]
+
+            return (
+              <Fragment key={`feed-${index}`}>
+                {blogPost ? (
+                  <article
+                    key={`blog-${blogPost.slug}`}
+                    className="overflow-hidden rounded-[1.75rem] border border-[#204025]/15 bg-[#fbf7ef] shadow-[0_18px_35px_rgba(23,18,13,0.06)]"
+                  >
+                    {blogPost.image ? (
+                      <LocalizedClientLink href={`/blog/${blogPost.slug}`} className="relative block aspect-[4/3] bg-[#e7dcc9]">
+                        <Image
+                          src={blogPost.image}
+                          alt={blogPost.imageAlt}
+                          fill
+                          className="object-cover transition-transform duration-500 hover:scale-[1.03]"
+                          sizes="(max-width: 1024px) 100vw, 33vw"
+                        />
+                      </LocalizedClientLink>
+                    ) : null}
+                    <div className="p-6">
+                      <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">{blogPost.category}</p>
+                      <h2 className="mt-3 text-2xl font-semibold leading-tight text-[#17120d]">
+                        {blogPost.title}
+                      </h2>
+                      <p className="mt-4 text-base leading-8 text-[#3b3024]">{blogPost.excerpt}</p>
+                      <LocalizedClientLink
+                        href={`/blog/${blogPost.slug}`}
+                        className="mt-5 inline-flex text-sm font-semibold text-[#2f6b3b] underline underline-offset-4"
+                      >
+                        Read post
+                      </LocalizedClientLink>
+                    </div>
+                  </article>
+                ) : null}
+
+                {mastodonPost ? (
+                  <article
+                    key={`mastodon-${mastodonPost.id}`}
+                    className="overflow-hidden rounded-[1.75rem] border border-[#204025]/15 bg-[#fbf7ef] shadow-[0_18px_35px_rgba(23,18,13,0.06)]"
+                  >
+                    <div className="p-6">
+                      <p className="text-sm uppercase tracking-[0.22em] text-[#2f6b3b]">
+                        {dateFormatter.format(new Date(mastodonPost.createdAt))}
+                      </p>
+                      <h2 className="mt-3 text-2xl font-semibold leading-tight text-[#17120d]">
+                        From Mastodon
+                      </h2>
+                      <p className="mt-4 text-base leading-8 text-[#3b3024] whitespace-pre-line">
+                        {mastodonPost.contentText}
+                      </p>
+                      <a
+                        href={mastodonPost.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="mt-5 inline-flex text-sm font-semibold text-[#2f6b3b] underline underline-offset-4"
+                      >
+                        Open on Mastodon
+                      </a>
+                    </div>
+                  </article>
+                ) : null}
+              </Fragment>
+            )
+          })}
         </div>
 
-        <div className="mt-14 rounded-[1.75rem] border border-[#204025]/15 bg-[#fbf7ef] p-6 shadow-[0_18px_35px_rgba(23,18,13,0.06)] sm:p-8">
-          <div className="mb-7 flex flex-wrap items-center justify-between gap-4">
-            <h2 className="text-2xl font-semibold text-[#17120d] sm:text-3xl">From Mastodon</h2>
-            <a
-              href={profileUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center rounded-full border border-[#2f6b3b] px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-[#2f6b3b] transition hover:bg-[#2f6b3b] hover:text-white"
-            >
-              Follow @rashadmad
-            </a>
-          </div>
-
-          {loadError ? (
+        {loadError ? (
+          <div className="mt-10 rounded-[1.75rem] border border-[#204025]/15 bg-[#fbf7ef] p-6 shadow-[0_18px_35px_rgba(23,18,13,0.06)]">
             <p className="text-base leading-8 text-[#3b3024]">
               Mastodon posts are temporarily unavailable. Visit the profile directly for the latest updates.
             </p>
-          ) : mastodonPosts.length === 0 ? (
+          </div>
+        ) : mastodonPosts.length === 0 ? (
+          <div className="mt-10 rounded-[1.75rem] border border-[#204025]/15 bg-[#fbf7ef] p-6 shadow-[0_18px_35px_rgba(23,18,13,0.06)]">
             <p className="text-base leading-8 text-[#3b3024]">
               No Mastodon posts are available yet.
             </p>
-          ) : (
-            <div className="grid gap-5 lg:grid-cols-2">
-              {mastodonPosts.map((post) => (
-                <article
-                  key={post.id}
-                  className="rounded-2xl border border-[#204025]/15 bg-[#f4ebda] p-5"
-                >
-                  <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#2f6b3b]">
-                    {dateFormatter.format(new Date(post.createdAt))}
-                  </p>
-                  <p className="mt-3 whitespace-pre-line text-base leading-8 text-[#3b3024]">
-                    {post.contentText}
-                  </p>
-                  <a
-                    href={post.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="mt-5 inline-flex text-sm font-semibold text-[#2f6b3b] underline underline-offset-4"
-                  >
-                    Open on Mastodon
-                  </a>
-                </article>
-              ))}
-            </div>
-          )}
-        </div>
+          </div>
+        ) : null}
 
         <div className="mt-12 rounded-[1.75rem] border border-black/10 bg-[#e7dcc9] px-6 py-8 sm:px-8">
           <p className="text-lg leading-8 text-[#3b3024]">{appCopy.blog.closing}</p>
