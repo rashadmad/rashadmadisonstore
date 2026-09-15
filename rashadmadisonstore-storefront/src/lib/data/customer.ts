@@ -107,7 +107,13 @@ export const retrieveCustomer =
   async (): Promise<HttpTypes.StoreCustomer | null> => {
     const authHeaders = await getAuthHeaders()
 
-    if (!authHeaders) return null
+    if (
+      !authHeaders ||
+      !("authorization" in authHeaders) ||
+      !authHeaders.authorization
+    ) {
+      return null
+    }
 
     const headers = {
       ...authHeaders,
@@ -128,7 +134,10 @@ export const retrieveCustomer =
         cache: "force-cache",
       })
       .then(({ customer }) => customer)
-      .catch(() => null)
+      .catch(async () => {
+        await removeAuthToken().catch(() => {})
+        return null
+      })
   }
 
 export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
@@ -174,11 +183,7 @@ export async function signup(_currentState: unknown, formData: FormData) {
       ...(await getAuthHeaders()),
     }
 
-    const { customer: createdCustomer } = await sdk.store.customer.create(
-      customerForm,
-      {},
-      headers
-    )
+    await sdk.store.customer.create(customerForm, {}, headers)
 
     const loginToken = await sdk.auth.login("customer", "emailpass", {
       email: customerForm.email,
@@ -194,13 +199,18 @@ export async function signup(_currentState: unknown, formData: FormData) {
 
     const customerCacheTag = await getCacheTag("customers")
     revalidateTag(customerCacheTag)
-
-    await transferCart()
-
-    return createdCustomer
   } catch (error: any) {
     return error.toString()
   }
+
+  try {
+    await transferCart()
+  } catch (error) {
+    // A stale guest cart should not block successful customer authentication.
+    console.warn("Unable to transfer cart after signup", error)
+  }
+
+  redirect("/account")
 }
 
 export async function login(_currentState: unknown, formData: FormData) {
@@ -245,7 +255,7 @@ export async function signout(countryCode: string) {
   const cartCacheTag = await getCacheTag("carts")
   revalidateTag(cartCacheTag)
 
-  redirect(`/${countryCode}/account`)
+  redirect(`/${countryCode}`)
 }
 
 export async function transferCart() {

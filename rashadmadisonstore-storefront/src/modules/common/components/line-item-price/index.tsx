@@ -46,7 +46,7 @@ const LineItemPrice = ({
           </>
         )}
         <span
-          className={clx("text-base-regular", {
+          className={clx("text-base-regular text-neutral-900 font-bold group-[.cart-dropdown]:text-yellow-500", {
             "text-ui-fg-interactive": hasReducedPrice,
           })}
           data-testid="product-price"

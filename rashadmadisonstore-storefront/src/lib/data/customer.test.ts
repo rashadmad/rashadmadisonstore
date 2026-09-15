@@ -45,7 +45,7 @@ import {
   setAuthToken,
   setHasLoggedInBefore,
 } from "./cookies"
-import { login, signup } from "./customer"
+import { login, retrieveCustomer, signup } from "./customer"
 
 const mockRegister = sdk.auth.register as jest.Mock
 const mockLogin = sdk.auth.login as jest.Mock
@@ -96,14 +96,15 @@ describe("customer authentication actions", () => {
     expect(mockCreateCustomer).not.toHaveBeenCalled()
   })
 
-  it("registers, authenticates, and returns the new customer", async () => {
+  it("registers, authenticates, and redirects to the account page", async () => {
     const customer = { id: "customer_1", email: "rashad@example.com" }
     mockRegister.mockResolvedValue("registration-token")
     mockCreateCustomer.mockResolvedValue({ customer })
     mockLogin.mockResolvedValue("login-token")
 
-    await expect(signup(null, createSignupForm())).resolves.toEqual(customer)
+    await expect(signup(null, createSignupForm())).resolves.toBeUndefined()
 
+    expect(mockRedirect).toHaveBeenCalledWith("/account")
     expect(mockRegister).toHaveBeenCalledWith("customer", "emailpass", {
       email: "rashad@example.com",
       password: "secure-password",
@@ -144,8 +145,9 @@ describe("customer authentication actions", () => {
     mockCreateCustomer.mockResolvedValue({ customer })
     mockLogin.mockResolvedValue("login-token")
 
-    await expect(signup(null, formData)).resolves.toEqual(customer)
+    await expect(signup(null, formData)).resolves.toBeUndefined()
 
+    expect(mockRedirect).toHaveBeenCalledWith("/account")
     expect(mockCreateAddress).toHaveBeenCalledWith(
       {
         first_name: "Rashad",
@@ -177,8 +179,9 @@ describe("customer authentication actions", () => {
     mockCreateCustomer.mockResolvedValue({ customer })
     mockLogin.mockResolvedValue("login-token")
 
-    await expect(signup(null, formData)).resolves.toEqual(customer)
+    await expect(signup(null, formData)).resolves.toBeUndefined()
 
+    expect(mockRedirect).toHaveBeenCalledWith("/account")
     expect(mockCreateAddress).toHaveBeenCalledWith(
       expect.objectContaining({
         is_default_billing: false,
@@ -250,4 +253,10 @@ describe("customer authentication actions", () => {
     expect(mockRedirect).toHaveBeenCalledWith("/account")
     warn.mockRestore()
   })
-})
+  it("returns null directly when no authorization header is present in cookies", async () => {
+    mockGetAuthHeaders.mockResolvedValue({})
+
+    const customer = await retrieveCustomer()
+
+    expect(customer).toBeNull()
+  })})

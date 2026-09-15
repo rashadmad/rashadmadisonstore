@@ -6,8 +6,10 @@ import { getAuthHeaders, getCacheOptions } from "./cookies"
 import { HttpTypes } from "@medusajs/types"
 
 export const retrieveOrder = async (id: string) => {
+  const authHeaders = await getAuthHeaders()
+
   const headers = {
-    ...(await getAuthHeaders()),
+    ...authHeaders,
   }
 
   const next = {
@@ -26,7 +28,7 @@ export const retrieveOrder = async (id: string) => {
       cache: "force-cache",
     })
     .then(({ order }) => order)
-    .catch((err) => medusaError(err))
+    .catch(() => null)
 }
 
 export const listOrders = async (
@@ -34,8 +36,18 @@ export const listOrders = async (
   offset: number = 0,
   filters?: Record<string, any>
 ) => {
+  const authHeaders = await getAuthHeaders()
+
+  if (
+    !authHeaders ||
+    !("authorization" in authHeaders) ||
+    !authHeaders.authorization
+  ) {
+    return null
+  }
+
   const headers = {
-    ...(await getAuthHeaders()),
+    ...authHeaders,
   }
 
   const next = {
@@ -57,7 +69,7 @@ export const listOrders = async (
       cache: "force-cache",
     })
     .then(({ orders }) => orders)
-    .catch((err) => medusaError(err))
+    .catch(() => null)
 }
 
 export const createTransferRequest = async (

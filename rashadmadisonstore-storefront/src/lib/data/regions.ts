@@ -35,31 +35,30 @@ export const retrieveRegion = async (id: string) => {
     .catch(medusaError)
 }
 
-const regionMap = new Map<string, HttpTypes.StoreRegion>()
-
 export const getRegion = async (countryCode: string) => {
   try {
-    if (regionMap.has(countryCode)) {
-      return regionMap.get(countryCode)
-    }
-
+    const lowerCountryCode = countryCode?.toLowerCase()
     const regions = await listRegions()
 
-    if (!regions) {
+    if (!regions || !regions.length) {
       return null
     }
 
+    const regionMap = new Map<string, HttpTypes.StoreRegion>()
+
     regions.forEach((region) => {
       region.countries?.forEach((c) => {
-        regionMap.set(c?.iso_2 ?? "", region)
+        if (c?.iso_2) {
+          regionMap.set(c.iso_2.toLowerCase(), region)
+        }
       })
     })
 
-    const region = countryCode
-      ? regionMap.get(countryCode)
+    const region = lowerCountryCode
+      ? regionMap.get(lowerCountryCode)
       : regionMap.get("us")
 
-    return region
+    return region || regions[0]
   } catch (e: any) {
     return null
   }

@@ -1,5 +1,12 @@
 export default function medusaError(error: any): never {
-  if (error.response) {
+  // @medusajs/js-sdk throws a FetchError (status/statusText/message) for non-2xx responses.
+  if (typeof error?.status === "number") {
+    console.error("Status code:", error.status, error.statusText)
+    console.error("Message:", error.message)
+
+    const message = String(error.message ?? error.statusText ?? "Request failed")
+    throw new Error(message.charAt(0).toUpperCase() + message.slice(1) + ".")
+  } else if (error.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
     const u = new URL(error.config.url, error.config.baseURL)

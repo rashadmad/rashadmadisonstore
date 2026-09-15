@@ -12,6 +12,10 @@ export const appCopy = {
       title: "Apparel | The Quintessential",
       description: "Browse apparel from The Quintessential.",
     },
+    store: {
+      title: "Store | The Quintessential",
+      description: "Explore all products, artwork, and apparel from The Quintessential.",
+    },
     about: {
       title: "About | The Quintessential",
       description:
@@ -21,6 +25,11 @@ export const appCopy = {
       title: "Blog | The Quintessential",
       description:
         "Notes, process updates, and writing from Rashad Madison on art, practice, and upcoming releases.",
+    },
+    customerService: {
+      title: "Customer Service & FAQ | The Quintessential",
+      description:
+        "Find answers to common questions about orders, shipping, original artwork, returns, and custom commissions at The Quintessential.",
     },
   },
   hero: {
@@ -148,6 +157,35 @@ export const appCopy = {
       "New releases added as they become available.",
     ],
   },
+  store: {
+    heading: "Store",
+    tagline: "explore all my work",
+    intro:
+      "Explore the complete catalog of original fine art, limited-edition prints, and wearable artwork from Rashad Madison.",
+    highlights: [
+      "Originals, limited prints, and apparel in one place.",
+      "Archival quality craftsmanship and materials.",
+      "Direct support for independent Afrocentric art.",
+    ],
+  },
+  collections: {
+    tenderHead:
+      "A personal exploration of vulnerability, identity, and the tender moments of Black hair rituals.",
+    prince:
+      "A regal portrait series honoring nobility, sovereignty, and the enduring dignity of Black youth.",
+    africanPrincess:
+      "A striking homage to royalty, grace, and rich ancestral heritage portrayed through bold color and intention.",
+    africanSunset:
+      "Warm, luminous compositions capturing the radiance, atmosphere, and golden warmth of ancestral landscapes.",
+    zuluHusband:
+      "Honoring traditional Zulu marriage customs, warrior pride, and visual devotion to heritage.",
+    identity:
+      "Artworks celebrating Black heritage, culture, and self-determination.",
+    apparel:
+      "Wearable art carrying the visual language and spirit of The Quintessential into daily life.",
+    default:
+      "A curated collection celebrating Black expression, heritage, and independent craftsmanship.",
+  },
   newsletter: {
     heading: "Handcrafted in the studio for your lifestyle",
     description:
@@ -185,6 +223,106 @@ export const appCopy = {
       "Thank you for supporting independent Afrocentric art. Every order helps fund new collections, community projects, and future exhibitions.",
     ],
   },
+  customerService: {
+    eyebrow: "Help & Support",
+    heading: "Customer Service & FAQ",
+    subheading: "Everything you need to know about collecting work, ordering, shipping, and studio inquiries.",
+    searchPlaceholder: "Search questions or keywords...",
+    contactBox: {
+      heading: "Still have questions?",
+      body: "We're here to help. Reach out directly to Rashad Madison's studio team.",
+      emailLabel: "Email rashadmad@gmail.com",
+      phoneLabel: "Call or text 773-320-579",
+    },
+    categories: [
+      {
+        id: "orders-payment",
+        title: "Ordering & Payment",
+        questions: [
+          {
+            q: "What payment methods do you accept?",
+            a: "We accept all major credit and debit cards (Visa, Mastercard, American Express, Discover) securely processed via Stripe. We also support Apple Pay and Google Pay during checkout."
+          },
+          {
+            q: "How do I know my order went through?",
+            a: "As soon as your order is placed, you will receive an instant email confirmation with your order number and item summary. You can also view your order history anytime by signing into your account."
+          },
+          {
+            q: "Can I change or cancel my order after placing it?",
+            a: "If you need to update shipping details or cancel an order, please contact us immediately at rashadmad@gmail.com. We process orders quickly, but we will do our best to accommodate changes before fulfillment."
+          }
+        ]
+      },
+      {
+        id: "shipping-delivery",
+        title: "Shipping & Delivery",
+        questions: [
+          {
+            q: "How long does shipping take?",
+            a: "Standard order processing takes 2–5 business days. Once shipped, domestic U.S. orders typically arrive within 3–7 business days depending on your location."
+          },
+          {
+            q: "Do you ship internationally?",
+            a: "Yes! We ship artwork, prints, and apparel worldwide. Shipping costs and estimated delivery times are calculated at checkout based on your country."
+          },
+          {
+            q: "How are original artworks and limited prints packaged?",
+            a: "Fine art prints and original works are packaged with archival museum-grade materials, acid-free backing, and protective rigid framing or tubes to ensure they arrive in pristine condition."
+          },
+          {
+            q: "How can I track my shipment?",
+            a: "Once your package leaves the studio, you'll receive a shipping confirmation email containing your tracking number and carrier link."
+          }
+        ]
+      },
+      {
+        id: "artwork-apparel",
+        title: "Artwork, Apparel & Care",
+        questions: [
+          {
+            q: "What is the difference between original artwork and limited prints?",
+            a: "Original artworks are one-of-a-kind physical pieces created by Rashad Madison using oil, acrylic, or ink on canvas/wood. Limited prints are high-resolution archival giclée or screen prints produced in limited quantities."
+          },
+          {
+            q: "Do original artworks come with a Certificate of Authenticity?",
+            a: "Yes, all original paintings and official limited-edition print releases include a signed and dated Certificate of Authenticity."
+          },
+          {
+            q: "How should I care for my apparel?",
+            a: "To preserve the print quality and vibrancy of artwork on apparel, we recommend washing garments inside out with cold water and hanging or tumble drying on low heat."
+          }
+        ]
+      },
+      {
+        id: "returns-exchanges",
+        title: "Returns & Exchanges",
+        questions: [
+          {
+            q: "What is your return policy?",
+            a: "We want you to love your piece. If an item arrives damaged or defective, please contact us within 14 days of delivery with photos of the package and item for a full replacement or refund."
+          },
+          {
+            q: "What if my package is lost or damaged in transit?",
+            a: "All fine art shipments are insured. If your package is damaged or lost by the carrier, email us at rashadmad@gmail.com with your order number and we will resolve it promptly."
+          }
+        ]
+      },
+      {
+        id: "commissions-studio",
+        title: "Commissions & Inquiries",
+        questions: [
+          {
+            q: "Does Rashad Madison accept custom art commissions?",
+            a: "Yes! Rashad accepts select private and commercial commissions throughout the year. Please reach out via email (rashadmad@gmail.com) with details about your vision, dimensions, and timeline."
+          },
+          {
+            q: "How can I inquire about gallery representation, press, or exhibitions?",
+            a: "For press kits, exhibition invitations, or gallery inquiries, please email rashadmad@gmail.com or call 773-320-579."
+          }
+        ]
+      }
+    ]
+  },
   footer: {
     brandName: "The Quintessential",
     headings: {
@@ -197,6 +335,7 @@ export const appCopy = {
       { label: "Blog", href: "/blog" },
       { label: "Gallery", href: "/gallery" },
       { label: "Collections", href: "/collections" },
+      { label: "Customer Service / FAQ", href: "/customer-service" },
       { label: "Store", href: "/store" },
     ],
     contact: {

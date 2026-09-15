@@ -29,10 +29,10 @@ const DeleteButton = ({
       )}
     >
       <button
-        className="flex gap-x-1 text-ui-fg-subtle hover:text-ui-fg-base cursor-pointer"
+        className="flex gap-x-1 text-neutral-600 hover:text-neutral-900 cursor-pointer font-medium group-[.cart-dropdown]:text-yellow-500 group-[.cart-dropdown]:hover:text-yellow-400"
         onClick={() => handleDelete(id)}
       >
-        {isDeleting ? <Spinner className="animate-spin" /> : <Trash />}
+        {isDeleting ? <Spinner className="animate-spin text-neutral-600 group-[.cart-dropdown]:text-yellow-500" /> : <Trash className="text-neutral-600 group-[.cart-dropdown]:text-yellow-500" />}
         <span>{children}</span>
       </button>
     </div>

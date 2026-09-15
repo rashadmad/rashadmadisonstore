@@ -22,9 +22,11 @@ const getPrice = (product: HttpTypes.StoreProduct) =>
 
 const getProductImages = (product: HttpTypes.StoreProduct): string[] => {
   const urls: string[] = []
+
   if (product.thumbnail) {
     urls.push(product.thumbnail)
   }
+
   if (product.images && Array.isArray(product.images)) {
     for (const img of product.images) {
       if (img?.url && !urls.includes(img.url)) {
@@ -32,6 +34,19 @@ const getProductImages = (product: HttpTypes.StoreProduct): string[] => {
       }
     }
   }
+
+  if (Array.isArray((product as any).variants)) {
+    for (const variant of (product as any).variants) {
+      if (!Array.isArray(variant?.images)) continue
+
+      for (const img of variant.images) {
+        if (img?.url && !urls.includes(img.url)) {
+          urls.push(img.url)
+        }
+      }
+    }
+  }
+
   return urls
 }
 
@@ -73,6 +88,61 @@ const getMediumDescription = (category: string) => {
   }
 
   return `A curated selection of ${category.toLowerCase()} by Rashad Madison.`
+}
+
+export const getCollectionDescription = (
+  collectionName: string,
+  rawCollection?: HttpTypes.StoreCollection
+) => {
+  const normalized = normalizeLabel(collectionName)
+
+  if (!normalized || normalized === "uncollected" || normalized === "uncategorized") {
+    return null
+  }
+
+  if (
+    typeof rawCollection?.description === "string" &&
+    rawCollection.description.trim().length > 0
+  ) {
+    return rawCollection.description
+  }
+
+  if (
+    typeof rawCollection?.metadata?.description === "string" &&
+    rawCollection.metadata.description.trim().length > 0
+  ) {
+    return rawCollection.metadata.description
+  }
+
+  if (normalized.includes("tender")) {
+    return appCopy.collections.tenderHead
+  }
+
+  if (normalized.includes("prince") && !normalized.includes("princess")) {
+    return appCopy.collections.prince
+  }
+
+  if (normalized.includes("princess")) {
+    return appCopy.collections.africanPrincess
+  }
+
+  if (normalized.includes("sunset")) {
+    return appCopy.collections.africanSunset
+  }
+
+  if (normalized.includes("zulu")) {
+    return appCopy.collections.zuluHusband
+  }
+
+  if (normalized.includes("apparel") || normalized.includes("wearable")) {
+    return appCopy.collections.apparel
+  }
+
+  if (normalized.includes("identity") || normalized.includes("heritage")) {
+    return appCopy.collections.identity
+  }
+
+  return appCopy.collections.default
 }
 
 const tileLayout = [
@@ -166,13 +236,26 @@ const renderApparelTile = (
 
 export default function BentoProductGrid({ products, variant = "default" }: BentoProductGridProps) {
   const grouped = products.reduce<
-    Record<string, { category: string; collection: string; products: HttpTypes.StoreProduct[] }>
+    Record<
+      string,
+      {
+        category: string
+        collection: string
+        rawCollection?: HttpTypes.StoreCollection
+        products: HttpTypes.StoreProduct[]
+      }
+    >
   >((groups, product) => {
     const category = (product as any).categories?.[0]?.name || "Uncategorized"
     const collection = product.collection?.title || "Uncollected"
     const key = `${normalizeLabel(category)}::${normalizeLabel(collection)}`
 
-    groups[key] ||= { category, collection, products: [] }
+    groups[key] ||= {
+      category,
+      collection,
+      rawCollection: product.collection as HttpTypes.StoreCollection,
+      products: [],
+    }
     groups[key].products.push(product)
     return groups
   }, {})
@@ -188,6 +271,10 @@ export default function BentoProductGrid({ products, variant = "default" }: Bent
       <div className="space-y-12 sm:space-y-16">
         {sections.map((section) => {
           const tiles = getBentoTiles(section.products, true)
+          const collectionDescription = getCollectionDescription(
+            section.collection,
+            section.rawCollection
+          )
 
           return (
             <section key={`${section.category}-${section.collection}`} className="space-y-6">
@@ -204,9 +291,16 @@ export default function BentoProductGrid({ products, variant = "default" }: Bent
                     )
                   )}
                 </div>
-                <h4 className="mt-6 text-xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-2xl">
-                  {section.collection}
-                </h4>
+                <div className="mt-6 space-y-1">
+                  <h4 className="text-xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-2xl">
+                    {section.collection}
+                  </h4>
+                  {collectionDescription && (
+                    <p className="max-w-2xl text-sm leading-6 text-ui-fg-subtle sm:text-base">
+                      {collectionDescription}
+                    </p>
+                  )}
+                </div>
               </div>
             </section>
           )
@@ -221,6 +315,10 @@ export default function BentoProductGrid({ products, variant = "default" }: Bent
         const tiles = getBentoTiles(section.products, false)
         const primaryTiles = tiles.slice(0, 5)
         const extraTiles = tiles.slice(5)
+        const collectionDescription = getCollectionDescription(
+          section.collection,
+          section.rawCollection
+        )
 
         return (
           <section key={`${section.category}-${section.collection}`} className="space-y-8">
@@ -268,9 +366,16 @@ export default function BentoProductGrid({ products, variant = "default" }: Bent
                   </div>
                 ) : null}
               </div>
-              <h4 className="mt-5 text-xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-2xl">
-                {section.collection}
-              </h4>
+              <div className="mt-5 space-y-1">
+                <h4 className="text-xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-2xl">
+                  {section.collection}
+                </h4>
+                {collectionDescription && (
+                  <p className="max-w-2xl text-sm leading-6 text-ui-fg-subtle sm:text-base">
+                    {collectionDescription}
+                  </p>
+                )}
+              </div>
             </div>
           </section>
         )

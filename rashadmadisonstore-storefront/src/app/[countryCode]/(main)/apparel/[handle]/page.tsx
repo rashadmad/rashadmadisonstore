@@ -157,6 +157,7 @@ export default async function ApparelProductPage(props: Props) {
       region={region}
       countryCode={params.countryCode}
       images={images ?? []}
+      isApparel={true}
     />
   )
 }

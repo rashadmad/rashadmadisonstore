@@ -55,7 +55,7 @@ describe('Hero component', () => {
     )
     expect(screen.getByRole('link', { name: 'African Princess red' })).toHaveAttribute(
       'href',
-      '/products/african-princess-red'
+      '/products/african-princess?v_id=variant_01M0ZKMMJ1G52C6R8QDQE9R6WW'
     )
     expect(screen.getByRole('link', { name: 'Tender Head' })).toHaveAttribute(
       'href',
@@ -91,5 +91,19 @@ describe('Hero component', () => {
 
     expect(screen.queryByRole('link', { name: 'Create an Account' })).not.toBeInTheDocument()
     expect(screen.queryByRole('link', { name: 'Sign back in' })).not.toBeInTheDocument()
+  })
+
+  it('displays personalized welcome message for signed-in users with a first name', () => {
+    const signedInCustomer = {
+      id: 'customer_123',
+      email: 'signedin@example.com',
+      first_name: 'Rashad',
+    } as any
+
+    render(<Hero customer={signedInCustomer} hasLoggedInBefore={true} />)
+
+    expect(
+      screen.getByRole('heading', { name: 'Welcome Rashad to the Quintessential' })
+    ).toBeInTheDocument()
   })
 })

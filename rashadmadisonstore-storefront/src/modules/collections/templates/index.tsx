@@ -4,6 +4,7 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import AnimatedImage from "@modules/common/components/animated-image"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { getPricesForVariant } from "@lib/util/get-product-price"
+import { getCollectionDescription } from "@modules/home/components/bento-product"
 
 const CLOUDINARY_FALLBACK_IMAGES = [
   "https://res.cloudinary.com/dxj8b6h12/image/upload/v1784665145/7034_akrxuz.jpg",
@@ -109,10 +110,7 @@ export default async function CollectionTemplate({
     productsLoadError = true
   }
 
-  const collectionDescription =
-    typeof collection?.metadata?.description === "string"
-      ? collection.metadata.description
-      : null
+  const collectionDescription = getCollectionDescription(collection.title, collection)
 
   return (
     <div className="content-container py-10 sm:py-16">

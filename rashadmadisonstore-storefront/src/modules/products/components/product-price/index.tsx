@@ -30,6 +30,7 @@ export default function ProductPrice({
       >
         {!variant && "From "}
         <span
+          className="text-yellow-500 font-bold"
           data-testid="product-price"
           data-value={selectedPrice.calculated_price_number}
         >

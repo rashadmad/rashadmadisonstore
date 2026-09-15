@@ -18,6 +18,7 @@ const SideMenuItems = {
   About: "/about",
   Blog: "/blog",
   Account: "/account",
+  Store: "/store",
   Gallery: "/gallery",
   Apparel: "/apparel",
   Cart: "/cart",
@@ -86,7 +87,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                           <li key={name} className="w-full">
                             <LocalizedClientLink
                               href={href}
-                              className="block w-full text-3xl leading-10 hover:text-yellow-300 text-white"
+                              className="block w-full text-3xl leading-10 hover:text-yellow-300 text-white transition-colors"
                               onClick={close}
                               prefetch={href === "/gallery" ? false : undefined}
                               data-testid={`${name.toLowerCase()}-link`}

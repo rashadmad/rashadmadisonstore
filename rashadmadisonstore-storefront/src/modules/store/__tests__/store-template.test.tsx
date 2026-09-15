@@ -41,7 +41,7 @@ describe('StoreTemplate', () => {
     })
 
     expect(screen.getByTestId('category-container')).toBeInTheDocument()
-    expect(screen.getByTestId('store-page-title')).toHaveTextContent('All products')
+    expect(screen.queryByTestId('store-page-title')).not.toBeInTheDocument()
     expect(screen.getByTestId('refinement-list')).toBeInTheDocument()
     // Note: paginated-products may be in Suspense fallback in test environment
   })
@@ -82,14 +82,13 @@ describe('StoreTemplate', () => {
     // Note: paginated-products may be in Suspense fallback in test environment
   })
 
-  it('should render the page title correctly', async () => {
+  it('should not render the old All Products page title', async () => {
     await act(async () => {
       render(React.createElement(StoreTemplate, defaultProps))
     })
 
-    const title = screen.getByTestId('store-page-title')
-    expect(title).toHaveTextContent('All products')
-    expect(title.tagName).toBe('H1')
+    expect(screen.queryByTestId('store-page-title')).not.toBeInTheDocument()
+    expect(screen.queryByText('All products')).not.toBeInTheDocument()
   })
 
   it('should render with proper layout classes', async () => {
@@ -101,16 +100,16 @@ describe('StoreTemplate', () => {
     expect(mainContainer).toHaveClass('flex', 'flex-col', 'small:flex-row', 'small:items-start', 'py-6', 'content-container')
   })
 
-  it('should render refinement list and title in correct order', async () => {
+  it('should render refinement list and paginated products in correct container', async () => {
     await act(async () => {
       render(React.createElement(StoreTemplate, defaultProps))
     })
 
     const container = screen.getByTestId('category-container')
     const refinementList = screen.getByTestId('refinement-list')
-    const title = screen.getByTestId('store-page-title')
+    const paginatedProducts = screen.getByTestId('paginated-products')
 
     expect(container).toContainElement(refinementList)
-    expect(container).toContainElement(title)
+    expect(container).toContainElement(paginatedProducts)
   })
 })

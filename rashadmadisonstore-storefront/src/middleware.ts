@@ -20,9 +20,9 @@ export async function fetchRegionsFromBackend(
         "x-publishable-api-key": publishableApiKey ?? "",
       },
       next: {
-        revalidate: 3600,
+        revalidate: 60,
       },
-      cache: "force-cache",
+      cache: "no-store",
     })
 
     const json = await response.json().catch(() => null)
@@ -44,7 +44,7 @@ export async function fetchRegionsFromBackend(
   }
 }
 
-async function getRegionMap(cacheId: string) {
+async function getRegionMap(cacheId: string, requestedCountry?: string) {
   const { regionMap, regionMapUpdated } = regionMapCache
 
   if (!BACKEND_URL) {
@@ -53,10 +53,12 @@ async function getRegionMap(cacheId: string) {
     )
   }
 
-  if (
+  const needsRefresh =
     !regionMap.keys().next().value ||
-    regionMapUpdated < Date.now() - 3600 * 1000
-  ) {
+    regionMapUpdated < Date.now() - 60 * 1000 ||
+    (requestedCountry && !regionMap.has(requestedCountry))
+
+  if (needsRefresh) {
     const regions = await fetchRegionsFromBackend(BACKEND_URL, PUBLISHABLE_API_KEY)
 
     regionMapCache.regionMap.clear()
@@ -136,7 +138,9 @@ export async function middleware(request: NextRequest) {
 
   let cacheId = cacheIdCookie?.value || crypto.randomUUID()
 
-  const regionMap = await getRegionMap(cacheId)
+  const urlCountryCode = request.nextUrl.pathname.split("/")[1]?.toLowerCase()
+
+  const regionMap = await getRegionMap(cacheId, urlCountryCode)
 
   const countryCode = regionMap && (await getCountryCode(request, regionMap))
 

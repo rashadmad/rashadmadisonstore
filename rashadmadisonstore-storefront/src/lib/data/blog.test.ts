@@ -7,20 +7,17 @@ describe("Markdown blog loader", () => {
     const posts = await listBlogPosts()
 
     expect(posts.map((post) => post.slug)).toEqual([
-      "print-from-sketch-to-final-layer",
-      "series-as-visual-language",
-      "what-support-funds",
+      "how-tender-head-came-to-be",
     ])
-    expect(posts[0].content).toContain("Every print begins")
-    expect(posts[0].image).toBe("/images/tenderHeadScreenPrint.jpeg")
+    expect(posts[0].image).toBe("/images/tenderHead_salon.png")
     expect(posts[0].imageAlt).toBe("Tender Head screen print")
   })
 
   it("loads one post by its filename slug", async () => {
-    const post = await getBlogPostBySlug("series-as-visual-language")
+    const post = await getBlogPostBySlug("how-tender-head-came-to-be")
 
-    expect(post?.title).toBe("How a series becomes a visual language")
-    expect(post?.category).toBe("Collections")
+    expect(post?.title).toBe("How tender head came to be")
+    expect(post?.category).toBe("Art Process")
   })
 
   it("rejects unsafe slugs", async () => {

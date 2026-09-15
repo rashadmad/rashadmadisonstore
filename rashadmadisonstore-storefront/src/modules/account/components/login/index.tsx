@@ -24,7 +24,7 @@ const Login = ({ setCurrentView, redirectTo }: Props) => {
         Sign in to access an enhanced shopping experience.
       </p>
       <div className="mb-5 w-full">
-        <GoogleAuthButton title="Google login is not configured yet.">
+        <GoogleAuthButton href="/api/auth/google/start">
           Login with Google
         </GoogleAuthButton>
       </div>

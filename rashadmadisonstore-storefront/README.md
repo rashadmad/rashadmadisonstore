@@ -63,6 +63,24 @@ The application runs at [http://localhost:8000](http://localhost:8000). Requests
 | `MASTODON_ACCESS_TOKEN`                       | No       | Server-only token required to publish a post to Mastodon.                                 |
 | `BLOG_CROSSPOST_KEY`                          | No       | Server-only shared secret protecting the Mastodon cross-post endpoint.                    |
 
+## Google Customer Authentication
+
+Google sign-in starts in the storefront and is completed by the Medusa backend. Add these variables to the backend app environment:
+
+```shell
+GOOGLE_CLIENT_ID=<your-google-oauth-client-id>
+GOOGLE_CLIENT_SECRET=<your-google-oauth-client-secret>
+GOOGLE_CALLBACK_URL=http://localhost:8000/api/auth/google/callback
+```
+
+In Google Cloud Console, add this authorized redirect URI to the OAuth client:
+
+```text
+http://localhost:8000/api/auth/google/callback
+```
+
+For production, set `GOOGLE_CALLBACK_URL` to your public storefront callback URL, such as `https://your-domain.com/api/auth/google/callback`, and add that same URI in Google Cloud Console.
+
 Never commit `.env.local` or any access tokens.
 
 ## Scripts

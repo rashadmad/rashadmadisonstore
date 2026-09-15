@@ -51,11 +51,16 @@ describe("AboutPage", () => {
       "bg-green-600",
       "text-white"
     )
-    expect(screen.getByText("SCAD")).toBeInTheDocument()
     expect(
       screen.getByRole("link", { name: /savannah college of art and design/i })
     ).toHaveAttribute("href", "https://www.scad.edu/")
     expect(screen.getByText(/I graduated from the Savannah College of Art and Design/i)).toBeInTheDocument()
+    expect(
+      screen.getByRole("heading", { name: /Interested in a Custom Commission\?/i })
+    ).toBeInTheDocument()
+    expect(
+      screen.getByRole("link", { name: /Call or Text: \(773\) 320-5790/i })
+    ).toHaveAttribute("href", "tel:7733205790")
   })
 
   it("opens a larger modal when clicking a practice image", () => {

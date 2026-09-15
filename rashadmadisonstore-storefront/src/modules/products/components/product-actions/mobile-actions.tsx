@@ -50,6 +50,13 @@ const MobileActions: React.FC<MobileActionsProps> = ({
     return variantPrice || cheapestPrice || null
   }, [price])
 
+  const selectedOptionsText = useMemo(() => {
+    const values = Object.values(options).filter(
+      (v): v is string => typeof v === "string" && v.trim().length > 0
+    )
+    return values.length > 0 ? values.join(" / ") : "Select Options"
+  }, [options])
+
   const isSimple = isSimpleProduct(product)
 
   return (
@@ -104,22 +111,21 @@ const MobileActions: React.FC<MobileActionsProps> = ({
               {!isSimple && <Button
                 onClick={open}
                 variant="secondary"
-                className="w-full"
+                className="h-11 w-full border border-gray-300 font-medium"
                 data-testid="mobile-actions-button"
               >
-                <div className="flex items-center justify-between w-full">
-                  <span>
-                    {variant
-                      ? Object.values(options).join(" / ")
-                      : "Select Options"}
+                <div className="flex items-center justify-between w-full truncate">
+                  <span className="truncate">
+                    {selectedOptionsText}
                   </span>
-                  <ChevronDown />
+                  <ChevronDown className="shrink-0 ml-1" />
                 </div>
               </Button>}
               <Button
                 onClick={handleAddToCart}
                 disabled={!inStock || !variant}
-                className="w-full"
+                variant="primary"
+                className="h-11 w-full rounded border-b-4 border-green-800 bg-green-600 font-bold text-white transition hover:border-green-600 hover:bg-green-500 hover:text-yellow-300"
                 isLoading={isAdding}
                 data-testid="mobile-cart-button"
               >

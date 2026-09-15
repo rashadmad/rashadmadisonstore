@@ -89,7 +89,7 @@ describe('CartTotals Component', () => {
 
     expect(screen.getByTestId('cart-discount')).toHaveTextContent('- $2500 USD')
     expect(screen.getByTestId('cart-discount')).toHaveAttribute('data-value', '2500')
-    expect(screen.getByTestId('cart-discount')).toHaveClass('text-ui-fg-interactive')
+    expect(screen.getByTestId('cart-discount')).toHaveClass('text-green-700')
     expect(screen.getByText('Discount')).toBeInTheDocument()
   })
 

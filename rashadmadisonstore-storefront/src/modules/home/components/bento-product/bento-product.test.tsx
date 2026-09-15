@@ -86,4 +86,72 @@ describe("BentoProductGrid", () => {
     expect(screen.getByText("Front")).toBeInTheDocument()
     expect(screen.getByText("Back")).toBeInTheDocument()
   })
+
+  it("uses variant images for the apparel back view when product images are not the second shot", () => {
+    render(
+      <BentoProductGrid
+        variant="apparel"
+        products={[
+          product({
+            thumbnail: "https://example.com/front.jpg",
+            images: [{ id: "front", url: "https://example.com/front.jpg" }],
+            variants: [
+              {
+                id: "variant_1",
+                images: [
+                  { id: "front", url: "https://example.com/front.jpg" },
+                  { id: "back", url: "https://example.com/back.jpg" },
+                ],
+              },
+            ],
+          }) as any,
+        ]}
+      />
+    )
+
+    const imgs = screen.getAllByRole("img")
+    expect(imgs[0]).toHaveAttribute("src", "https://example.com/front.jpg")
+    expect(imgs[1]).toHaveAttribute("src", "https://example.com/back.jpg")
+    expect(screen.getByText("Back")).toBeInTheDocument()
+  })
+
+  it("renders small collection description paragraph under collection title", () => {
+    render(
+      <BentoProductGrid
+        products={[
+          product({
+            collection: {
+              id: "coll_tender",
+              title: "Tender Head",
+              description: "Custom description for Tender Head collection.",
+            },
+          }) as any,
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("heading", { level: 4, name: "Tender Head" })).toBeInTheDocument()
+    expect(
+      screen.getByText("Custom description for Tender Head collection.")
+    ).toBeInTheDocument()
+  })
+
+  it("renders unique collection descriptions tailored to specific artwork collections", () => {
+    render(
+      <BentoProductGrid
+        products={[
+          product({
+            id: "p_prince",
+            title: "Prince Fine Art",
+            collection: { id: "coll_prince", title: "Prince" },
+          }) as any,
+        ]}
+      />
+    )
+
+    expect(screen.getByRole("heading", { level: 4, name: "Prince" })).toBeInTheDocument()
+    expect(
+      screen.getByText("A regal portrait series honoring nobility, sovereignty, and the enduring dignity of Black youth.")
+    ).toBeInTheDocument()
+  })
 })

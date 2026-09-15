@@ -1,15 +1,15 @@
 type GoogleAuthButtonProps = {
   children: string
-  title: string
+  href: string
+  title?: string
 }
 
-const GoogleAuthButton = ({ children, title }: GoogleAuthButtonProps) => {
+const GoogleAuthButton = ({ children, href, title }: GoogleAuthButtonProps) => {
   return (
-    <button
-      type="button"
-      disabled
+    <a
+      href={href}
       title={title}
-      className="group relative inline-flex h-11 w-full items-center justify-center overflow-hidden rounded border border-[#747775] bg-white px-3 text-sm font-medium text-[#1f1f1f] shadow-[0_1px_2px_rgba(60,64,67,0.3)] opacity-60"
+      className="group relative inline-flex h-11 w-full items-center justify-center overflow-hidden rounded border border-[#747775] bg-white px-3 text-sm font-medium text-[#1f1f1f] shadow-[0_1px_2px_rgba(60,64,67,0.3)] transition hover:bg-[#f8fafd] focus:outline-none focus:ring-2 focus:ring-[#4285F4] focus:ring-offset-2"
     >
       <div className="absolute inset-0 opacity-0 transition group-hover:bg-[#303030] group-hover:opacity-5" />
       <div className="relative flex w-full items-center justify-center gap-3">
@@ -30,7 +30,7 @@ const GoogleAuthButton = ({ children, title }: GoogleAuthButtonProps) => {
         </div>
         <span>{children}</span>
       </div>
-    </button>
+    </a>
   )
 }
 

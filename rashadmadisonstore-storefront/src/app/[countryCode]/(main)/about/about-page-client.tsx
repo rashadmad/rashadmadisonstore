@@ -164,6 +164,39 @@ export default function AboutPageClient() {
         </div>
       </section>
 
+      <section id="commissions" aria-labelledby="commissions-heading" className="border-y border-black/10 bg-[#162719] text-white py-14 sm:py-16 lg:py-20">
+        <div className="content-container">
+          <div className="mx-auto max-w-4xl rounded-[2rem] border border-yellow-300/30 bg-[radial-gradient(ellipse_at_top,rgba(234,179,8,0.15),transparent_70%)] p-8 sm:p-12 shadow-[0_24px_80px_rgba(0,0,0,0.35)] text-center">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-yellow-300">
+              Custom Artwork & Inquiries
+            </p>
+            <h2 id="commissions-heading" className="mt-3 font-display text-3xl font-semibold sm:text-4xl lg:text-5xl text-white">
+              Interested in a Custom Commission?
+            </h2>
+            <p className="mt-5 max-w-2xl mx-auto text-base sm:text-lg leading-8 text-white/85">
+              I collaborate directly with art collectors, patrons, and spaces on unique, custom fine-art pieces and original commissions. Give me a call or send a text to discuss your vision, ideas, and timeline.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <a
+                href="tel:7733205790"
+                className="inline-flex items-center gap-3 rounded-full border-b-4 border-yellow-600 bg-yellow-400 px-6 py-3.5 text-base font-bold text-[#101b12] hover:bg-yellow-300 transition-colors shadow-lg"
+              >
+                <svg className="w-5 h-5 text-[#101b12]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.12.45 2.33.69 3.58.69a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.24 2.46.69 3.57a1 1 0 01-.27 1.12l-2.2 2.2z" />
+                </svg>
+                <span>Call or Text: (773) 320-5790</span>
+              </a>
+              <a
+                href="mailto:rashadmad@gmail.com"
+                className="inline-flex items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 py-3.5 text-base font-semibold text-white hover:bg-white/20 transition-colors"
+              >
+                Email Studio
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="about-support" aria-label="Support the practice" className="content-container py-14 sm:py-16 lg:py-20">
         <div className="rounded-[2rem] border border-black/10 bg-[#132017] px-6 py-10 text-white shadow-[0_26px_80px_rgba(0,0,0,0.18)] sm:px-10 sm:py-12 lg:flex lg:items-end lg:justify-between lg:gap-10">
           <div className="max-w-3xl">

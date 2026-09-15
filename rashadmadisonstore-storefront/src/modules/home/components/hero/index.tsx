@@ -107,17 +107,15 @@ export default function Hero({
                       level="h1"
                       className="font-display mt-2 text-4xl font-semibold tracking-tight text-green-500 sm:text-5xl dark:text-white"
                     >
-                      {appCopy.hero.heading}
+                      {customer?.first_name
+                        ? `Welcome ${customer.first_name} to the Quintessential`
+                        : appCopy.hero.heading}
                     </Heading>
-                    <p className="block max-w-[28ch] font-sans text-xl leading-7 text-ui-fg-subtle sm:text-2xl sm:leading-8">
-                      {appCopy.hero.lines[0]}
-                    </p>
-                    <p className="block max-w-[28ch] font-sans text-xl leading-7 text-ui-fg-subtle sm:text-2xl sm:leading-8">
-                      {appCopy.hero.lines[1]}
-                    </p>
-                    <p className="block max-w-[28ch] font-sans text-xl leading-7 text-ui-fg-subtle sm:text-2xl sm:leading-8">
-                      {appCopy.hero.lines[2]}
-                    </p>
+                    {appCopy.hero.lines.map((line, idx) => (
+                      <p key={idx} className="block max-w-[28ch] font-sans text-xl leading-7 text-ui-fg-subtle sm:text-2xl sm:leading-8">
+                        {line}
+                      </p>
+                    ))}
 
                     <div className="mt-4 mb-2 flex flex-col items-center gap-4 self-auto sm:mt-5 sm:mb-5 sm:items-start sm:self-start lg:items-center lg:self-auto">
                       <LocalizedClientLink
@@ -171,7 +169,10 @@ export default function Hero({
                     </LocalizedClientLink>
                   </div>
                   <div className="w-20 flex-none space-y-4 pt-6 sm:mr-0 sm:w-44 sm:space-y-8 sm:pt-52 lg:pt-36">
-                    <LocalizedClientLink href="/products/african-princess-red" className="block">
+                    <LocalizedClientLink
+                      href="/products/african-princess?v_id=variant_01M0ZKMMJ1G52C6R8QDQE9R6WW"
+                      className="block"
+                    >
                       <div className="hero-art-frame relative">
                         <img
                           alt={appCopy.hero.gallery.africanPrincessRedAlt}

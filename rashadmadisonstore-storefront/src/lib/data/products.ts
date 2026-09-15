@@ -50,6 +50,7 @@ export const listProducts = async ({
   }
 
   const next = {
+    revalidate: 60,
     ...(await getCacheOptions("products")),
   }
 
@@ -68,7 +69,6 @@ export const listProducts = async ({
         },
         headers,
         next,
-        cache: "force-cache",
       }
     )
     .then(({ products, count }) => {

@@ -44,7 +44,7 @@ const Register = ({ setCurrentView }: Props) => {
           <p className="text-center text-base-regular text-ui-fg-base">
             or
           </p>
-          <GoogleAuthButton title="Google account signup is not configured yet.">
+          <GoogleAuthButton href="/api/auth/google/start">
             Sign up with Google
           </GoogleAuthButton>
         </div>

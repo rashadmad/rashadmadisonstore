@@ -7,12 +7,13 @@ jest.mock('next/navigation', () => ({
 }))
 
 describe('SideMenu', () => {
-  it('includes the About and Blog pages in the side panel navigation', () => {
+  it('includes the About, Blog, and Store pages in the side panel navigation', () => {
     render(<SideMenu regions={null} locales={null} currentLocale={null} />)
 
     fireEvent.click(screen.getByTestId('nav-menu-button'))
 
     expect(screen.getByRole('link', { name: 'About' })).toHaveAttribute('href', '/us/about')
     expect(screen.getByRole('link', { name: 'Blog' })).toHaveAttribute('href', '/us/blog')
+    expect(screen.getByRole('link', { name: 'Store' })).toHaveAttribute('href', '/us/store')
   })
 })

@@ -163,7 +163,7 @@ describe('DeleteButton Component', () => {
     )
 
     const button = screen.getByRole('button')
-    expect(button).toHaveClass('flex', 'gap-x-1', 'text-ui-fg-subtle', 'hover:text-ui-fg-base', 'cursor-pointer')
+    expect(button).toHaveClass('flex', 'gap-x-1', 'text-neutral-600', 'cursor-pointer')
   })
 
   it('should render without children', () => {

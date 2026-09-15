@@ -41,8 +41,7 @@ export default function TransferRequestForm() {
           <div className="flex flex-col gap-y-2 w-full">
             <Input className="w-full" name="order_id" placeholder="Order ID" />
             <SubmitButton
-              variant="secondary"
-              className="w-fit whitespace-nowrap self-end"
+              className="w-full sm:w-fit whitespace-nowrap self-end inline-flex items-center justify-center rounded border-b-4 border-green-700 bg-green-500 px-4 py-2 font-bold text-white transition hover:border-green-500 hover:bg-green-400 hover:text-yellow-300"
             >
               Request transfer
             </SubmitButton>
