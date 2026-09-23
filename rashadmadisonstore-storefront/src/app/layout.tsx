@@ -1,4 +1,5 @@
 import { getBaseURL } from "@lib/util/env"
+import { GoogleAnalytics } from "@next/third-parties/google"
 import { Metadata } from "next"
 import { DM_Sans, Syne } from "next/font/google"
 import "styles/globals.css"
@@ -19,7 +20,9 @@ export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
 }
 
-export default function RootLayout(props: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
+
   return (
     <html lang="en" data-mode="light" className={`${dmSans.variable} ${syne.variable}`}>
       <body>
@@ -30,8 +33,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
           Skip to content
         </a>
         <main id="main-content" className="relative">
-          {props.children}
+          {children}
         </main>
+        {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>
   )
