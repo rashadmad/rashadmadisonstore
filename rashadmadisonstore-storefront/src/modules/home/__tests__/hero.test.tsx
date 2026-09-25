@@ -55,7 +55,7 @@ describe('Hero component', () => {
     )
     expect(screen.getByRole('link', { name: 'African Princess red' })).toHaveAttribute(
       'href',
-      '/products/african-princess-red'
+      '/products/african-princess'
     )
     expect(screen.getByRole('link', { name: 'Tender Head' })).toHaveAttribute(
       'href',

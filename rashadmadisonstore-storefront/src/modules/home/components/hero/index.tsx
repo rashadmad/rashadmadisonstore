@@ -7,7 +7,7 @@ import NewsletterSubscription from "../newsletter"
 
 type HeroArtworkHandle =
   | "african-sunset"
-  | "african-princess-red"
+  | "african-princess"
   | "tender-head"
   | "prince"
   | "zulu-husband"
@@ -17,7 +17,7 @@ type HeroArtworkSources = Partial<Record<HeroArtworkHandle, string>>
 const DEFAULT_HERO_ARTWORK_SOURCES: Record<HeroArtworkHandle, string> = {
   "african-sunset":
     "https://res.cloudinary.com/dxj8b6h12/image/upload/v1784665145/7034_akrxuz.jpg",
-  "african-princess-red":
+  "african-princess":
     "https://res.cloudinary.com/dxj8b6h12/image/upload/v1784772775/africanPrincess_atuxqk.jpg",
   "tender-head":
     "https://res.cloudinary.com/dxj8b6h12/image/upload/v1747342820/tenderhead_vgseur.jpg",
@@ -171,11 +171,11 @@ export default function Hero({
                     </LocalizedClientLink>
                   </div>
                   <div className="w-20 flex-none space-y-4 pt-6 sm:mr-0 sm:w-44 sm:space-y-8 sm:pt-52 lg:pt-36">
-                    <LocalizedClientLink href="/products/african-princess-red" className="block">
+                    <LocalizedClientLink href="/products/african-princess" className="block">
                       <div className="hero-art-frame relative">
                         <img
                           alt={appCopy.hero.gallery.africanPrincessRedAlt}
-                          src={getHeroArtworkSrc(heroArtworkSources, "african-princess-red")}
+                          src={getHeroArtworkSrc(heroArtworkSources, "african-princess")}
                           className="hero-art-frame-image aspect-2/3 w-full bg-gray-900/5 object-cover dark:bg-gray-700/5"
                         />
                       </div>

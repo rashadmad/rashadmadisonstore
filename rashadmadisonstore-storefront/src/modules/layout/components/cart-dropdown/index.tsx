@@ -148,8 +148,10 @@ const CartDropdown = ({
                                   variant={item.variant}
                                   data-testid="cart-item-variant"
                                   data-value={item.variant}
+                                  className="text-gray-200"
                                 />
                                 <span
+                                  className="text-gray-200"
                                   data-testid="cart-item-quantity"
                                   data-value={item.quantity}
                                 >
@@ -161,6 +163,7 @@ const CartDropdown = ({
                                   item={item}
                                   style="tight"
                                   currencyCode={cartState.currency_code}
+                                  className="text-gray-100"
                                 />
                               </div>
                             </div>
@@ -168,6 +171,7 @@ const CartDropdown = ({
                           <DeleteButton
                             id={item.id}
                             className="mt-1"
+                            buttonClassName="text-red-300 hover:text-red-200"
                             data-testid="cart-item-remove-button"
                           >
                             Remove
@@ -195,7 +199,7 @@ const CartDropdown = ({
                   </div>
                   <LocalizedClientLink href="/cart" passHref>
                     <Button
-                      className="w-full"
+                      className="w-full bg-green-500 hover:bg-green-400 text-white font-bold border-b-4 border-green-700 hover:border-green-500"
                       size="large"
                       data-testid="go-to-cart-button"
                     >
@@ -210,7 +214,7 @@ const CartDropdown = ({
                   <div className="bg-gray-900 text-small-regular flex items-center justify-center w-6 h-6 rounded-full text-white">
                     <span>0</span>
                   </div>
-                  <span>Your shopping bag is empty.</span>
+                  <span className="text-white">Your shopping bag is empty.</span>
                   <div>
                     <LocalizedClientLink href="/store">
                       <span className="sr-only">Go to all products page</span>
