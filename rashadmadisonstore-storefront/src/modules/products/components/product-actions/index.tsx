@@ -2,6 +2,8 @@
 
 import { addToCart } from "@lib/data/cart"
 import { useIntersection } from "@lib/hooks/use-in-view"
+import { sendGAEvent } from "@lib/gtag"
+import { getPricesForVariant } from "@lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
 import Divider from "@modules/common/components/divider"
@@ -30,6 +32,7 @@ const optionsAsKeymap = (
 
 export default function ProductActions({
   product,
+  region,
   disabled,
 }: ProductActionsProps) {
   const router = useRouter()
@@ -59,6 +62,39 @@ export default function ProductActions({
       return isEqual(variantOptions, options)
     })
   }, [product.variants, options])
+
+  const analyticsItem = useMemo(() => {
+    if (!selectedVariant?.id) {
+      return null
+    }
+
+    const price = getPricesForVariant(selectedVariant)
+    const currency = price?.currency_code ?? region.currency_code
+
+    return {
+      currency: currency.toUpperCase(),
+      value: price?.calculated_price_number,
+      items: [
+        {
+          item_id: selectedVariant.id,
+          item_name: product.title,
+          item_variant: selectedVariant.title ?? selectedVariant.sku,
+          quantity: 1,
+        },
+      ],
+    }
+  }, [product.title, region.currency_code, selectedVariant])
+
+  const trackedProductId = useRef<string | null>(null)
+
+  useEffect(() => {
+    if (!analyticsItem || trackedProductId.current === product.id) {
+      return
+    }
+
+    sendGAEvent("view_item", analyticsItem)
+    trackedProductId.current = product.id
+  }, [analyticsItem, product.id])
 
   // update the options when a variant is selected
   const setOptionValue = (optionId: string, value: string) => {
@@ -131,6 +167,10 @@ export default function ProductActions({
       quantity: 1,
       countryCode,
     })
+
+    if (analyticsItem) {
+      sendGAEvent("add_to_cart", analyticsItem)
+    }
 
     setIsAdding(false)
   }

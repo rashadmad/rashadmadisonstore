@@ -2,6 +2,7 @@
 
 import { isManual, isStripeLike } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
+import { sendGAEvent } from "@lib/gtag"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
 import { useElements, useStripe } from "@stripe/react-stripe-js"
@@ -37,7 +38,11 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       )
     case isManual(paymentSession?.provider_id):
       return (
-        <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
+        <ManualTestPaymentButton
+          notReady={notReady}
+          cart={cart}
+          data-testid={dataTestId}
+        />
       )
     default:
       return <Button disabled>Select a payment method</Button>
@@ -55,6 +60,26 @@ const StripePaymentButton = ({
 }) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const checkoutTracked = React.useRef(false)
+
+  const trackCheckoutStart = () => {
+    if (checkoutTracked.current) {
+      return
+    }
+
+    sendGAEvent("begin_checkout", {
+      currency: cart.currency_code.toUpperCase(),
+      value: cart.total,
+      items: (cart.items ?? []).map((item) => ({
+        item_id: item.variant_id,
+        item_name: item.product_title,
+        item_variant: item.variant?.title ?? item.variant?.sku,
+        price: item.unit_price,
+        quantity: item.quantity,
+      })),
+    })
+    checkoutTracked.current = true
+  }
 
   const onPaymentCompleted = async () => {
     await placeOrder()
@@ -83,6 +108,8 @@ const StripePaymentButton = ({
       setSubmitting(false)
       return
     }
+
+    trackCheckoutStart()
 
     await stripe
       .confirmCardPayment(session?.data.client_secret as string, {
@@ -151,9 +178,35 @@ const StripePaymentButton = ({
   )
 }
 
-const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
+const ManualTestPaymentButton = ({
+  notReady,
+  cart,
+}: {
+  notReady: boolean
+  cart: HttpTypes.StoreCart
+}) => {
   const [submitting, setSubmitting] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const checkoutTracked = React.useRef(false)
+
+  const trackCheckoutStart = () => {
+    if (checkoutTracked.current) {
+      return
+    }
+
+    sendGAEvent("begin_checkout", {
+      currency: cart.currency_code.toUpperCase(),
+      value: cart.total,
+      items: (cart.items ?? []).map((item) => ({
+        item_id: item.variant_id,
+        item_name: item.product_title,
+        item_variant: item.variant?.title ?? item.variant?.sku,
+        price: item.unit_price,
+        quantity: item.quantity,
+      })),
+    })
+    checkoutTracked.current = true
+  }
 
   const onPaymentCompleted = async () => {
     await placeOrder()
@@ -167,6 +220,7 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
 
   const handlePayment = () => {
     setSubmitting(true)
+    trackCheckoutStart()
 
     onPaymentCompleted()
   }
