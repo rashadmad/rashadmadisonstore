@@ -296,7 +296,26 @@ MASTODON_ACCOUNT_ACCT=rashadmad
 # Required for site -> Mastodon cross-post publishing
 MASTODON_ACCESS_TOKEN=<your-mastodon-access-token>
 BLOG_CROSSPOST_KEY=<a-long-random-secret>
+
+# Required for forwarding newsletter signups to the companion app
+NEWSLETTER_SIGNUP_URL=https://your-companion-app.example.com/newsletter-signups
+NEWSLETTER_SIGNUP_KEY=<shared-secret-for-the-companion-app>
 ```
+
+## Newsletter signup endpoint
+
+The storefront accepts newsletter signups at `POST /api/newsletter` and forwards this JSON payload to `NEWSLETTER_SIGNUP_URL`:
+
+```json
+{
+  "email": "person@example.com",
+  "firstName": "First",
+  "lastName": "Last",
+  "source": "the-quintessential-storefront"
+}
+```
+
+When `NEWSLETTER_SIGNUP_KEY` is set, it is sent as the `x-newsletter-key` header. The companion app should validate that header, treat `email` as the deduplication key, and return a 2xx response after storing the signup.
 
 ## Cross-post endpoint
 

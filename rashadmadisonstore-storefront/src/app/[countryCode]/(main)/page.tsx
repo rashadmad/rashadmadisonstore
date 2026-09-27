@@ -14,7 +14,7 @@ import { HttpTypes } from "@medusajs/types"
 
 const HERO_ARTWORK_HANDLES = [
   "african-sunset",
-  "african-princess-red",
+  "african-princess",
   "tender-head",
   "prince",
   "zulu-husband",

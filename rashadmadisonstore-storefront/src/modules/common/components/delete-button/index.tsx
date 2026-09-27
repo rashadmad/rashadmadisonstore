@@ -7,10 +7,12 @@ const DeleteButton = ({
   id,
   children,
   className,
+  buttonClassName,
 }: {
   id: string
   children?: React.ReactNode
   className?: string
+  buttonClassName?: string
 }) => {
   const [isDeleting, setIsDeleting] = useState(false)
 
