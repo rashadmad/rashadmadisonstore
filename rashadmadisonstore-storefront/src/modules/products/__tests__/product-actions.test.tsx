@@ -1,12 +1,29 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import OptionSelect from "../components/product-actions/option-select"
 import MobileActions from "../components/product-actions/mobile-actions"
+import ProductActions from "../components/product-actions"
+
+const mockBack = jest.fn()
+const mockPush = jest.fn()
 
 jest.mock("next/navigation", () => ({
   useParams: () => ({ countryCode: "us" }),
   usePathname: () => "/products/test",
   useSearchParams: () => new URLSearchParams(),
+  useRouter: () => ({
+    back: mockBack,
+    push: mockPush,
+    replace: jest.fn(),
+  }),
+}))
+
+jest.mock("@lib/data/cart", () => ({
+  addToCart: jest.fn().mockResolvedValue(undefined),
+}))
+
+jest.mock("@lib/hooks/use-in-view", () => ({
+  useIntersection: jest.fn().mockReturnValue(true),
 }))
 
 describe("OptionSelect", () => {
@@ -69,5 +86,37 @@ describe("MobileActions", () => {
     const cartBtn = screen.getByTestId("mobile-cart-button")
     expect(cartBtn).toHaveClass("bg-green-600")
     expect(cartBtn).toHaveClass("border-green-800")
+  })
+})
+
+describe("ProductActions navigation after add to cart", () => {
+  it("navigates back to the previous page after adding an item to cart", async () => {
+    Object.defineProperty(window.history, "length", {
+      value: 2,
+      writable: true,
+    })
+
+    const product = {
+      id: "prod_1",
+      title: "Test Canvas",
+      options: [],
+      variants: [{ id: "var_1", options: [], manage_inventory: false, inventory_quantity: 10 }],
+    } as any
+
+    render(
+      <ProductActions
+        product={product}
+        region={{ currency_code: "usd" } as any}
+      />
+    )
+
+    const button = screen.getByTestId("add-product-button")
+    expect(button).not.toBeDisabled()
+
+    fireEvent.click(button)
+
+    await waitFor(() => {
+      expect(mockBack).toHaveBeenCalled()
+    })
   })
 })

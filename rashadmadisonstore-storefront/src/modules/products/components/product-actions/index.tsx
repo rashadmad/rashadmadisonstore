@@ -133,6 +133,12 @@ export default function ProductActions({
     })
 
     setIsAdding(false)
+
+    if (window.history.length > 1) {
+      router.back()
+    } else {
+      router.push(`/${countryCode}`)
+    }
   }
 
   return (

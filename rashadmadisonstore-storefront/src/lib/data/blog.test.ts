@@ -16,7 +16,7 @@ describe("Markdown blog loader", () => {
   it("loads one post by its filename slug", async () => {
     const post = await getBlogPostBySlug("how-tender-head-came-to-be")
 
-    expect(post?.title).toBe("How tender head came to be")
+    expect(post?.title).toBe("How Tender Head came to be")
     expect(post?.category).toBe("Art Process")
   })
 

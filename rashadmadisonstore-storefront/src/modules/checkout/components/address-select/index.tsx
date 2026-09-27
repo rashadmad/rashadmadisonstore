@@ -1,4 +1,10 @@
-import { Listbox, Transition } from "@headlessui/react"
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from "@headlessui/react"
 import { ChevronUpDown } from "@medusajs/icons"
 import { clx } from "@medusajs/ui"
 import { Fragment, useMemo } from "react"
@@ -21,7 +27,8 @@ const AddressSelect = ({
   addressInput,
   onSelect,
 }: AddressSelectProps) => {
-  const handleSelect = (id: string) => {
+  const handleSelect = (id: string | null) => {
+    if (!id) return
     const savedAddress = addresses.find((a) => a.id === id)
     if (savedAddress) {
       onSelect(savedAddress as HttpTypes.StoreCartAddress)
@@ -33,40 +40,32 @@ const AddressSelect = ({
   }, [addresses, addressInput])
 
   return (
-    <Listbox onChange={handleSelect} value={selectedAddress?.id}>
+    <Listbox onChange={handleSelect} value={selectedAddress?.id ?? null}>
       <div className="relative">
-        <Listbox.Button
+        <ListboxButton
           className="relative w-full flex justify-between items-center px-4 py-[10px] text-left bg-white cursor-default focus:outline-none border rounded-rounded focus-visible:ring-2 focus-visible:ring-green-500/30 focus-visible:ring-offset-green-100 focus-visible:ring-offset-2 focus-visible:border-green-500 text-base-regular"
           data-testid="shipping-address-select"
         >
-          {({ open }) => (
-            <>
-              <span className="block truncate">
-                {selectedAddress
-                  ? selectedAddress.address_1
-                  : "Choose an address"}
-              </span>
-              <ChevronUpDown
-                className={clx("transition-rotate duration-200", {
-                  "transform rotate-180": open,
-                })}
-              />
-            </>
-          )}
-        </Listbox.Button>
+          <span className="block truncate">
+            {selectedAddress
+              ? selectedAddress.address_1
+              : "Choose an address"}
+          </span>
+          <ChevronUpDown className="transition-transform duration-200" />
+        </ListboxButton>
         <Transition
           as={Fragment}
           leave="transition ease-in duration-100"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <Listbox.Options
-            className="absolute z-20 w-full overflow-auto text-small-regular bg-white border border-top-0 max-h-60 focus:outline-none sm:text-sm"
+          <ListboxOptions
+            className="absolute z-20 w-full overflow-auto text-small-regular bg-white border border-top-0 max-h-60 focus:outline-none sm:text-sm shadow-md rounded-b-md"
             data-testid="shipping-address-options"
           >
             {addresses.map((address) => {
               return (
-                <Listbox.Option
+                <ListboxOption
                   key={address.id}
                   value={address.id}
                   className="cursor-default select-none relative pl-6 pr-10 hover:bg-gray-50 py-4"
@@ -103,10 +102,10 @@ const AddressSelect = ({
                       </div>
                     </div>
                   </div>
-                </Listbox.Option>
+                </ListboxOption>
               )
             })}
-          </Listbox.Options>
+          </ListboxOptions>
         </Transition>
       </div>
     </Listbox>

@@ -40,7 +40,14 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
         <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
       )
     default:
-      return <Button disabled>Select a payment method</Button>
+      return (
+        <Button
+          disabled
+          className="w-full rounded border-b-4 border-gray-300 bg-gray-200 font-bold text-gray-500"
+        >
+          Select a payment method
+        </Button>
+      )
   }
 }
 
@@ -138,6 +145,7 @@ const StripePaymentButton = ({
         disabled={disabled || notReady}
         onClick={handlePayment}
         size="large"
+        className="w-full rounded border-b-4 border-green-800 bg-green-600 font-bold text-white transition hover:border-green-600 hover:bg-green-500 hover:text-yellow-300 disabled:opacity-50 disabled:pointer-events-none"
         isLoading={submitting}
         data-testid={dataTestId}
       >
@@ -178,6 +186,7 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
         isLoading={submitting}
         onClick={handlePayment}
         size="large"
+        className="w-full rounded border-b-4 border-green-800 bg-green-600 font-bold text-white transition hover:border-green-600 hover:bg-green-500 hover:text-yellow-300 disabled:opacity-50 disabled:pointer-events-none"
         data-testid="submit-order-button"
       >
         Place order
