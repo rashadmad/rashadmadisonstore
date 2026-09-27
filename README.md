@@ -1,4 +1,4 @@
-![Philosopher symbol](rashadmadisonstore-storefront/public/images/philosopher_symbol.svg)
+<img src="rashadmadisonstore-storefront/public/images/philosopher_symbol.svg" alt="Philosopher symbol" width="33%">
 
 # Rashad Madison Store
 
