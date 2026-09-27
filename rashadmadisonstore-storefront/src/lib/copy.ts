@@ -146,13 +146,20 @@ export const appCopy = {
     description:
       "Get studio notes, release alerts, and first access to new work before it drops. Thoughtful updates only—no noise, no clutter, no spam.",
     labels: {
+      firstName: "First name",
+      lastName: "Last name",
       email: "Email address",
       submit: "Join the list",
+      submitting: "Joining...",
+      firstNamePlaceholder: "First name",
+      lastNamePlaceholder: "Last name",
       emailPlaceholder: "Enter your email",
     },
     validation: {
+      requiredName: "Please enter your first and last name.",
       invalidEmail: "Please enter a valid email address.",
       success: "Thanks for joining the list.",
+      error: "We could not add you right now. Please try again.",
     },
     highlights: {
       first: {

@@ -7,14 +7,25 @@ import { appCopy } from "@lib/copy"
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
 export default function NewsletterSubscription() {
+  const [firstName, setFirstName] = useState("")
+  const [lastName, setLastName] = useState("")
   const [email, setEmail] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [error, setError] = useState("")
   const [success, setSuccess] = useState("")
 
-  const handleSubscription = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubscription = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
+    const trimmedFirstName = firstName.trim()
+    const trimmedLastName = lastName.trim()
     const trimmedEmail = email.trim()
+
+    if (!trimmedFirstName || !trimmedLastName) {
+      setSuccess("")
+      setError(appCopy.newsletter.validation.requiredName)
+      return
+    }
 
     if (!EMAIL_REGEX.test(trimmedEmail)) {
       setSuccess("")
@@ -22,10 +33,34 @@ export default function NewsletterSubscription() {
       return
     }
 
-    // Placeholder for subscription logic once provider integration is wired.
+    setIsSubmitting(true)
     setError("")
-    setSuccess(appCopy.newsletter.validation.success)
-    setEmail("")
+
+    try {
+      const response = await fetch("/api/newsletter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: trimmedEmail,
+          firstName: trimmedFirstName,
+          lastName: trimmedLastName,
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Newsletter subscription failed")
+      }
+
+      setSuccess(appCopy.newsletter.validation.success)
+      setFirstName("")
+      setLastName("")
+      setEmail("")
+    } catch {
+      setSuccess("")
+      setError(appCopy.newsletter.validation.error)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -60,10 +95,40 @@ export default function NewsletterSubscription() {
               {appCopy.newsletter.description}
             </p>
             <form className="mt-8 max-w-lg" onSubmit={handleSubscription} noValidate>
-              <label htmlFor="email-address" className="sr-only">
-                {appCopy.newsletter.labels.email}
-              </label>
-              <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <label className="sr-only" htmlFor="newsletter-first-name">
+                  {appCopy.newsletter.labels.firstName}
+                </label>
+                <input
+                  id="newsletter-first-name"
+                  name="firstName"
+                  type="text"
+                  value={firstName}
+                  onChange={(event) => setFirstName(event.target.value)}
+                  placeholder={appCopy.newsletter.labels.firstNamePlaceholder}
+                  autoComplete="given-name"
+                  required
+                  className="min-w-0 rounded-full border border-white/30 bg-white/10 px-4 py-3.5 text-base text-white placeholder:text-white/70 outline-none ring-0 backdrop-blur-sm transition focus:border-yellow-300 focus:bg-white/15 sm:text-sm/6"
+                />
+                <label className="sr-only" htmlFor="newsletter-last-name">
+                  {appCopy.newsletter.labels.lastName}
+                </label>
+                <input
+                  id="newsletter-last-name"
+                  name="lastName"
+                  type="text"
+                  value={lastName}
+                  onChange={(event) => setLastName(event.target.value)}
+                  placeholder={appCopy.newsletter.labels.lastNamePlaceholder}
+                  autoComplete="family-name"
+                  required
+                  className="min-w-0 rounded-full border border-white/30 bg-white/10 px-4 py-3.5 text-base text-white placeholder:text-white/70 outline-none ring-0 backdrop-blur-sm transition focus:border-yellow-300 focus:bg-white/15 sm:text-sm/6"
+                />
+              </div>
+              <div className="mt-3 flex flex-col gap-3 sm:flex-row">
+                <label htmlFor="email-address" className="sr-only">
+                  {appCopy.newsletter.labels.email}
+                </label>
                 <input
                   id="email-address"
                   name="email"
@@ -86,9 +151,12 @@ export default function NewsletterSubscription() {
                 />
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   className="inline-flex flex-none items-center justify-center rounded-full border-b-4 border-yellow-300 bg-yellow-300 px-5 py-3.5 text-sm font-bold uppercase tracking-[0.12em] text-[#101b12] transition hover:border-yellow-200 hover:bg-yellow-200"
                 >
-                  {appCopy.newsletter.labels.submit}
+                  {isSubmitting
+                    ? appCopy.newsletter.labels.submitting
+                    : appCopy.newsletter.labels.submit}
                 </button>
               </div>
               <div aria-live="polite" aria-atomic="true">
