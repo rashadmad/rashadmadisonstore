@@ -1,3 +1,5 @@
+![Philosopher symbol](rashadmadisonstore-storefront/public/images/philosopher_symbol.svg)
+
 # Rashad Madison Store
 
 Full-stack ecommerce project for Rashad Madison's art, prints, and related products.
