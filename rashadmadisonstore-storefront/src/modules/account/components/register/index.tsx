@@ -2,6 +2,8 @@
 
 import { useActionState, useState } from "react"
 import Input from "@modules/common/components/input"
+import StateSelect from "@modules/common/components/state-select"
+import USCountryInput from "@modules/common/components/us-country-input"
 import { LOGIN_VIEW } from "@modules/account/templates/login-template"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
@@ -115,9 +117,9 @@ const Register = ({ setCurrentView }: Props) => {
                 <Input label="Shipping address" name="shipping_address.address_1" autoComplete="shipping address-line1" />
                 <Input label="Apartment, suite, etc." name="shipping_address.address_2" autoComplete="shipping address-line2" />
                 <Input label="Shipping city" name="shipping_address.city" autoComplete="shipping address-level2" />
-                <Input label="Shipping state" name="shipping_address.province" autoComplete="shipping address-level1" />
+                <StateSelect label="Shipping state" name="shipping_address.province" autoComplete="shipping address-level1" />
                 <Input label="Shipping postal code" name="shipping_address.postal_code" autoComplete="shipping postal-code" />
-                <Input label="Shipping country code" name="shipping_address.country_code" autoComplete="shipping country" maxLength={2} />
+                <USCountryInput name="shipping_address.country_code" />
               </div>
               <div className="flex flex-col gap-2 text-small-regular text-ui-fg-base sm:flex-row sm:items-center sm:gap-5">
                 <label className="inline-flex items-center gap-2">

@@ -1,4 +1,5 @@
 import { getBaseURL } from "@lib/util/env"
+import { NavigationProvider } from "@lib/context/navigation"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import { Metadata } from "next"
 import { DM_Sans, Syne } from "next/font/google"
@@ -33,7 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Skip to content
         </a>
         <main id="main-content" className="relative">
-          {children}
+          <NavigationProvider>{children}</NavigationProvider>
         </main>
         {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>

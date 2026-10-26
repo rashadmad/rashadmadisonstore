@@ -60,7 +60,7 @@ const getOptionalAddress = (
   const postal_code = getFormString(formData, `${prefix}.postal_code`)
   const country_code = getFormString(formData, `${prefix}.country_code`).toLowerCase()
 
-  if (!address_1 && !city && !postal_code && !country_code) {
+  if (!address_1 && !city && !postal_code && (!country_code || country_code === "us")) {
     return null
   }
 

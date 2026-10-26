@@ -24,6 +24,18 @@ describe('CartTotals Component', () => {
     jest.clearAllMocks()
   })
 
+  it('does not imply free shipping before delivery is calculated', () => {
+    render(<CartTotals totals={{ ...baseTotals, shipping_methods: [] }} />)
+    expect(screen.getByTestId('cart-shipping')).toHaveTextContent('Calculated at delivery step')
+    expect(screen.getByText('Estimated total')).toBeInTheDocument()
+  })
+
+  it('shows a confirmed zero shipping amount after a method is applied', () => {
+    render(<CartTotals totals={{ ...baseTotals, shipping_subtotal: 0, shipping_methods: [{ id: 'sm_1' }] }} />)
+    expect(screen.getByTestId('cart-shipping')).toHaveTextContent('$0 USD')
+    expect(screen.getByText('Total')).toBeInTheDocument()
+  })
+
   it('should render all cart totals correctly', () => {
     render(<CartTotals totals={baseTotals} />)
 

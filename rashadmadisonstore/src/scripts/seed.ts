@@ -14,7 +14,6 @@ import {
   createInventoryLevelsWorkflow,
   createProductCategoriesWorkflow,
   createProductsWorkflow,
-  createRegionsWorkflow,
   createSalesChannelsWorkflow,
   createShippingOptionsWorkflow,
   createShippingProfilesWorkflow,
@@ -60,17 +59,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
   const link = container.resolve(ContainerRegistrationKeys.LINK);
   const query = container.resolve(ContainerRegistrationKeys.QUERY);
   const fulfillmentModuleService = container.resolve(Modules.FULFILLMENT);
-  const regionModuleService = container.resolve(Modules.REGION);
   const salesChannelModuleService = container.resolve(Modules.SALES_CHANNEL);
   const storeModuleService = container.resolve(Modules.STORE);
-
-  const countries = ["gb", "de", "dk", "se", "fr", "es", "it"];
-  const paymentProviders = ["pp_system_default"];
-
-  if (process.env.STRIPE_API_KEY) {
-    // Stripe provider id format is pp_<module id>_<provider id>.
-    paymentProviders.push("pp_stripe_stripe");
-  }
 
   logger.info("Seeding store data...");
   const [store] = await storeModuleService.listStores();
@@ -99,11 +89,8 @@ export default async function seedDemoData({ container }: ExecArgs) {
       store_id: store.id,
       supported_currencies: [
         {
-          currency_code: "eur",
-          is_default: true,
-        },
-        {
           currency_code: "usd",
+          is_default: true,
         },
       ],
     },
@@ -117,41 +104,15 @@ export default async function seedDemoData({ container }: ExecArgs) {
       },
     },
   });
-  logger.info("Seeding region data...");
-  const existingEuropeRegions = await regionModuleService.listRegions({
-    name: "Europe",
-  });
-
-  let region = existingEuropeRegions[0];
-
-  if (!region) {
-    const { result: regionResult } = await createRegionsWorkflow(container).run({
-      input: {
-        regions: [
-          {
-            name: "Europe",
-            currency_code: "eur",
-            countries,
-            payment_providers: paymentProviders,
-          },
-        ],
-      },
-    });
-
-    region = regionResult[0];
-  } else {
-    logger.info("Europe region already exists. Reusing existing region.");
-  }
-
-  logger.info("Finished seeding regions.");
-
   logger.info("Seeding tax regions...");
   try {
     await createTaxRegionsWorkflow(container).run({
-      input: countries.map((country_code) => ({
-        country_code,
-        provider_id: "tp_system",
-      })),
+      input: [
+        {
+          country_code: "us",
+          provider_id: "tp_system",
+        },
+      ],
     });
   } catch (error: any) {
     const message = String(error?.message || "");
@@ -170,10 +131,10 @@ export default async function seedDemoData({ container }: ExecArgs) {
     input: {
       locations: [
         {
-          name: "European Warehouse",
+          name: "US Warehouse",
           address: {
-            city: "Copenhagen",
-            country_code: "DK",
+            city: "Chicago",
+            country_code: "US",
             address_1: "",
           },
         },
@@ -234,38 +195,14 @@ export default async function seedDemoData({ container }: ExecArgs) {
 
   try {
     fulfillmentSet = await fulfillmentModuleService.createFulfillmentSets({
-      name: "European Warehouse delivery",
+      name: "US Warehouse delivery",
       type: "shipping",
       service_zones: [
         {
-          name: "Europe",
+          name: "United States",
           geo_zones: [
             {
-              country_code: "gb",
-              type: "country",
-            },
-            {
-              country_code: "de",
-              type: "country",
-            },
-            {
-              country_code: "dk",
-              type: "country",
-            },
-            {
-              country_code: "se",
-              type: "country",
-            },
-            {
-              country_code: "fr",
-              type: "country",
-            },
-            {
-              country_code: "es",
-              type: "country",
-            },
-            {
-              country_code: "it",
+              country_code: "us",
               type: "country",
             },
           ],
@@ -279,7 +216,7 @@ export default async function seedDemoData({ container }: ExecArgs) {
       message.includes("already exists")
     ) {
       const existingSets = await fulfillmentModuleService.listFulfillmentSets({
-        name: "European Warehouse delivery",
+        name: "US Warehouse delivery",
       });
 
       if (!existingSets?.length) {
@@ -327,80 +264,34 @@ export default async function seedDemoData({ container }: ExecArgs) {
       await createShippingOptionsWorkflow(container).run({
         input: [
           {
-            name: "Standard Shipping",
+            name: "Standard Shipping (delivery times vary)",
             price_type: "flat",
             provider_id: "manual_manual",
             service_zone_id: serviceZoneId,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Standard",
-            description: "Ship in 2-3 days.",
-            code: "standard",
-          },
-          prices: [
-            {
-              currency_code: "usd",
-              amount: 10,
+            shipping_profile_id: shippingProfile.id,
+            type: {
+              label: "Standard",
+              description: "Delivery time varies by destination.",
+              code: "standard",
             },
-            {
-              currency_code: "eur",
-              amount: 10,
-            },
-            {
-              region_id: region.id,
-              amount: 10,
-            },
-          ],
-          rules: [
-            {
-              attribute: "enabled_in_store",
-              value: "true",
-              operator: "eq",
-            },
-            {
-              attribute: "is_return",
-              value: "false",
-              operator: "eq",
-            },
-          ],
-        },
-          {
-            name: "Express Shipping",
-            price_type: "flat",
-            provider_id: "manual_manual",
-            service_zone_id: serviceZoneId,
-          shipping_profile_id: shippingProfile.id,
-          type: {
-            label: "Express",
-            description: "Ship in 24 hours.",
-            code: "express",
-          },
-          prices: [
-            {
-              currency_code: "usd",
-              amount: 10,
-            },
-            {
-              currency_code: "eur",
-              amount: 10,
-            },
-            {
-              region_id: region.id,
-              amount: 10,
-            },
-          ],
-          rules: [
-            {
-              attribute: "enabled_in_store",
-              value: "true",
-              operator: "eq",
-            },
-            {
-              attribute: "is_return",
-              value: "false",
-              operator: "eq",
-            },
-          ],
+            prices: [
+              {
+                currency_code: "usd",
+                amount: 10,
+              },
+            ],
+            rules: [
+              {
+                attribute: "enabled_in_store",
+                value: "true",
+                operator: "eq",
+              },
+              {
+                attribute: "is_return",
+                value: "false",
+                operator: "eq",
+              },
+            ],
           },
         ],
       });
@@ -592,10 +483,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -609,10 +496,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Color: "White",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",
@@ -628,10 +511,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -645,10 +524,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Color: "White",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",
@@ -664,10 +539,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -681,10 +552,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Color: "White",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",
@@ -700,10 +567,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -717,10 +580,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Color: "White",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",
@@ -768,10 +627,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -784,10 +639,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Size: "M",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",
@@ -802,10 +653,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -818,10 +665,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Size: "XL",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",
@@ -869,10 +712,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -885,10 +724,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Size: "M",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",
@@ -903,10 +738,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -919,10 +750,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Size: "XL",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",
@@ -970,10 +797,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -986,10 +809,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Size: "M",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",
@@ -1004,10 +823,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
               },
               prices: [
                 {
-                  amount: 10,
-                  currency_code: "eur",
-                },
-                {
                   amount: 15,
                   currency_code: "usd",
                 },
@@ -1020,10 +835,6 @@ export default async function seedDemoData({ container }: ExecArgs) {
                 Size: "XL",
               },
               prices: [
-                {
-                  amount: 10,
-                  currency_code: "eur",
-                },
                 {
                   amount: 15,
                   currency_code: "usd",

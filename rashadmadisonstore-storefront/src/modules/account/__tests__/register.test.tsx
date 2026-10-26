@@ -179,6 +179,13 @@ describe('Register Component', () => {
     expect(screen.queryByText('Billing address optional')).not.toBeInTheDocument()
   })
 
+  it('keeps the US country hidden and submits it with the signup address', () => {
+    renderEmailSignup()
+    expect(screen.queryByText('Shipping country code')).not.toBeInTheDocument()
+    const form = screen.getByTestId('register-button').closest('form')!
+    expect(new FormData(form).get('shipping_address.country_code')).toBe('us')
+  })
+
   it('lets users mark billing as the same as shipping', () => {
     renderEmailSignup()
     expect(screen.getByLabelText('Is your billing address the same as your shipping address?')).toBeChecked()

@@ -1,12 +1,18 @@
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { NavigationContext } from '@lib/context/navigation'
 
 import LocalizedClientLink from '../components/localized-client-link'
 
 // Mock Next.js components and hooks
 jest.mock('next/link', () => {
-  return function MockLink({ children, href, ...props }: any) {
-    return <a href={href} {...props} data-testid="next-link">{children}</a>
+  return function MockLink({ children, href, onNavigate, onClick, ...props }: any) {
+    return <a href={href} {...props} data-testid="next-link" onClick={(event) => {
+      onClick?.(event)
+      if (!event.defaultPrevented && !event.metaKey && !event.ctrlKey && props.target !== "_blank") {
+        onNavigate?.({ preventDefault: () => event.preventDefault() })
+      }
+    }}>{children}</a>
   }
 })
 
@@ -17,8 +23,61 @@ jest.mock('next/navigation', () => ({
 const mockUseParams = require('next/navigation').useParams
 
 describe('LocalizedClientLink Component', () => {
+  const router = {
+    push: jest.fn(),
+    replace: jest.fn(),
+    refresh: jest.fn(),
+    back: jest.fn(),
+    forward: jest.fn(),
+    prefetch: jest.fn(),
+  }
   beforeEach(() => {
     jest.clearAllMocks()
+  })
+
+  it('tracks internal navigation while preserving scroll options', () => {
+    mockUseParams.mockReturnValue({ countryCode: 'us' })
+    render(
+      <NavigationContext.Provider value={router}>
+        <LocalizedClientLink href="/checkout?step=payment" scroll={false}>Payment</LocalizedClientLink>
+      </NavigationContext.Provider>
+    )
+    fireEvent.click(screen.getByText('Payment'))
+    expect(router.push).toHaveBeenCalledWith('/us/checkout?step=payment', { scroll: false })
+  })
+
+  it('preserves replace navigation', () => {
+    mockUseParams.mockReturnValue({ countryCode: 'us' })
+    render(
+      <NavigationContext.Provider value={router}>
+        <LocalizedClientLink href="/cart" replace>Cart</LocalizedClientLink>
+      </NavigationContext.Provider>
+    )
+    fireEvent.click(screen.getByText('Cart'))
+    expect(router.replace).toHaveBeenCalledWith('/us/cart', { scroll: undefined })
+    expect(router.push).not.toHaveBeenCalled()
+  })
+
+  it('respects navigation cancellation', () => {
+    mockUseParams.mockReturnValue({ countryCode: 'us' })
+    render(
+      <NavigationContext.Provider value={router}>
+        <LocalizedClientLink href="/cart" onNavigate={(event: { preventDefault: () => void }) => event.preventDefault()}>Cart</LocalizedClientLink>
+      </NavigationContext.Provider>
+    )
+    fireEvent.click(screen.getByText('Cart'))
+    expect(router.push).not.toHaveBeenCalled()
+  })
+
+  it('leaves modified clicks to Next.js instead of starting tracked navigation', () => {
+    mockUseParams.mockReturnValue({ countryCode: 'us' })
+    render(
+      <NavigationContext.Provider value={router}>
+        <LocalizedClientLink href="/cart">Cart</LocalizedClientLink>
+      </NavigationContext.Provider>
+    )
+    fireEvent.click(screen.getByText('Cart'), { metaKey: true })
+    expect(router.push).not.toHaveBeenCalled()
   })
 
   it('should render with country code prepended to href', () => {

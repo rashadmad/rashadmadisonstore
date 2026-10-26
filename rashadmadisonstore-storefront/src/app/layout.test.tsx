@@ -2,6 +2,10 @@ import { render, screen } from "@testing-library/react"
 
 import RootLayout from "./layout"
 
+jest.mock("@lib/context/navigation", () => ({
+  NavigationProvider: ({ children }: { children: React.ReactNode }) => children,
+}))
+
 jest.mock("@next/third-parties/google", () => ({
   GoogleAnalytics: ({ gaId }: { gaId: string }) => (
     <div data-testid="google-analytics" data-ga-id={gaId} />

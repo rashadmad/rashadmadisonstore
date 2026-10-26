@@ -3,7 +3,8 @@
 import React, { useEffect, useMemo, useActionState } from "react"
 
 import Input from "@modules/common/components/input"
-import NativeSelect from "@modules/common/components/native-select"
+import StateSelect from "@modules/common/components/state-select"
+import USCountryInput from "@modules/common/components/us-country-input"
 
 import AccountInfo from "../account-info"
 import { HttpTypes } from "@medusajs/types"
@@ -161,27 +162,16 @@ const ProfileBillingAddress: React.FC<MyInformationProps> = ({
               data-testid="billing-city-input"
             />
           </div>
-          <Input
-            label="Province"
+          <StateSelect
+            label="State"
             name="province"
             defaultValue={billingAddress?.province || undefined}
             data-testid="billing-province-input"
           />
-          <NativeSelect
+          <USCountryInput
             name="country_code"
-            defaultValue={billingAddress?.country_code || undefined}
-            required
             data-testid="billing-country-code-select"
-          >
-            <option value="">-</option>
-            {regionOptions.map((option, i) => {
-              return (
-                <option key={i} value={option?.value}>
-                  {option?.label}
-                </option>
-              )
-            })}
-          </NativeSelect>
+          />
         </div>
       </AccountInfo>
     </form>

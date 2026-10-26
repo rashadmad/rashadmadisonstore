@@ -42,6 +42,85 @@ Visit the [Quickstart Guide](https://docs.medusajs.com/learn/installation) to se
 
 Visit the [Docs](https://docs.medusajs.com/learn/installation#get-started) to learn more about our system requirements.
 
+## Chicago-area free shipping
+
+### Automatic USPS checkout shipping
+
+The storefront now assigns shipping automatically rather than asking customers
+to select a carrier or service. Register the profile-shipping provider by
+restarting the backend after deployment, then run `npm run setup:profile-shipping`.
+The setup command is safe to rerun and creates one calculated USPS option per
+existing shipping profile in the single configured US shipping service zone.
+It does not modify products or delete existing options.
+
+Base USD packaging rates are configured in `src/lib/profile-shipping.ts`:
+
+| Shipping profile | Base rate |
+| --- | ---: |
+| Risograph print | $9.50 |
+| Risograph Print tabloid | $9.50 |
+| ScreenPrint stretched | $22.00 |
+| ScreenPrint framed | $26.50 |
+| Risograph Print Framed | $14.00 |
+| Small Bag | $6.25 |
+| bag | $5.75 |
+
+Each purchased unit counts separately. Units are sorted by base shipping rate,
+highest first, and charged at full price, half price, then free, repeating from
+the fourth unit. Half-price charges round to the nearest cent, with half cents
+rounded up. Three $9.50-profile prints therefore ship for $14.25; four ship for
+$23.75. Equal-rate ties use profile and line-item IDs for stable allocation.
+Eligible Chicago-area addresses receive $0 shipping for every profile.
+
+The backend computes and persists a separate method for each required profile;
+checkout displays their combined charge. Cart changes refresh calculated method
+prices, and completion rejects missing or stale charges. A newly added profile
+must have a rate configured here and an option created by the setup command.
+Missing rates or ambiguous options block shipping with an explicit error rather
+than silently offering free shipping. Changes to old flat-rate options in Admin
+do not alter these calculated rates.
+
+These are store-defined shipping charges, not live USPS quotes. The provider
+does not purchase postage, generate labels, or provide delivery guarantees.
+Fulfillment and USPS labels remain handled by the store.
+
+The older local-only setup below can bootstrap a new store's location/channel
+links before running the automatic shipping setup.
+
+After deploying the backend, run `npm run setup:chicago-shipping` from this
+directory against the store database, then restart the backend. The command
+creates a **Free Local Shipping - Eligible Chicago-Area ZIP Codes** option at
+USD 0 for each existing US manual-shipping service-zone/shipping-profile
+combination. It is safe to
+rerun and leaves paid shipping, express shipping, pickup, and returns unchanged.
+For stores with no shipping options, the command creates a US service zone and
+free options for all existing shipping profiles, using the single existing stock
+location. It links that location to the manual fulfillment provider and the
+default sales channel (or the only sales channel). No paid rate is invented.
+Stores with multiple stock locations must first configure a US manual-shipping
+option for the intended location. Existing shipping configurations are reused.
+Cart delivery options are fetched without caching so newly configured options
+and changes to address eligibility appear immediately on checkout refresh.
+
+Customers select the free option during checkout; no coupon or minimum purchase
+is required. Eligibility uses the **shipping** address, not the billing address:
+US addresses with a ZIP code associated with Cook, DuPage, Kane, Lake, McHenry,
+or Will county in Illinois qualify. ZIP+4 is supported. An omitted state is
+allowed because the ZIP identifies Illinois; a conflicting state is rejected.
+The backend checks eligibility both when listing options and when selecting or
+refreshing a shipping method. Changing to an ineligible address removes the
+selected free option and requires choosing another delivery method.
+
+The ZIP allowlist in [chicago-shipping.ts](src/lib/chicago-shipping.ts) is derived
+from [GeoNames US postal data](https://download.geonames.org/export/zip/US.zip),
+retrieved October 20, 2026, under
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Credit:
+[GeoNames](https://www.geonames.org/). It uses Illinois county codes 031, 043,
+089, 097, 111, and 197. This is a ZIP-based service area, not street-level county
+verification: ZIP boundaries may cross county lines. Review the allowlist when
+postal boundaries change. No customer address is sent to an external lookup
+service.
+
 ## What is Medusa
 
 Medusa is a set of commerce modules and tools that allow you to build rich, reliable, and performant commerce applications without reinventing core commerce logic. The modules can be customized and used to build advanced ecommerce stores, marketplaces, or any product that needs foundational commerce primitives. All modules are open-source and freely available on npm.

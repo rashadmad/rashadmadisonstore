@@ -2,15 +2,29 @@
 
 import { sdk } from "@lib/config"
 import { HttpTypes } from "@medusajs/types"
-import { getAuthHeaders, getCacheOptions } from "./cookies"
+import medusaError from "@lib/util/medusa-error"
+import { getAuthHeaders, getCacheOptions, getCacheTag, getCartId } from "./cookies"
+import { revalidateTag } from "next/cache"
+
+export async function applyAutomaticShipping() {
+  const cartId = await getCartId()
+  if (!cartId) throw new Error("No cart found when calculating shipping.")
+  const headers = await getAuthHeaders()
+  try {
+    const result = await sdk.client.fetch<{ amount: number; local: boolean }>(
+      `/store/carts/${cartId}/automatic-shipping`,
+      { method: "POST", headers, cache: "no-store" }
+    )
+    revalidateTag(await getCacheTag("carts"))
+    return result
+  } catch (error) {
+    medusaError(error)
+  }
+}
 
 export const listCartShippingMethods = async (cartId: string) => {
   const headers = {
     ...(await getAuthHeaders()),
-  }
-
-  const next = {
-    ...(await getCacheOptions("fulfillment")),
   }
 
   return sdk.client
@@ -22,14 +36,11 @@ export const listCartShippingMethods = async (cartId: string) => {
           cart_id: cartId,
         },
         headers,
-        next,
-        cache: "force-cache",
+        cache: "no-store",
       }
     )
     .then(({ shipping_options }) => shipping_options)
-    .catch(() => {
-      return null
-    })
+    .catch(medusaError)
 }
 
 export const calculatePriceForShippingOption = async (

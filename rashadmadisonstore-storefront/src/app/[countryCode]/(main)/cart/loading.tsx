@@ -1,5 +1,5 @@
-import SkeletonCartPage from "@modules/skeletons/templates/skeleton-cart-page"
+import TransitionLoading from "@modules/common/components/transition-loading"
 
 export default function Loading() {
-  return <SkeletonCartPage />
+  return <TransitionLoading label="Loading cart" />
 }

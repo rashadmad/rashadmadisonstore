@@ -1,5 +1,5 @@
-import SkeletonOrderConfirmed from "@modules/skeletons/templates/skeleton-order-confirmed"
+import TransitionLoading from "@modules/common/components/transition-loading"
 
 export default function Loading() {
-  return <SkeletonOrderConfirmed />
+  return <TransitionLoading label="Loading order" />
 }

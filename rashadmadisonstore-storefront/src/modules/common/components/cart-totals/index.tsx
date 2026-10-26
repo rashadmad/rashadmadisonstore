@@ -12,6 +12,7 @@ type CartTotalsProps = {
     item_subtotal?: number | null
     shipping_subtotal?: number | null
     discount_subtotal?: number | null
+    shipping_methods?: { id: string }[]
   }
 }
 
@@ -24,6 +25,7 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals }) => {
     shipping_subtotal,
     discount_subtotal,
   } = totals
+  const shippingPending = totals.shipping_methods !== undefined && !totals.shipping_methods.length
 
   return (
     <div>
@@ -37,7 +39,9 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals }) => {
         <div className="flex items-center justify-between">
           <span>Shipping</span>
           <span className="font-semibold text-neutral-900" data-testid="cart-shipping" data-value={shipping_subtotal || 0}>
-            {convertToLocale({ amount: shipping_subtotal ?? 0, currency_code })}
+            {shippingPending
+              ? "Calculated at delivery step"
+              : convertToLocale({ amount: shipping_subtotal ?? 0, currency_code })}
           </span>
         </div>
         {!!discount_subtotal && (
@@ -65,7 +69,7 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals }) => {
       </div>
       <div className="h-px w-full border-b border-neutral-200 my-4" />
       <div className="flex items-center justify-between text-neutral-900 mb-2 text-base font-bold">
-        <span>Total</span>
+        <span>{shippingPending ? "Estimated total" : "Total"}</span>
         <span
           className="text-xl sm:text-2xl font-bold text-neutral-900"
           data-testid="cart-total"

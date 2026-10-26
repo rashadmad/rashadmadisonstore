@@ -13,7 +13,7 @@ import { useParams, usePathname, useSearchParams } from "next/navigation"
 import { useEffect, useMemo, useRef, useState } from "react"
 import ProductPrice from "../product-price"
 import MobileActions from "./mobile-actions"
-import { useRouter } from "next/navigation"
+import { useRouter } from "@lib/context/navigation"
 
 type ProductActionsProps = {
   product: HttpTypes.StoreProduct

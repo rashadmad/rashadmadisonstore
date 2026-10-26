@@ -2,10 +2,11 @@ import { HttpTypes } from "@medusajs/types"
 import { Container } from "@medusajs/ui"
 import Checkbox from "@modules/common/components/checkbox"
 import Input from "@modules/common/components/input"
+import StateSelect from "@modules/common/components/state-select"
 import { mapKeys } from "lodash"
 import React, { useEffect, useMemo, useState } from "react"
 import AddressSelect from "../address-select"
-import CountrySelect from "../country-select"
+import USCountryInput from "@modules/common/components/us-country-input"
 
 const ShippingAddress = ({
   customer,
@@ -164,17 +165,12 @@ const ShippingAddress = ({
           required
           data-testid="shipping-city-input"
         />
-        <CountrySelect
+        <USCountryInput
           name="shipping_address.country_code"
-          autoComplete="country"
-          region={cart?.region}
-          value={formData["shipping_address.country_code"]}
-          onChange={handleChange}
-          required
           data-testid="shipping-country-select"
         />
-        <Input
-          label="State / Province"
+        <StateSelect
+          label="State"
           name="shipping_address.province"
           autoComplete="address-level1"
           value={formData["shipping_address.province"]}

@@ -45,6 +45,15 @@ module.exports = defineConfig({
   },
   modules: [
     {
+      resolve: '@medusajs/medusa/fulfillment',
+      options: {
+        providers: [
+          { resolve: '@medusajs/medusa/fulfillment-manual', id: 'manual' },
+          { resolve: './src/modules/profile-shipping', id: 'profile-shipping' },
+        ],
+      },
+    },
+    {
       resolve: '@medusajs/medusa/auth',
       options: {
         providers: [

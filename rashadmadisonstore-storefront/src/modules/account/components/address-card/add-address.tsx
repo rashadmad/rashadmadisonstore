@@ -5,8 +5,9 @@ import { Button, Heading } from "@medusajs/ui"
 import { useEffect, useState, useActionState } from "react"
 
 import useToggleState from "@lib/hooks/use-toggle-state"
-import CountrySelect from "@modules/checkout/components/country-select"
+import USCountryInput from "@modules/common/components/us-country-input"
 import Input from "@modules/common/components/input"
+import StateSelect from "@modules/common/components/state-select"
 import Modal from "@modules/common/components/modal"
 import { SubmitButton } from "@modules/checkout/components/submit-button"
 import { HttpTypes } from "@medusajs/types"
@@ -115,17 +116,14 @@ const AddAddress = ({
                   data-testid="city-input"
                 />
               </div>
-              <Input
-                label="Province / State"
+              <StateSelect
+                label="State"
                 name="province"
                 autoComplete="address-level1"
                 data-testid="state-input"
               />
-              <CountrySelect
-                region={region}
+              <USCountryInput
                 name="country_code"
-                required
-                autoComplete="country"
                 data-testid="country-select"
               />
               <Input

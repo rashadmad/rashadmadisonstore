@@ -130,6 +130,18 @@ describe("customer authentication actions", () => {
     expect(mockRevalidateTag).toHaveBeenCalledWith("customers-cache-id")
   })
 
+  it("allows signup without an address when only the hidden US country is submitted", async () => {
+    const formData = createSignupForm()
+    formData.set("shipping_address.country_code", "us")
+    mockRegister.mockResolvedValue("registration-token")
+    mockCreateCustomer.mockResolvedValue({ customer: { id: "customer_1" } })
+    mockLogin.mockResolvedValue("login-token")
+
+    await expect(signup(null, formData)).resolves.toBeUndefined()
+    expect(mockCreateAddress).not.toHaveBeenCalled()
+    expect(mockRedirect).toHaveBeenCalledWith("/account")
+  })
+
   it("creates a default shipping address when optional signup address is provided", async () => {
     const customer = { id: "customer_1", email: "rashad@example.com" }
     const formData = createSignupForm()

@@ -67,9 +67,9 @@ describe('Checkout Form', () => {
     expect(screen.getByTestId('review-section')).toBeInTheDocument()
   })
 
-  it('should fetch shipping methods with cart id', async () => {
+  it('does not fetch selectable shipping options', async () => {
     render(await CheckoutForm({ cart: mockCart, customer: mockCustomer }))
-    expect(listCartShippingMethods).toHaveBeenCalledWith('cart-1')
+    expect(listCartShippingMethods).not.toHaveBeenCalled()
   })
 
   it('should fetch payment methods with region id', async () => {
@@ -77,10 +77,10 @@ describe('Checkout Form', () => {
     expect(listCartPaymentMethods).toHaveBeenCalledWith('region-1')
   })
 
-  it('should return null when shipping methods are unavailable', async () => {
+  it('renders automatic delivery even without selectable shipping options', async () => {
     listCartShippingMethods.mockResolvedValue(null)
     const { container } = render(await CheckoutForm({ cart: mockCart, customer: mockCustomer }))
-    expect(container.firstChild).toBeNull()
+    expect(screen.getByTestId('shipping-section')).toBeInTheDocument()
   })
 
   it('should return null when payment methods are unavailable', async () => {

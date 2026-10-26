@@ -10,7 +10,8 @@ import PaymentContainer, {
   StripeCardContainer,
 } from "@modules/checkout/components/payment-container"
 import Divider from "@modules/common/components/divider"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useSearchParams } from "next/navigation"
+import { useRouter } from "@lib/context/navigation"
 import { useCallback, useEffect, useState } from "react"
 
 const Payment = ({

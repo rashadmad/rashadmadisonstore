@@ -46,6 +46,57 @@ npm run dev
 
 The application runs at [http://localhost:8000](http://localhost:8000). Requests without a country code are redirected to the configured Medusa region, such as `/us`.
 
+## Page transition loading
+
+Checkout fetches available payment providers without caching so changes made
+under Medusa Admin's region payment settings appear on checkout refresh.
+
+Navigation lasting at least two seconds displays a non-blocking top progress
+indicator, keeping the current content and keyboard controls available. When a
+route has no usable content and shows a loading boundary, the gallery loading
+artwork is shown in the document flow instead of a full-screen overlay.
+One shared timer coordinates both states, including nested route fallbacks.
+Faster transitions do not flash an indicator or receive an artificial delay.
+Loading is announced through an accessible status; animation respects reduced
+motion preferences.
+
+Route loading boundaries cover server-rendered pages. The root navigation
+provider also tracks localized links and programmatic navigation, including
+checkout query-string steps, pagination, sorting, and refreshes. Use
+`LocalizedClientLink` for internal storefront links and `useRouter` from
+`@lib/context/navigation` for programmatic navigation so new features participate.
+Modified clicks and links opening new tabs retain Next.js link behavior.
+Tracked router back/forward calls participate; browser history buttons are
+covered when they trigger route loading boundaries, not by a global browser
+navigation event. Arbitrary server actions and external/full-document navigation
+are not tracked. Existing button-level progress indicators remain unchanged;
+navigation loading does not indicate that a payment has succeeded.
+
+## Address state selection
+
+Checkout shipping and billing forms, saved-address forms, and signup use a
+shared US state dropdown with all 50 states, DC, and five US territories.
+Selections submit two-letter codes. Existing full state names and `US-XX`
+codes are recognized; other saved province values are preserved for editing.
+This list does not enable new shipping destinations or change shipping rates.
+Country fields are hidden and submit `us` while the store serves only the United
+States. Restore country selectors before expanding internationally (see the TODO
+in `USCountryInput`). Signup addresses remain optional.
+
+## Automatic checkout shipping
+
+Delivery automatically applies backend-calculated USPS shipping with no service
+selection. Each unit uses its product shipping profile's base rate, sorted from
+highest rate to lowest. The repeating charge is full price, half price, free.
+Eligible Chicago-area ZIP codes receive free shipping for the whole order.
+The Delivery step explains the policy and shows the combined charge before
+payment. Failed calculations block continuation and offer a retry; before a
+shipping method is applied, the summary labels shipping as calculated at the
+delivery step rather than implying it is free.
+
+The backend must have the profile-shipping provider and calculated options
+configured; see its `npm run setup:profile-shipping` command and README.
+
 ## Environment Variables
 
 | Variable                                      | Required | Purpose                                                                                   |
