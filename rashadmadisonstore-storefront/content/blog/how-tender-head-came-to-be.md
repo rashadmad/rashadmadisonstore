@@ -1,45 +1,46 @@
 ---
-title: How Tender Head came to be
+title: How Tender Head Came to Be
 category: Art Process
-excerpt: The story of tender head.
+excerpt: The story and inspiration behind the "Tenderhead" screen print.
 publishedAt: 2026-09-03
 image: /images/tenderHead_salon.png
 imageAlt: Tender Head screen print
 ---
 
-Let’s get started. This is my first blog post on my new site, and I’m excited to begin documenting my process more intentionally. I want this to be a place where I can share the ins and outs of how I work with screenprinting, watercolor, and drawing as I continue to build my community and following.
+This is my first blog post on my new site, and I’m excited to begin documenting my process more intentionally. I want this space to be a place where I can share the ins and outs of my work with screen printing, watercolor, and drawing as I continue to build my creative community.
 
-I want to start by taking you through how I created my best-selling piece(at the time of writing), "Tenderhead."
+To kick things off, I want to take you through how I created my best-selling piece to date: **"Tenderhead."**
 
-It began when I saw this image:
+It all began when I came across this striking photograph:
+
 ![tuvawolf photo of girl getting hair braided](/images/TenderHeadOriginal.jpeg)
-*[photo credit to Tuvawolf Merja Iileka](https://www.instagram.com/tuvawolf/)*
+*[Photo credit to Tuvawolf Merja Iileka](https://www.instagram.com/tuvawolf/)*
 
-I was immediately struck by it. Her face tells a story. She is an African girl in transition, and her matted hair is becoming structured and presentable. I can tell she would rather be running around playing with her friends with her hair wild and free, but instead she is sitting there while her scalp is being yanked and braided. The term "Tenderhead"—part of African American vernacular and culture—represents a sensitive scalp, and that tension becomes a big issue when hair is being handled during hair care. I know from experience.
+I was immediately drawn to it. Her face tells a profound story. She is a young African girl in transition, sitting still while her matted hair is brought into a structured, presentable style. You can tell she would rather be running around outside playing with her friends, her hair wild and free. Instead, she is enduring the painful process of having her scalp pulled and braided. 
 
-I knew I wanted to draw her immediately, but when it comes to selling a product, you start thinking about a million different things that you think "they" would like. People unfortunately have negative connotations with:
+The term *"Tenderhead"*—a familiar phrase within African American vernacular and culture—describes a sensitive scalp. That sensitivity creates a real tension whenever hair is being styled or cared for. It’s a feeling I know well from personal experience.
 
-* Africans & African Americans
-* Darker-skinned people
-* Women and girls who are not smiling
+I knew immediately that I wanted to draw her. However, when you start thinking about selling your art, a million doubts creep in about what "they" (the market) might prefer. Unfortunately, society often carries negative biases around:
+
+- African and African American subjects
+- Darker-skinned people
+- Women and girls who are not smiling
 
 <img src="/images/darkSkinnedWomen.jpg" alt="Dark-skinned women" class="blog-image-half blog-image-half-left">
 
-I love how the light hits the darkest skin. It’s a unique and fun thing to draw. I like how dark skin absorbs light, making any highlights pop and tell a story. In the above image, you can see light surrounding her entire face, making every indentation in her skin recede. Mind you, she is a young girl, so she doesn’t yet have the intense features that come with age. There is a smooth silkiness to her skin.
+Visually, I love how light interacts with deep skin tones. It’s a unique and rewarding challenge to render. Dark skin absorbs light in a way that makes highlights pop, telling a rich visual story. In the photo above, light frames her face, making the subtle contours of her skin recede. As a young girl, she doesn't yet have the sharp, defined facial features that come with age—there is a smooth, silky quality to her skin that I wanted to capture.
 
 <img src="/images/dolltest2.jpg" alt="Image description" class="blog-image-half">
 
-When I create drawings of darker-skinned women and girls, it becomes an opportunity for me to grapple with my own deep-seated prejudice and programming from society. I may be pro-Black as they get, not that folks are battling for that mantel. Being pro-Black is not something you just say about yourself—you have 
+Creating portraits of darker-skinned women and girls gives me an opportunity to grapple with my own internalized social conditioning. As passionately pro-Black as I am, true alignment isn't just something you claim—it requires ongoing internal work. 
 
-<br>
+With every stroke of my pencil and ink brush, I had to fight against an underlying anxiety: the fear that the artwork wouldn't be accepted, the conditioning that tells us Black girls aren't prized, and the pervasive feeling of not being enough. 
 
-to do the internal work. Every stroke of my pencil and ink brush I had to fight through the feeling that the drawing would never be accepted or appreciated, that Black girls are ugly, and that overall feeling that I myself am not enough. often I actually fight through this in my best work. I set out to do something ambitious and honestly don’t know if I’ll be able to do it.
+In many ways, I do my best work while pushing through this internal resistance. I set out with ambitious goals, often unsure if I’ll be able to bring them to fruition. Creating art requires an investment of time and money, but the deepest cost is this spiritual work. Through my art, I am striving to convey a meaningful message about my people, my ancestors, and myself.
 
-Obviously, my art has a sacrifice of money and time, but the biggest cost is the spiritual work. I have a message I’m trying to convey about my people, myself, and my ancestors.
+*(You can explore more of my technical process [here](/about#practice).)*
 
-I go into the technical process [here](/about#practice):
-
-I will admit that creating the work was painful, but I pushed so much of myself into it.
+While creating this piece was emotionally challenging, I poured so much of my heart into it.
 
 <div class="blog-image-triptych">
 	<img src="/images/crown.jpeg" alt="Crown artwork" />
@@ -47,15 +48,12 @@ I will admit that creating the work was painful, but I pushed so much of myself 
 	<img src="/images/Martin_TV_Show_logo.png" alt="Martin television show logo" />
 </div>
 
+You’ll notice triangular motifs in my work whenever possible. These were inspired by designer Art Sims, who created the iconic *Do the Right Thing* film logo—a design that deeply influenced the *Martin* TV show logo and defined much of 90s graphic design. For me, these triangles serve as a symbolic motif representing Dr. Martin Luther King Jr.
 
-I try to add these triangles to my work whenever possible. They were inspired by Art Sims, who created the graphic design for the "Do the Right Thing" logo, which I think influenced the Martin logo and many designs in the 90s. The triangles are a motif representing Dr. Martin Luther King Jr.
+People often ask if *Tenderhead* is a woodblock print. While it isn't, I was studying block printing technique heavily at the time, and that bold contrast naturally seeped into the linework. There is also an intentional graffiti energy to the piece—I can easily picture it rendered as a large-scale mural in my neighborhood.
 
-Also, many people ask me if my art is from a woodprint, which it isn’t. But I was very interested in block printing when I created it, and I think that influence seeped in.
+I intentionally exaggerated her features and embraced asymmetry. Standard convention might suggest that asymmetry detracts from beauty, but through the drawing and inking process, something powerful emerged. This young, dark-skinned girl is unmistakably beautiful. 
 
-There is also some graffiti energy in the piece, and that was intentional. I could easily see it on a wall as a mural in my neighborhood.
+To me, the piece carries an iconic quality—much like the immediate recognizability of classic cultural imagery like Rosie the Riveter. It connects deeply to themes of beauty, self-care, and heritage. It serves as a striking statement piece for anyone looking to express their appreciation for Black culture, identity, and art.
 
-I definitely exaggerated her features and made her as asymmetrical as possible. One would think that would make her "ugly," but somehow, some way, this drawing and inking came out amazing. It feels instantly iconic to me. I would compare it to the Starbucks logo or the image of Rosie the Riveter.
-
-It has a simple tie into beauty and haircare. It is an awesome lifestyle choice for someone looking to make a statement about their appreciation for luxury, love of Black culture, and love of being Black.
-
-I leave this post with gratitude for reading my first blog entry. Thank you for being here, for paying attention, and for continuing to support the work I’m making. This is only the beginning.
+Thank you for taking the time to read my very first blog post. I’m deeply grateful for your presence, your support, and your interest in my artistic journey. This is only the beginning!

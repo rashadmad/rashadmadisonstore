@@ -7,6 +7,8 @@ import rehypeRaw from "rehype-raw"
 import { appCopy } from "@lib/copy"
 import { getBlogPostBySlug, listBlogPosts } from "@lib/data/blog"
 import { retrieveCustomer } from "@lib/data/customer"
+import { listProducts } from "@lib/data/products"
+import { getProductPrice } from "@lib/util/get-product-price"
 import PostComments from "@modules/blog/components/post-comments"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
@@ -52,6 +54,16 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   const customer = await retrieveCustomer().catch(() => null)
   const authorName = [customer?.first_name, customer?.last_name].filter(Boolean).join(" ")
+  const featuredProduct = post.slug === "how-tender-head-came-to-be"
+    ? (await listProducts({
+        countryCode: resolvedParams.countryCode,
+        queryParams: { handle: "tender-head-screenprint", limit: 1 },
+      })).response.products[0]
+    : undefined
+  const featuredPrice = featuredProduct
+    ? getProductPrice({ product: featuredProduct }).cheapestPrice
+    : null
+  const featuredImage = featuredProduct?.thumbnail || featuredProduct?.images?.[0]?.url
 
   return (
     <div className="bg-[#f6f1e7] text-[#17120d]">
@@ -111,6 +123,59 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 {post.content}
               </ReactMarkdown>
             </div>
+
+            {post.slug === "how-tender-head-came-to-be" ? (
+              <section
+                aria-labelledby="bring-this-piece-home"
+                className="mt-12 clear-both rounded-2xl border border-[#2f6b3b]/20 bg-[#e7dcc9]/45 p-6 sm:p-8"
+              >
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#2f6b3b]">
+                  From the studio to your space
+                </p>
+                <h2
+                  id="bring-this-piece-home"
+                  className="mt-3 font-display text-3xl font-semibold"
+                >
+                  Bring this piece home
+                </h2>
+                <p className="mt-4 text-lg leading-8 text-[#3b3024]">
+                  If Tenderhead&apos;s story resonates with you, explore the print
+                  and bring a celebration of Black beauty, identity, and heritage
+                  into your space.
+                </p>
+                {featuredProduct && featuredPrice ? (
+                  <LocalizedClientLink
+                    href={`/products/${featuredProduct.handle}`}
+                    className="group mt-6 block overflow-hidden rounded-xl border border-[#2f6b3b]/20 bg-[#fbf7ef] transition hover:border-[#2f6b3b] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#2f6b3b]"
+                  >
+                    {featuredImage ? (
+                      <div className="relative aspect-square bg-[#e7dcc9]">
+                        <Image
+                          src={featuredImage}
+                          alt={featuredProduct.title}
+                          fill
+                          className="object-contain p-4"
+                          sizes="(max-width: 640px) 100vw, 600px"
+                        />
+                      </div>
+                    ) : null}
+                    <div className="flex flex-wrap items-center justify-between gap-3 p-5">
+                      <span className="text-lg font-semibold text-[#2f6b3b]">
+                        {featuredProduct.title}
+                      </span>
+                      <span className="text-lg font-semibold">
+                        {featuredProduct.variants && featuredProduct.variants.length > 1 ? "From " : ""}
+                        {featuredPrice.calculated_price}
+                      </span>
+                    </div>
+                  </LocalizedClientLink>
+                ) : (
+                  <p className="mt-6 text-[#7a6a57]">
+                    This print is currently unavailable.
+                  </p>
+                )}
+              </section>
+            ) : null}
           </div>
 
           <aside aria-label="Advertisement" className="hidden lg:block">

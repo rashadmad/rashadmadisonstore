@@ -45,6 +45,9 @@ module.exports = defineConfig({
   },
   modules: [
     {
+      resolve: './src/modules/newsletter',
+    },
+    {
       resolve: '@medusajs/medusa/fulfillment',
       options: {
         providers: [

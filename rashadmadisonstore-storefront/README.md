@@ -348,25 +348,34 @@ MASTODON_ACCOUNT_ACCT=rashadmad
 MASTODON_ACCESS_TOKEN=<your-mastodon-access-token>
 BLOG_CROSSPOST_KEY=<a-long-random-secret>
 
-# Required for forwarding newsletter signups to the companion app
-NEWSLETTER_SIGNUP_URL=https://your-companion-app.example.com/newsletter-signups
-NEWSLETTER_SIGNUP_KEY=<shared-secret-for-the-companion-app>
 ```
 
 ## Newsletter signup endpoint
 
-The storefront accepts newsletter signups at `POST /api/newsletter` and forwards this JSON payload to `NEWSLETTER_SIGNUP_URL`:
+The storefront accepts newsletter signups at `POST /api/newsletter` and saves
+them through the configured Medusa SDK at `POST /store/newsletter`:
 
 ```json
 {
   "email": "person@example.com",
   "firstName": "First",
   "lastName": "Last",
-  "source": "the-quintessential-storefront"
+  "consent": true
 }
 ```
 
-When `NEWSLETTER_SIGNUP_KEY` is set, it is sent as the `x-newsletter-key` header. The companion app should validate that header, treat `email` as the deduplication key, and return a 2xx response after storing the signup.
+First name, last name, a validly formatted email, and explicit consent are
+required. Only a successful save replaces the newsletter section with the
+thank-you message. Failures leave the form available to retry.
+
+Use the existing `MEDUSA_BACKEND_URL` and
+`NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY`; the old `NEWSLETTER_SIGNUP_URL` and
+`NEWSLETTER_SIGNUP_KEY` variables are no longer used. Apply the backend's
+newsletter migration before accepting signups. Subscriber data is stored in
+Medusa, separately from customer accounts; see the backend README for access.
+This integration stores signups only; it does not send emails, verify email
+ownership, or provide an automated unsubscribe service. Set up your mailing
+platform and unsubscribe handling before sending campaigns.
 
 ## Cross-post endpoint
 

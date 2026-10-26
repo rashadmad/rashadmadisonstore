@@ -60,7 +60,9 @@ const Shipping = ({ cart }: { cart: HttpTypes.StoreCart }) => {
           <Text className="mb-4">
             We ship via USPS within the United States. Shipping is calculated automatically
             from each product&apos;s packaging profile; there is no service to choose.
-            Delivery times vary.
+            Delivery times vary. Thank you for your patience as we refine our shipping
+            process. Please include your phone number in your shipping address so we
+            can contact you directly with an estimated delivery time.
           </Text>
           <Text className="mb-4">
             Items are ordered by shipping rate, highest first. Each group of three

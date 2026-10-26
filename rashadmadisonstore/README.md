@@ -42,6 +42,30 @@ Visit the [Quickstart Guide](https://docs.medusajs.com/learn/installation) to se
 
 Visit the [Docs](https://docs.medusajs.com/learn/installation#get-started) to learn more about our system requirements.
 
+## Newsletter subscribers
+
+The `newsletter` module stores newsletter signups separately from customer
+accounts. From this backend directory run `npx medusa db:migrate`, then restart
+Medusa after deploying. The migration creates `newsletter_subscriber` with a
+unique email, first/last names, subscription status, signup source, consent
+timestamp, and creation/update timestamps.
+
+`POST /store/newsletter` accepts `firstName`, `lastName`, `email`, and
+`consent: true` using the storefront's existing Medusa publishable key. The
+backend trims names, normalizes email to lowercase, validates lengths and email
+format, and records consent. Duplicate signups return the same generic success
+without changing existing data or reactivating unsubscribed records.
+
+Authenticated administrators can read subscribers at
+`GET /admin/newsletter?limit=50&offset=0`. The response contains `subscribers`,
+`count`, `offset`, and `limit`; limit is capped at 100. This is an API endpoint,
+not a new Admin dashboard screen. Public signups never return subscriber data.
+
+This feature stores signups only. It does not send newsletters, verify email
+ownership, or implement automated unsubscribe links. Before sending campaigns,
+connect a mailing platform and provide unsubscribe handling; honor opt-out
+requests by updating the subscriber status to `unsubscribed`.
+
 ## Chicago-area free shipping
 
 ### Automatic USPS checkout shipping

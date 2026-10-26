@@ -1,64 +1,43 @@
 import { NextRequest, NextResponse } from "next/server"
+import { sdk } from "@lib/config"
 
 export const runtime = "nodejs"
 
-const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-
-const normalize = (value: unknown) =>
-  typeof value === "string" ? value.trim().replace(/\s+/g, " ") : ""
-
 export async function POST(req: NextRequest) {
-  const signupUrl = process.env.NEWSLETTER_SIGNUP_URL?.trim()
-  const signupKey = process.env.NEWSLETTER_SIGNUP_KEY?.trim()
-
-  if (!signupUrl || !signupKey) {
-    return NextResponse.json(
-      { error: "Newsletter signup is not configured." },
-      { status: 503 }
-    )
-  }
-
+  let body: unknown
   try {
-    const body = (await req.json()) as Record<string, unknown>
-    const email = normalize(body.email).toLowerCase()
-    const firstName = normalize(body.firstName)
-    const lastName = normalize(body.lastName)
-
-    if (!firstName || !lastName) {
-      return NextResponse.json({ error: "First and last name are required." }, { status: 400 })
-    }
-
-    if (!EMAIL_REGEX.test(email)) {
-      return NextResponse.json({ error: "A valid email is required." }, { status: 400 })
-    }
-
-    if (firstName.length > 80 || lastName.length > 80 || email.length > 254) {
-      return NextResponse.json({ error: "Newsletter information is too long." }, { status: 400 })
-    }
-
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-      "x-newsletter-key": signupKey,
-    }
-
-    const response = await fetch(signupUrl, {
+    body = JSON.parse(await req.text())
+  } catch (error) {
+    if (!(error instanceof SyntaxError)) throw error
+    return NextResponse.json({ error: "Invalid signup data." }, { status: 400 })
+  }
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return NextResponse.json({ error: "Invalid signup data." }, { status: 400 })
+  }
+  try {
+    await sdk.client.fetch("/store/newsletter", {
       method: "POST",
-      headers,
-      body: JSON.stringify({
-        email,
-        firstName,
-        lastName,
-        source: "the-quintessential-storefront",
-      }),
+      headers: { "Content-Type": "application/json" },
+      body,
       cache: "no-store",
     })
-
-    if (!response.ok) {
-      return NextResponse.json({ error: "Newsletter provider rejected the signup." }, { status: 502 })
-    }
-
     return NextResponse.json({ ok: true })
-  } catch {
-    return NextResponse.json({ error: "Could not submit newsletter signup." }, { status: 500 })
+  } catch (error) {
+    const status =
+      error && typeof error === "object" && "status" in error
+        ? error.status
+        : undefined
+    console.error("Newsletter signup could not be saved to Medusa.", {
+      status: typeof status === "number" ? status : "unavailable",
+    })
+    return NextResponse.json(
+      {
+        error:
+          status === 400
+            ? "Please check your signup details and consent."
+            : "Could not save your signup. Please try again.",
+      },
+      { status: status === 400 ? 400 : 502 }
+    )
   }
 }

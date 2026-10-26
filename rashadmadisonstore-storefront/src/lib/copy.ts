@@ -187,6 +187,9 @@ export const appCopy = {
       "A curated collection celebrating Black expression, heritage, and independent craftsmanship.",
   },
   newsletter: {
+    thankYouLabel: "Thank you for taking interest in my practice",
+    thankYouHeading: "Looking forward to taking you on the journey with me.",
+    consent: "I agree to receive studio updates and newsletter emails. I can unsubscribe at any time.",
     heading: "Handcrafted in the studio for your lifestyle",
     description:
       "Get studio notes, release alerts, and first access to new work before it drops. Thoughtful updates only—no noise, no clutter, no spam.",
