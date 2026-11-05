@@ -18,7 +18,7 @@ const Purpose = () => {
 
           <div className="md:ml-auto md:w-full md:pl-0 lg:pr-0 lg:pl-8 xl:pl-12">
             <h2 className="text-base font-semibold leading-7 text-green-700">{appCopy.purpose.eyebrow}</h2>
-            <p id="purpose-heading" className="font-display mt-2 text-3xl font-semibold tracking-tight text-green-400 sm:text-4xl">
+            <p id="purpose-heading" className="font-display mt-2 text-3xl font-semibold tracking-tight text-green-800 sm:text-4xl">
               {appCopy.purpose.heading}
             </p>
             <p className="mt-4 block font-sans text-lg leading-7 text-gray-700 sm:text-xl sm:leading-8">

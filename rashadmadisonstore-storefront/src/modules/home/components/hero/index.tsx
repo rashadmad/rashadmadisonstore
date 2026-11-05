@@ -101,11 +101,11 @@ export default function Hero({
             <div className="mx-auto flex min-h-[calc(100dvh-4rem)] max-w-7xl items-center px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
               <div className="mx-auto max-w-2xl gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
                 <div className="relative w-full lg:max-w-xl lg:shrink-0 xl:max-w-2xl">
-                  <div className="mt-4 flex w-full flex-col items-center gap-4 text-center sm:items-start sm:text-left lg:items-center lg:text-center">
+                  <div className="mt-4 flex w-full flex-col items-center gap-4 text-center sm:items-start sm:text-left lg:items-start lg:text-left">
                     <Heading
                       id="hero-heading"
                       level="h1"
-                      className="font-display mt-2 text-4xl font-semibold tracking-tight text-green-500 sm:text-5xl dark:text-white"
+                      className="font-display mt-2 text-4xl font-semibold tracking-tight text-green-700 sm:text-5xl dark:text-white"
                     >
                       {customer?.first_name
                         ? `Welcome ${customer.first_name} to the Quintessential`
@@ -117,47 +117,49 @@ export default function Hero({
                       </p>
                     ))}
 
-                    <div className="mt-4 mb-2 flex flex-col items-center gap-4 self-auto sm:mt-5 sm:mb-5 sm:items-start sm:self-start lg:items-center lg:self-auto">
+                    <div className="mt-4 mb-2 flex flex-col items-center gap-3 self-auto sm:mt-5 sm:mb-5 sm:items-start sm:self-start lg:items-start lg:self-start">
                       <LocalizedClientLink
                         href="/gallery"
-                        className="inline-flex items-center rounded border-b-4 border-green-800 bg-green-600 px-4 py-2 font-bold text-white hover:border-green-600 hover:bg-green-500 hover:text-yellow-300"
+                        className="inline-flex items-center rounded border-b-4 border-green-900 bg-green-700 px-5 py-3 text-base font-bold text-white transition-colors hover:border-green-700 hover:bg-green-600 hover:text-white"
                       >
                         {appCopy.hero.cta.browseCollection}
                       </LocalizedClientLink>
 
-                      <a
-                        href="https://buy.stripe.com/aFa8wQ0fV4bAa509rJ0RG0d"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center rounded border-b-4 border-green-700 bg-green-500 px-4 py-2 font-bold text-white hover:border-green-500 hover:bg-green-400 hover:text-yellow-300"
-                      >
-                        {appCopy.hero.cta.donateMaterials}
-                      </a>
-
-                      {!customer && (
-                        <LocalizedClientLink
-                          href={
-                            hasLoggedInBefore
-                              ? "/account?view=sign-in"
-                              : "/account?view=register"
-                          }
-                          className="inline-flex items-center rounded border-b-4 border-green-700 bg-green-500 px-4 py-2 font-bold text-white hover:border-green-500 hover:bg-green-400 hover:text-yellow-300"
+                      <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 sm:justify-start">
+                        <a
+                          href="https://buy.stripe.com/aFa8wQ0fV4bAa509rJ0RG0d"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center rounded border-b-2 border-green-700 px-1 py-1 font-semibold text-green-800 transition-colors hover:border-green-500 hover:text-green-600"
                         >
-                          {hasLoggedInBefore
-                            ? appCopy.hero.cta.signBackIn
-                            : appCopy.hero.cta.createAccount}
-                        </LocalizedClientLink>
-                      )}
+                          {appCopy.hero.cta.donateMaterials}
+                        </a>
+
+                        {!customer && (
+                          <LocalizedClientLink
+                            href={
+                              hasLoggedInBefore
+                                ? "/account?view=sign-in"
+                                : "/account?view=register"
+                            }
+                            className="inline-flex items-center rounded border-b border-green-700 px-1 py-1 text-sm font-medium text-green-800 transition-colors hover:border-green-500 hover:text-green-600"
+                          >
+                            {hasLoggedInBefore
+                              ? appCopy.hero.cta.signBackIn
+                              : appCopy.hero.cta.createAccount}
+                          </LocalizedClientLink>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Gallery Grid Section */}
                 <div
-                  className="mt-10 flex justify-center gap-3 sm:-mt-44 sm:justify-start sm:gap-8 sm:pl-20 lg:mt-0 lg:pl-0"
+                  className="mt-10 flex justify-center gap-3 sm:mt-12 sm:justify-start sm:gap-8 sm:pl-20 lg:mt-0 lg:pl-0"
                   aria-label="Featured artwork gallery"
                 >
-                  <div className="w-24 flex-none space-y-4 pt-12 sm:ml-0 sm:w-56 sm:space-y-8 sm:pt-80 lg:order-last lg:pt-36 xl:order-0 xl:pt-80">
+                  <div className="w-24 flex-none space-y-4 pt-8 sm:ml-0 sm:w-56 sm:space-y-8 sm:pt-16 lg:order-last lg:pt-12 xl:order-0 xl:pt-16">
                     <LocalizedClientLink href="/products/african-sunset" className="block">
                       <div className="hero-art-frame african-sunset-frame relative">
                         <img
@@ -168,7 +170,7 @@ export default function Hero({
                       </div>
                     </LocalizedClientLink>
                   </div>
-                  <div className="w-20 flex-none space-y-4 pt-6 sm:mr-0 sm:w-44 sm:space-y-8 sm:pt-52 lg:pt-36">
+                  <div className="w-20 flex-none space-y-4 pt-4 sm:mr-0 sm:w-44 sm:space-y-8 sm:pt-10 lg:pt-8">
                     <LocalizedClientLink
                       href="/products/african-princess?v_id=variant_01M0ZKMMJ1G52C6R8QDQE9R6WW"
                       className="block"
@@ -191,7 +193,7 @@ export default function Hero({
                       </div>
                     </LocalizedClientLink>
                   </div>
-                  <div className="w-[7.5rem] flex-none space-y-4 pt-12 sm:w-[13rem] sm:space-y-8 sm:pt-0 lg:w-[16rem] xl:w-[18rem]">
+                  <div className="w-[7.5rem] flex-none space-y-4 pt-8 sm:w-[13rem] sm:space-y-8 sm:pt-0 lg:w-[16rem] xl:w-[18rem]">
                     <LocalizedClientLink href="/products/prince" className="block">
                       <div className="hero-art-frame-v2 relative mx-auto max-w-[10rem] p-5 sm:max-w-[11.5rem] sm:p-6 lg:max-w-[13rem] lg:p-8 xl:max-w-[14rem] xl:p-10">
                         <img

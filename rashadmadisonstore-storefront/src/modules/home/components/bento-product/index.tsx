@@ -146,20 +146,20 @@ export const getCollectionDescription = (
 }
 
 const tileLayout = [
-  { wrapper: "col-span-3 row-span-2 h-full w-full", position: "object-[50%_18%]" },
-  { wrapper: "col-span-3 row-span-1 h-full w-full", position: "object-[50%_22%]" },
-  { wrapper: "col-start-4 row-start-2 h-full w-full", position: "object-[50%_24%]" },
-  { wrapper: "col-start-5 row-start-2 h-full w-full", position: "object-[50%_24%]" },
-  { wrapper: "col-start-6 row-start-2 h-full w-full", position: "object-[50%_24%]" },
+  { wrapper: "col-span-3 row-span-2 h-full w-full", objectPosition: "50% 65%" },
+  { wrapper: "col-span-3 row-span-1 h-full w-full", objectPosition: "50% 50%" },
+  { wrapper: "col-start-4 row-start-2 h-full w-full", objectPosition: "50% 65%" },
+  { wrapper: "col-start-5 row-start-2 h-full w-full", objectPosition: "50% 65%" },
+  { wrapper: "col-start-6 row-start-2 h-full w-full", objectPosition: "50% 65%" },
 ] as const
 
 const getGridClassName = (tileCount: number) => {
-  if (tileCount === 1) return "grid min-h-[280px] grid-cols-1 bg-white sm:min-h-[360px] lg:min-h-[420px]"
-  if (tileCount === 2) return "grid min-h-[280px] grid-cols-1 gap-1 bg-white sm:min-h-[360px] sm:grid-cols-2 lg:min-h-[420px]"
-  if (tileCount === 3) return "grid min-h-[280px] grid-cols-1 gap-1 bg-white sm:min-h-[360px] sm:grid-cols-3 lg:min-h-[420px]"
-  if (tileCount === 4) return "grid min-h-[220px] grid-cols-2 gap-1 bg-white sm:grid-cols-4 sm:min-h-[280px] lg:min-h-[320px]"
+  if (tileCount === 1) return "grid h-[320px] grid-cols-1 grid-rows-1 bg-white sm:h-[360px]"
+  if (tileCount === 2) return "grid h-[600px] grid-cols-1 grid-rows-2 gap-1 bg-white sm:h-[360px] sm:grid-cols-2 sm:grid-rows-1"
+  if (tileCount === 3) return "grid h-[900px] grid-cols-1 grid-rows-3 gap-1 bg-white sm:h-[360px] sm:grid-cols-3 sm:grid-rows-1"
+  if (tileCount === 4) return "grid h-[480px] grid-cols-2 grid-rows-2 gap-1 bg-white sm:h-[320px] sm:grid-cols-4 sm:grid-rows-1"
 
-  return "grid h-[360px] grid-cols-6 grid-rows-2 gap-1 bg-white sm:h-[440px] lg:h-[520px]"
+  return "grid h-[360px] grid-cols-6 grid-rows-2 gap-1 bg-white sm:h-[400px] lg:h-[440px]"
 }
 
 const renderTile = (
@@ -171,22 +171,24 @@ const renderTile = (
 ) => (
   <div
     key={key}
-    className={`group relative ${tileCount >= 5 ? tileLayout[index]?.wrapper : "h-full w-full"}`}
+    className={`group relative min-h-0 min-w-0 overflow-hidden ${tileCount >= 5 ? tileLayout[index]?.wrapper : "h-full w-full"}`}
   >
     <LocalizedClientLink href={`/products/${tile.handle}`} className="block h-full w-full">
       <AnimatedImage
         src={tile.src}
         alt={alt}
         wrapperClassName="h-full w-full overflow-hidden"
-        className={`h-full w-full object-cover transition-transform duration-300 group-hover:scale-105 ${
-          tileCount >= 5 ? tileLayout[index]?.position : "object-[50%_22%]"
-        }`}
+        className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+        style={{
+          objectPosition:
+            tileCount >= 5 ? tileLayout[index]?.objectPosition : "50% 65%",
+        }}
       />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-2 py-2 sm:px-3 z-20">
-        <p className="line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-white sm:text-xs">
+        <p className="line-clamp-2 text-xs font-semibold leading-tight text-white sm:text-sm">
           {tile.name}
         </p>
-        <p className="text-[11px] font-bold text-yellow-300 sm:text-xs">{tile.price}</p>
+        <p className="mt-1 text-xs font-bold text-yellow-300 sm:text-sm">{tile.price}</p>
       </div>
     </LocalizedClientLink>
   </div>
@@ -224,11 +226,11 @@ const renderApparelTile = (
           </span>
         )}
       </div>
-      <div className="mt-3 flex items-center justify-between gap-2 px-1">
-        <p className="line-clamp-1 text-xs font-semibold uppercase tracking-wider text-ui-fg-base">
+      <div className="mt-3 flex flex-col items-start gap-1 px-1">
+        <p className="line-clamp-2 text-sm font-semibold leading-tight text-ui-fg-base">
           {tile.name}
         </p>
-        <p className="shrink-0 text-xs font-bold text-green-700">{tile.price}</p>
+        <p className="text-sm font-bold text-green-700">{tile.price}</p>
       </div>
     </LocalizedClientLink>
   </div>
@@ -313,8 +315,10 @@ export default function BentoProductGrid({ products, variant = "default" }: Bent
     <div className="space-y-12 sm:space-y-16">
       {sections.map((section) => {
         const tiles = getBentoTiles(section.products, false)
-        const primaryTiles = tiles.slice(0, 5)
-        const extraTiles = tiles.slice(5)
+        const tileGroups = Array.from(
+          { length: Math.ceil(tiles.length / tileLayout.length) },
+          (_, index) => tiles.slice(index * tileLayout.length, (index + 1) * tileLayout.length)
+        )
         const collectionDescription = getCollectionDescription(
           section.collection,
           section.rawCollection
@@ -331,40 +335,20 @@ export default function BentoProductGrid({ products, variant = "default" }: Bent
               </p>
             </div>
             <div className="w-full rounded-3xl border border-ui-border-base bg-white p-4 shadow-sm sm:p-6">
-              <div className="overflow-hidden rounded-2xl">
-                <div className={getGridClassName(primaryTiles.length)}>
-                  {primaryTiles.map((tile, index) =>
-                    renderTile(
-                      tile,
-                      `${section.collection} image ${index + 1}`,
-                      index,
-                      primaryTiles.length,
-                      `${section.collection}-${index}`
-                    )
-                  )}
-                </div>
-                {extraTiles.length > 0 ? (
-                  <div className="mt-1 grid grid-cols-2 gap-1 bg-white sm:grid-cols-3 lg:grid-cols-4">
-                    {extraTiles.map((tile, index) => (
-                      <div key={`${section.collection}-extra-${index}`} className="group relative aspect-square h-full w-full overflow-hidden">
-                        <LocalizedClientLink href={`/products/${tile.handle}`} className="block h-full w-full">
-                          <AnimatedImage
-                            src={tile.src}
-                            alt={`${section.collection} image ${index + 6}`}
-                            wrapperClassName="h-full w-full"
-                            className="h-full w-full object-cover object-[50%_22%] transition-transform duration-300 group-hover:scale-105"
-                          />
-                          <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/55 to-transparent px-2 py-2 sm:px-3 z-20">
-                            <p className="line-clamp-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-white sm:text-xs">
-                              {tile.name}
-                            </p>
-                            <p className="text-[11px] font-bold text-yellow-300 sm:text-xs">{tile.price}</p>
-                          </div>
-                        </LocalizedClientLink>
-                      </div>
-                    ))}
+              <div className="space-y-1 overflow-hidden rounded-2xl">
+                {tileGroups.map((group, groupIndex) => (
+                  <div key={groupIndex} className={getGridClassName(group.length)}>
+                    {group.map((tile, index) =>
+                      renderTile(
+                        tile,
+                        `${section.collection} image ${groupIndex * tileLayout.length + index + 1}`,
+                        index,
+                        group.length,
+                        `${section.collection}-${groupIndex * tileLayout.length + index}`
+                      )
+                    )}
                   </div>
-                ) : null}
+                ))}
               </div>
               <div className="mt-5 space-y-1">
                 <h4 className="text-xl font-semibold uppercase tracking-wide text-ui-fg-base sm:text-2xl">

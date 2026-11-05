@@ -80,6 +80,13 @@ describe('Product Preview', () => {
     expect(screen.getByText('Test Product')).toBeInTheDocument()
   })
 
+  it('allows product titles to wrap across two lines beside the price', () => {
+    render(React.createElement(ProductPreview, { product: mockProduct, region: mockRegion }))
+
+    expect(screen.getByTestId('product-title')).toHaveClass('line-clamp-2', 'min-w-0')
+    expect(screen.getByTestId('price').parentElement).toHaveClass('shrink-0')
+  })
+
   it('should apply featured class when isFeatured is true', () => {
     const { container } = render(React.createElement(ProductPreview, { product: mockProduct, region: mockRegion, isFeatured: true }))
     expect(container.querySelector('[class*="group"]')).toBeInTheDocument()

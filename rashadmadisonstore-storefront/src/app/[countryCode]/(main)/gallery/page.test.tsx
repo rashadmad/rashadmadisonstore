@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react"
+import "@testing-library/jest-dom"
 
 import GalleryPage from "./page"
 import { listProducts } from "@lib/data/products"
@@ -37,6 +38,7 @@ describe("GalleryPage", () => {
     render(page)
 
     expect(screen.getByRole("heading", { name: /gallery/i })).toBeInTheDocument()
+    expect(screen.queryByRole("link", { name: "Shop the artwork" })).not.toBeInTheDocument()
     expect(screen.getByText("Fine Art")).toBeInTheDocument()
     expect(screen.getByText("Identity")).toBeInTheDocument()
     expect(screen.getAllByText("Sample Artwork").length).toBeGreaterThan(0)
@@ -86,5 +88,30 @@ describe("GalleryPage", () => {
 
     expect(screen.getByText(/could not load gallery/i)).toBeInTheDocument()
     expect(screen.getByText(/medusa product data is unavailable/i)).toBeInTheDocument()
+  })
+
+  it.each([
+    { categories: [{ id: "new_category", name: "Apparel", handle: "apparel" }] },
+    { categories: [{ id: "shirts_category", name: "T-shirts", handle: "t-shirts" }] },
+    { collection: { id: "wearables_collection", title: "Wearables", handle: "wearables" } },
+    { title: "Tenderhead T-shirt", handle: "tenderheadtshirt" },
+  ])("excludes clothing without relying on the original category ID: %j", async (details) => {
+    ;(listProducts as jest.Mock).mockResolvedValue({
+      response: {
+        products: [{
+          id: "clothing",
+          title: "Clothing",
+          handle: "clothing",
+          categories: [],
+          variants: [],
+          ...details,
+        }],
+        count: 1,
+      },
+      nextPage: null,
+    })
+    render(await GalleryPage({ params: { countryCode: "us" } }))
+    expect(document.querySelector('a[href^="/products/"]')).not.toBeInTheDocument()
+    expect(screen.getByText("No gallery pieces are available right now.")).toBeInTheDocument()
   })
 })

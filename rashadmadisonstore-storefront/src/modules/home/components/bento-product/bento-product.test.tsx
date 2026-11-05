@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react"
+import "@testing-library/jest-dom"
 import BentoProductGrid from "./index"
 
 jest.mock("@modules/common/components/localized-client-link", () => ({
@@ -7,6 +8,27 @@ jest.mock("@modules/common/components/localized-client-link", () => ({
 }))
 
 const product = (overrides: any = {}) => ({
+  subtitle: null,
+  description: null,
+  is_giftcard: false,
+  status: "published" as const,
+  thumbnail: null,
+  width: null,
+  weight: null,
+  length: null,
+  height: null,
+  origin_country: null,
+  hs_code: null,
+  mid_code: null,
+  material: null,
+  collection_id: null,
+  type_id: null,
+  options: [],
+  discountable: true,
+  external_id: null,
+  created_at: null,
+  updated_at: null,
+  deleted_at: null,
   id: overrides.id || "product_1",
   handle: overrides.handle || "sample-artwork",
   title: overrides.title || "Sample Artwork",
@@ -17,6 +39,56 @@ const product = (overrides: any = {}) => ({
 })
 
 describe("BentoProductGrid", () => {
+  it.each([5, 6, 9, 10, 11, 15])("continues the bento pattern for %i artwork products", (count) => {
+    const products = Array.from({ length: count }, (_, index) => product({
+      id: `product_${index}`,
+      handle: `artwork-${index}`,
+      title: `Artwork ${index}`,
+    }))
+    render(<BentoProductGrid products={products} />)
+
+    const links = screen.getAllByRole("link")
+    expect(links).toHaveLength(count)
+    links.forEach((link, index) => {
+    expect(link).toHaveAttribute("href", `/products/artwork-${index}`)
+    const tile = link.parentElement!
+    const groupSize = Math.min(5, count - Math.floor(index / 5) * 5)
+    const expectedObjectPosition =
+      groupSize === 5 && index % 5 === 1 ? "50% 50%" : "50% 65%"
+    expect(
+      screen.getByRole("img", { name: `Identity image ${index + 1}` })
+    ).toHaveStyle({ objectPosition: expectedObjectPosition })
+      if (groupSize === 5) {
+        expect(tile.parentElement).toHaveClass("grid-cols-6", "grid-rows-2")
+        const layoutClasses = [
+          ["col-span-3", "row-span-2"],
+          ["col-span-3", "row-span-1"],
+          ["col-start-4", "row-start-2"],
+          ["col-start-5", "row-start-2"],
+          ["col-start-6", "row-start-2"],
+        ]
+        expect(tile).toHaveClass(...layoutClasses[index % 5])
+      } else {
+        expect(tile.parentElement).not.toHaveClass("grid-cols-6")
+      }
+      expect(screen.getByRole("img", { name: `Identity image ${index + 1}` })).toBeInTheDocument()
+    })
+  })
+  it.each([1, 2, 3, 4, 5])("bounds image sizing for a group of %i products", (count) => {
+      render(<BentoProductGrid products={Array.from({ length: count }, (_, index) =>
+        product({ id: `bounded_${index}`, handle: `bounded-${index}` })
+      )} />)
+      screen.getAllByRole("img").forEach((image, index) => {
+        expect(image).toHaveClass("absolute", "inset-0", "h-full", "w-full", "object-cover")
+        expect(image).toHaveStyle({
+          objectPosition: count === 5 && index === 1 ? "50% 50%" : "50% 65%",
+        })
+      })
+      const tile = screen.getAllByRole("link")[0].parentElement!
+      expect(tile).toHaveClass("min-h-0", "min-w-0", "overflow-hidden")
+      const heights = ["h-[320px]", "h-[600px]", "h-[900px]", "h-[480px]", "h-[360px]"]
+      expect(tile.parentElement).toHaveClass(heights[count - 1])
+  })
   it("groups Medusa products by category and collection", () => {
     render(<BentoProductGrid products={[product() as any]} />)
 
@@ -26,6 +98,21 @@ describe("BentoProductGrid", () => {
     ).toBeInTheDocument()
     expect(screen.getByRole("heading", { level: 4, name: "Identity" })).toBeInTheDocument()
     expect(screen.getAllByRole("img")).toHaveLength(1)
+  })
+
+  it("allows artwork and apparel product names to wrap across two lines", () => {
+    render(
+      <>
+        <BentoProductGrid products={[product({ title: "A Longer Artwork Title" }) as any]} />
+        <BentoProductGrid
+          variant="apparel"
+          products={[product({ id: "shirt", title: "A Longer Apparel Title" }) as any]}
+        />
+      </>
+    )
+
+    expect(screen.getByText("A Longer Artwork Title")).toHaveClass("line-clamp-2")
+    expect(screen.getByText("A Longer Apparel Title")).toHaveClass("line-clamp-2")
   })
 
   it("keeps products in separate Medusa category sections", () => {

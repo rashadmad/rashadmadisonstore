@@ -335,6 +335,18 @@ This storefront now supports Mastodon blog sync in two directions:
 - Mastodon -> Site: the Blog page automatically pulls recent public posts from your Mastodon profile.
 - Site -> Mastodon: a secure API endpoint can publish site-originated posts to Mastodon.
 
+## Gallery display
+
+The gallery excludes clothing using the same apparel detection as product
+image galleries: category ID/name/handle, wearable collections, and clothing
+titles/handles. Products are not deleted or removed from the apparel page.
+Within each artwork category/collection, the five-tile bento layout repeats
+for additional products. A final group of fewer than five uses the existing
+smaller-group layout without duplicating artwork.
+Artwork tiles use fixed responsive heights so source image dimensions cannot
+stretch the grid. Full bento groups are capped at 400px tall on desktop;
+smaller groups are 320px tall on desktop (280px for four-product rows).
+
 ## Required environment variables
 
 Add these to your `.env.local`:

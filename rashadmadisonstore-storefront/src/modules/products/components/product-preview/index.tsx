@@ -37,11 +37,14 @@ export default function ProductPreview({
           size="full"
           isFeatured={isFeatured}
         />
-        <div className="flex txt-compact-medium mt-4 justify-between">
-          <Text className="text-ui-fg-subtle" data-testid="product-title">
+        <div className="mt-4 flex items-start justify-between txt-compact-medium">
+          <Text
+            className="line-clamp-2 min-w-0 flex-1 pr-3 leading-snug text-ui-fg-subtle"
+            data-testid="product-title"
+          >
             {product.title}
           </Text>
-          <div className="flex items-center gap-x-2">
+          <div className="flex shrink-0 items-center gap-x-2">
             {cheapestPrice && <PreviewPrice price={cheapestPrice} />}
           </div>
         </div>

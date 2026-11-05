@@ -34,6 +34,10 @@ describe("ApparelPage", () => {
     render(page)
 
     expect(screen.getByRole("heading", { level: 1, name: "Apparel" })).toBeInTheDocument()
+    expect(screen.getByRole("link", { name: "Shop apparel" })).toHaveAttribute(
+      "href",
+      "#products"
+    )
     expect(screen.getByRole("list", { name: "Apparel highlights" })).toBeInTheDocument()
     expect(screen.getAllByText("Quintessential Shirt").length).toBeGreaterThan(0)
     expect(listProducts).toHaveBeenCalledWith(expect.objectContaining({

@@ -33,9 +33,9 @@ export const appCopy = {
     },
   },
   hero: {
-    heading: "This Is The Quintessential",
+    heading: "Art that celebrates Black beauty and legacy.",
     lines: [
-      "as of right now this is the place to celebrate and contribute to the Art projects and works of Rashad Madison",
+      "Original artwork and limited-edition prints by Chicago artist Rashad Madison.",
     ],
     cta: {
       browseCollection: "Browse Gallery",
@@ -52,9 +52,9 @@ export const appCopy = {
     },
   },
   purpose: {
-    eyebrow: "Support an Award-winning artist",
+    eyebrow: "Support an independent artist",
     heading: "Be a part of the movement",
-    body: "Art is a revolutionary act. Patronizing independent artists shelters a revolutionary, patronizing art work that looks like you stregnthens th  and admiring their work reminds you that you are also a creative that yarns to push boundaries. Lets push boundaries together!",
+    body: "Art is a revolutionary act. Supporting independent artists sustains creative practice and brings work that reflects our lives, histories, and imaginations into the world. Explore Rashad Madison's work and help move the culture forward.",
     cta: "Learn more",
   },
   featuredProducts: {
@@ -125,13 +125,13 @@ export const appCopy = {
   },
   gallery: {
     heading: "Gallery",
-    tagline: "buy black art",
+    tagline: "Original prints • limited editions",
     intro:
-      "All my artwork comes entirely from me, with no AI involved in its production. This gallery is a visceral celebration of Black beauty, heritage, and identity. Intricate, high-detail compositions honor the profound strength and radiance of our people. Majestic curves, full lips, and broad noses are portrayed with reverence and pride. The work carries forward an enduring cultural legacy.",
+      "Original portraits and prints by Rashad Madison celebrate Black beauty, heritage, and identity through bold detail, color, and storytelling.",
     highlights: [
-      "Fine art made with the best materials, tools and processes to ensure longevity and quality.",
-      "Risograph and screenprints numbered limited editions.",
-      "Every piece is a visual anthem to Black expression and Black power.",
+      "Made by Chicago artist Rashad Madison.",
+      "Risograph and screenprints released as numbered editions.",
+      "Thoughtfully chosen materials, made for collecting and living with.",
     ],
     mediumDescriptions: {
       risograph:
@@ -148,25 +148,27 @@ export const appCopy = {
   },
   apparel: {
     heading: "Apparel",
-    tagline: "wear the work",
+    tagline: "Wear the art",
     intro:
-      "Apparel carrying the visual language of The Quintessential. Each piece is made to bring the artwork into daily life.",
+      "Bring Rashad Madison's bold artwork into everyday life with wearable pieces from The Quintessential.",
     highlights: [
-      "Artwork translated into wearable pieces.",
-      "Made for everyday expression.",
-      "New releases added as they become available.",
+      "Original artwork translated into wearable designs.",
+      "Made for everyday expression and lasting style.",
+      "New releases arrive as the studio creates them.",
     ],
+    cta: "Shop apparel",
   },
   store: {
     heading: "Store",
-    tagline: "explore all my work",
+    tagline: "Art, prints, and apparel",
     intro:
-      "Explore the complete catalog of original fine art, limited-edition prints, and wearable artwork from Rashad Madison.",
+      "Explore original artwork, limited-edition prints, and apparel by Chicago artist Rashad Madison.",
     highlights: [
-      "Originals, limited prints, and apparel in one place.",
-      "Archival quality craftsmanship and materials.",
-      "Direct support for independent Afrocentric art.",
+      "Discover art, limited prints, and wearable pieces in one place.",
+      "Find a piece for your collection, home, or wardrobe.",
+      "Every purchase supports an independent artist.",
     ],
+    cta: "Browse all products",
   },
   collections: {
     tenderHead:
