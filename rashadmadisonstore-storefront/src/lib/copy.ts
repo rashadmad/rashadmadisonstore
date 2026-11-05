@@ -168,7 +168,6 @@ export const appCopy = {
       "Find a piece for your collection, home, or wardrobe.",
       "Every purchase supports an independent artist.",
     ],
-    cta: "Browse all products",
   },
   collections: {
     tenderHead:

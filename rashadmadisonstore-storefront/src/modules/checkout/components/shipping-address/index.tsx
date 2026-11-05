@@ -95,6 +95,9 @@ const ShippingAddress = ({
 
   return (
     <>
+      <p className="mb-4 text-sm font-light text-ui-fg-subtle">
+        As of now we are only shipping within the United States.
+      </p>
       {customer && (addressesInRegion?.length || 0) > 0 && (
         <Container className="mb-6 flex flex-col gap-y-4 p-5">
           <p className="text-small-regular">

@@ -21,6 +21,7 @@ type MobileActionsProps = {
   isAdding?: boolean
   show: boolean
   optionsDisabled: boolean
+  shippingPromo: string
 }
 
 const MobileActions: React.FC<MobileActionsProps> = ({
@@ -33,6 +34,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
   isAdding,
   show,
   optionsDisabled,
+  shippingPromo,
 }) => {
   const { state, open, close } = useToggleState()
 
@@ -105,6 +107,9 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 <div></div>
               )}
             </div>
+            <p className="text-xs font-light leading-snug text-center text-ui-fg-subtle">
+              {shippingPromo}
+            </p>
             <div className={clx("grid grid-cols-2 w-full gap-x-4", {
               "!grid-cols-1": isSimple
             })}>

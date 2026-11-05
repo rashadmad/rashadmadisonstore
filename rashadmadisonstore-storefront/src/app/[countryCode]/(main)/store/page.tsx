@@ -41,7 +41,6 @@ export default async function StorePage(props: Params) {
           icon: storeHighlightIcons[index],
         }))}
         backgroundImage="/images/princeImageBackground.jpg"
-        ctaLabel={appCopy.store.cta}
       />
       <div id="products" className="scroll-mt-24">
         <StoreTemplate

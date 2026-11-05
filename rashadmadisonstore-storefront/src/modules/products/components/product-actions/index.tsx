@@ -21,6 +21,9 @@ type ProductActionsProps = {
   disabled?: boolean
 }
 
+const shippingPromo =
+  "Add more, save on shipping: For every three shippable items, shipping is full price on the highest-rate item, half price on the next, and free on the lowest-rate one. The offer repeats as you add more."
+
 const optionsAsKeymap = (
   variantOptions: HttpTypes.StoreProductVariant["options"]
 ) => {
@@ -208,6 +211,8 @@ export default function ProductActions({
 
         <ProductPrice product={product} variant={selectedVariant} />
 
+        <p className="text-sm font-light text-ui-fg-subtle">{shippingPromo}</p>
+
         <Button
           onClick={handleAddToCart}
           disabled={
@@ -238,6 +243,7 @@ export default function ProductActions({
           isAdding={isAdding}
           show={!inView}
           optionsDisabled={!!disabled || isAdding}
+          shippingPromo={shippingPromo}
         />
       </div>
     </>

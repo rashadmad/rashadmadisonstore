@@ -78,10 +78,12 @@ describe("MobileActions", () => {
         handleAddToCart={() => {}}
         show={true}
         optionsDisabled={false}
+        shippingPromo="Add more, save on shipping."
       />
     )
 
     expect(screen.getByTestId("mobile-actions-button")).toHaveTextContent("Black")
+    expect(screen.getByText("Add more, save on shipping.")).toBeInTheDocument()
 
     const cartBtn = screen.getByTestId("mobile-cart-button")
     expect(cartBtn).toHaveClass("bg-green-600")
@@ -109,6 +111,12 @@ describe("ProductActions navigation after add to cart", () => {
         region={{ currency_code: "usd" } as any}
       />
     )
+
+    expect(
+      screen.getByText(
+        "Add more, save on shipping: For every three shippable items, shipping is full price on the highest-rate item, half price on the next, and free on the lowest-rate one. The offer repeats as you add more."
+      )
+    ).toBeInTheDocument()
 
     const button = screen.getByTestId("add-product-button")
     expect(button).not.toBeDisabled()
