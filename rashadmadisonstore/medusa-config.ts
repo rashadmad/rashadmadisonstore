@@ -2,6 +2,12 @@ import { loadEnv, defineConfig } from '@medusajs/framework/utils'
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
+const redisUrl = process.env.REDIS_URL?.trim()
+
+if (process.env.NODE_ENV === 'production' && !redisUrl) {
+  throw new Error('REDIS_URL is required in production. Reference the Railway Redis service URL in the backend variables.')
+}
+
 const stripeProvider = process.env.STRIPE_API_KEY
   ? [
       {
@@ -35,6 +41,7 @@ const googleAuthProvider =
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
+    redisUrl,
     http: {
       storeCors: process.env.STORE_CORS!,
       adminCors: process.env.ADMIN_CORS!,
@@ -44,6 +51,48 @@ module.exports = defineConfig({
     }
   },
   modules: [
+    ...(redisUrl
+      ? [
+          {
+            resolve: '@medusajs/medusa/cache-redis',
+            options: { redisUrl },
+          },
+          {
+            resolve: '@medusajs/medusa/caching',
+            options: {
+              providers: [
+                {
+                  resolve: '@medusajs/medusa/caching-redis',
+                  id: 'caching-redis',
+                  is_default: true,
+                  options: { redisUrl },
+                },
+              ],
+            },
+          },
+          {
+            resolve: '@medusajs/medusa/event-bus-redis',
+            options: { redisUrl },
+          },
+          {
+            resolve: '@medusajs/medusa/workflow-engine-redis',
+            options: { redis: { redisUrl } },
+          },
+          {
+            resolve: '@medusajs/medusa/locking',
+            options: {
+              providers: [
+                {
+                  resolve: '@medusajs/medusa/locking-redis',
+                  id: 'locking-redis',
+                  is_default: true,
+                  options: { redisUrl },
+                },
+              ],
+            },
+          },
+        ]
+      : []),
     {
       resolve: './src/modules/newsletter',
     },

@@ -42,6 +42,31 @@ Visit the [Quickstart Guide](https://docs.medusajs.com/learn/installation) to se
 
 Visit the [Docs](https://docs.medusajs.com/learn/installation#get-started) to learn more about our system requirements.
 
+## Production Redis on Railway
+
+Create a Redis service in the same Railway project and environment as the
+Medusa backend. In the backend's Variables tab, add `REDIS_URL` as a reference
+to the Redis service's `REDIS_URL` (for a service named Redis,
+`${{Redis.REDIS_URL}}`). Use Railway's private connection; do not expose Redis
+publicly or put its credentials in the storefront or Git.
+
+Deploy this configuration along with the variable. Production requires
+`REDIS_URL`, including during the build and migrations. The URL configures
+Redis-backed sessions, both Medusa cache interfaces, the event bus, workflow
+engine, and the default locking provider. Local development and tests retain
+Medusa's in-memory defaults when `REDIS_URL` is absent.
+
+Configure persistent storage and backups for the Redis service, and use
+`maxmemory-policy noeviction` because workflow and event queues must not be
+evicted. This configuration shares one Redis instance between the services;
+do not flush it as a way of clearing the cache. Any future Medusa worker
+service must use the same database and Redis connection as the server.
+
+After deploying, confirm that `/health` returns `OK` and inspect startup logs
+for Redis connection errors. The fake Redis, local event bus, in-memory
+default locking, and session MemoryStore warnings should no longer appear.
+Do not rotate `JWT_SECRET` or `COOKIE_SECRET` as part of this change.
+
 ## Newsletter subscribers
 
 The `newsletter` module stores newsletter signups separately from customer
