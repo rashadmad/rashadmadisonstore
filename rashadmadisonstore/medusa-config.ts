@@ -1,4 +1,5 @@
 import { loadEnv, defineConfig } from '@medusajs/framework/utils'
+import { s3FileModule } from './src/lib/s3-config'
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
@@ -51,6 +52,7 @@ module.exports = defineConfig({
     }
   },
   modules: [
+    ...s3FileModule(process.env),
     ...(redisUrl
       ? [
           {

@@ -67,6 +67,196 @@ for Redis connection errors. The fake Redis, local event bus, in-memory
 default locking, and session MemoryStore warnings should no longer appear.
 Do not rotate `JWT_SECRET` or `COOKIE_SECRET` as part of this change.
 
+## S3 product media and one-time catalog migration
+
+The production Medusa database is the source of truth after cutover. Deploying
+code does not copy the local catalog. New Admin uploads can use private S3
+storage with public image delivery through CloudFront. Existing local images
+and database URLs are not moved just by enabling the provider.
+
+### Configure AWS and Railway
+
+Keep S3 **Block Public Access** enabled and use **Bucket owner enforced**
+object ownership. Configure CloudFront with the S3 REST origin (not its website
+endpoint), OAC, and signed origin requests. Restrict the CloudFront bucket-policy
+read statement to these object resources:
+
+```text
+arn:aws:s3:::the-quintessential-shop-media/uploads/*
+arn:aws:s3:::the-quintessential-shop-media/catalog/*
+```
+
+Use the CloudFront service principal and the distribution's exact `AWS:SourceArn`
+condition from AWS's generated policy. Do not leave another CloudFront statement
+granting `bucket/*` access: the provider stores private files, such as exports,
+under `private/`, which must not be readable through the public distribution.
+Private files are downloaded with S3 presigned URLs. Preserve unrelated policy
+statements; an IAM upload identity and CloudFront OAC have separate permissions.
+
+Give the **backend-only** IAM identity `s3:PutObject`, `s3:GetObject`, and
+`s3:DeleteObject` on `uploads/*` and `private/*`, plus
+`s3:AbortMultipartUpload` for stream-upload cleanup. The migration uploader needs
+`s3:PutObject` and `s3:GetObject` on `catalog/*`. Do not grant account-wide S3 access.
+These operations do not need object ACL permissions. If the bucket uses a
+customer-managed KMS key, configure the corresponding IAM and CloudFront KMS
+permissions separately before enabling uploads.
+
+Set all five variables on the Railway **backend**, then deploy:
+
+```dotenv
+S3_BUCKET=the-quintessential-shop-media
+S3_REGION=us-east-1
+S3_FILE_URL=https://dqzi1n6psq03x.cloudfront.net
+S3_ACCESS_KEY_ID=<backend-upload-access-key>
+S3_SECRET_ACCESS_KEY=<backend-upload-secret>
+```
+
+Temporary AWS credentials also require `S3_SESSION_TOKEN`. Store credentials in
+Railway variables or an approved local secret store, never Git or the storefront.
+Partial S3 configuration fails explicitly; leaving all five unset preserves
+local file storage. The private-S3 provider adapts Medusa 2.13's ACL-based uploader
+to an ACL-disabled bucket, including ordinary uploads, multipart streams, and
+presigned uploads. Public media gets `uploads/` keys and CloudFront URLs.
+
+Set these variables on the Railway **storefront**, then rebuild:
+
+```dotenv
+MEDUSA_CLOUD_S3_HOSTNAME=dqzi1n6psq03x.cloudfront.net
+MEDUSA_CLOUD_S3_PATHNAME=/**
+```
+
+Keep `MEDUSA_BACKEND_URL` pointed at Medusa, not S3 or CloudFront. Test a new
+image upload in production Admin and open its returned CloudFront URL.
+
+### Export and prepare images locally (read-only)
+
+From the backend directory, with its environment pointing at the **local**
+database, freeze local catalog edits and run:
+
+```sh
+npm run catalog:export -- ./catalog-bundle https://dqzi1n6psq03x.cloudfront.net
+npm run catalog:media -- ./catalog-bundle plan
+```
+
+The export directory must not already exist. The script reads all pages of
+products, variants, base prices (including quantity tiers and region rules),
+inventory items/levels, categories and their parents, collections, tags,
+shipping profiles, stock locations, and sales-channel relationships. Product
+types and all product type assignments are intentionally omitted from the
+snapshot; the local source catalog is not changed. A product with exactly one
+variant and no options receives a synthetic `Title: Default` option in the
+snapshot so Medusa can create it; this does not change the local product. The
+export preserves variant-image associations and opaque metadata. Only referenced
+inventory items are exported.
+It does not export admin users, credentials, keys, customers,
+orders, carts, reservations, promotions/price lists, translations, or custom
+module records.
+
+Local `/static/` and `/uploads/` image files are copied automatically into the
+bundle, deduplicated by SHA-256, and assigned immutable `catalog/<hash>.<extension>`
+keys. Product/variant thumbnails, product/variant images, and inventory thumbnails
+are rewritten in the snapshot, not in the source database. External HTTPS image
+URLs remain unchanged and are not downloaded. If the local backend uses another
+origin, pass it as the third export argument. Missing files, unsupported formats
+(supported: JPEG, PNG, WebP, GIF, AVIF), files over 30 MiB, invalid references,
+nonzero reservations, and unsupported price rules stop the export explicitly.
+Products with no shipping profile preserve that absence; configure shipping
+before making them purchasable.
+
+Keep the bundle private and outside Git. It may contain business metadata and
+stock-location addresses. It includes no database connection strings or admin
+credentials. If an export fails, correct the reported problem and use a new
+directory; do not treat a partial directory as a completed snapshot.
+
+### Upload images (requires explicit approval)
+
+On the local machine, supply `S3_BUCKET`, `S3_REGION`, and `S3_FILE_URL`, plus
+either the S3 credential variables above or AWS SDK credentials from an approved
+profile/default credential chain. Do not configure production database access
+just to upload media.
+
+```sh
+CATALOG_MIGRATION_ALLOW_WRITE=true npm run catalog:media -- ./catalog-bundle apply
+npm run catalog:media -- ./catalog-bundle verify
+```
+
+The uploader validates local checksums, retries transient AWS failures, skips
+matching existing objects, and refuses to overwrite different objects. Both
+apply and verify check actual CloudFront response bytes against every migrated
+file's SHA-256, not merely HTTP 200. Cached CloudFront errors can temporarily
+fail verification; correct the policy or wait for the error cache to expire,
+then rerun the same bundle. Existing uploads are not duplicated.
+
+### Dry-run, import, and verify on Railway
+
+Back up production PostgreSQL before importing. Stop destination catalog edits,
+inventory changes, and checkout during the migration; run only one importer.
+The destination must have no unrelated products. Enable every source price
+currency in production Admin. Region-scoped prices require exactly one production
+region with matching currency and country set; missing dependencies stop the plan
+instead of silently changing prices.
+
+Deploy this code first. Copy **only** `catalog.json` to a private temporary
+directory on the running backend (the importer does not need local image files).
+For example, Railway supports authenticated SCP using the backend's domain:
+
+```sh
+scp ./catalog-bundle/catalog.json rashadmadisonstore-production.up.railway.app@ssh.railway.com:/tmp/catalog.json
+```
+
+In the Railway backend SSH shell:
+
+```sh
+export PATH="/mise/shims:$PATH"
+mkdir -m 700 /tmp/catalog-bundle
+mv /tmp/catalog.json /tmp/catalog-bundle/catalog.json
+chmod 600 /tmp/catalog-bundle/catalog.json
+cd /app
+npm run catalog:import -- /tmp/catalog-bundle plan
+# Only after reviewing the plan and approving production writes:
+CATALOG_MIGRATION_ALLOW_WRITE=true npm run catalog:import -- /tmp/catalog-bundle apply
+npm run catalog:import -- /tmp/catalog-bundle verify
+```
+
+Do not overwrite an existing temporary snapshot when resuming. Container files
+are ephemeral; retain the original bundle locally and transfer it again after
+a redeploy if necessary. The script uses Medusa workflows, maps new IDs, reuses
+the existing production default sales channel and same-named default shipping profile, and
+marks newly created records with source IDs and digests. Rerunning the **same
+immutable snapshot** resumes committed work without duplicates. Changed
+snapshots, conflicting destination records, or unexpected final data fail
+explicitly. Admin users, authentication, and publishable API keys are untouched.
+An unset default sales channel/location is initialized from the migrated catalog;
+existing defaults are not overwritten.
+
+Final verification compares catalog values and relationships, variant prices,
+quantities, inventory kits, image URLs and variant-image associations. This is
+a one-time initial import, **not** an ongoing synchronization or rollback tool.
+Recover unexpected partial migrations from a reviewed backup rather than
+manually deleting records indiscriminately.
+
+Before opening the store, link the existing production publishable key to the
+appropriate sales channels, configure production regions/taxes/payment providers,
+and associate warehouse fulfillment providers/service zones. Shipping profiles
+are copied, but shipping options and fulfillment configuration are not. Then run
+the existing `setup:profile-shipping` command after reviewing its prerequisites,
+verify shipping-profile rates, and test a cart, shipping calculation, stock
+availability, and checkout using test payments. Once verified, stop maintaining
+the local catalog and manage new products/images in production Admin.
+
+### Targeted validation
+
+```sh
+npm run test:unit -- --runTestsByPath src/lib/__tests__/s3-config.unit.spec.ts src/modules/private-s3/__tests__/service.unit.spec.ts src/lib/catalog-migration/__tests__/migration.unit.spec.ts src/lib/catalog-migration/__tests__/media.unit.spec.ts
+npm run test:integration:http -- --runTestsByPath integration-tests/http/catalog-migration.spec.ts
+```
+
+The integration test uses a uniquely named disposable database. Configure
+`DB_HOST`, `DB_PORT`, `DB_USERNAME`, and `DB_PASSWORD` for a **local/test**
+PostgreSQL account that can create test databases; do not use the production
+database. It verifies real Medusa relationships, repeat imports, and preservation
+of users and publishable keys. Redis and AWS providers are disabled for this test.
+
 ## Newsletter subscribers
 
 The `newsletter` module stores newsletter signups separately from customer
