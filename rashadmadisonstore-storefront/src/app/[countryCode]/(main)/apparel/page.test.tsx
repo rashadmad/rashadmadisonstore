@@ -24,8 +24,16 @@ describe("ApparelPage", () => {
           categories: [{ id: "category_1", name: "Apparel" }],
           collection: { id: "collection_1", title: "Wearables", handle: "wearables" },
           variants: [],
+        }, {
+          id: "art_1",
+          handle: "african-princess",
+          title: "African Princess",
+          images: [{ id: "image_2", url: "https://example.com/art.jpg" }],
+          categories: [{ id: "category_2", name: "African" }],
+          collection: { id: "collection_2", title: "Prints", handle: "prints" },
+          variants: [],
         }],
-        count: 1,
+        count: 2,
       },
       nextPage: null,
     })
@@ -40,9 +48,10 @@ describe("ApparelPage", () => {
     )
     expect(screen.getByRole("list", { name: "Apparel highlights" })).toBeInTheDocument()
     expect(screen.getAllByText("Quintessential Shirt").length).toBeGreaterThan(0)
+    expect(screen.queryByText("African Princess")).not.toBeInTheDocument()
     expect(listProducts).toHaveBeenCalledWith(expect.objectContaining({
       countryCode: "us",
-      queryParams: expect.objectContaining({ category_id: ["pcat_01M156N3KC165P2FA7SBQ9CG7B"] }),
+      queryParams: expect.not.objectContaining({ category_id: expect.anything() }),
     }))
   })
 })

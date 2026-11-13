@@ -5,6 +5,7 @@ import { appCopy } from "@lib/copy"
 import { listProducts } from "@lib/data/products"
 import BentoProductGrid from "@modules/home/components/bento-product"
 import ShopPageHero from "@modules/common/components/shop-page-hero"
+import { checkIsApparelProduct } from "@modules/products/components/image-gallery"
 import { HttpTypes } from "@medusajs/types"
 
 export const metadata: Metadata = {
@@ -27,11 +28,10 @@ export default async function ApparelPage({
     products = (await listProducts({
       countryCode,
       queryParams: {
-        category_id: ["pcat_01M156N3KC165P2FA7SBQ9CG7B"],
         limit: 100,
         fields: "*variants.calculated_price,*variants.prices,*variants.images,*categories,*collection,*images",
       },
-    })).response.products
+    })).response.products.filter(checkIsApparelProduct)
   } catch {
     loadError = true
   }
