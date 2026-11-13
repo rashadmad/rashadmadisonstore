@@ -56,6 +56,17 @@ medusaIntegrationTestRunner({
       replaceImageUrls(bundle, new Map([
         ["http://localhost:9000/static/image.png", "https://example.cloudfront.net/image.png"],
       ]))
+      const product = bundle.catalog.products[0]
+      const sharedImage = { id: "img-shared", url: "https://example.cloudfront.net/shared.png", rank: 1 }
+      product.images.push(sharedImage)
+      product.options[0].values.push({ value: "Large" })
+      product.variants[0].images.push(sharedImage)
+      product.variants.push({
+        ...structuredClone(product.variants[0]),
+        id: "variant-large", title: "Large", sku: "PRINT-LARGE", variant_rank: 1,
+        options: [{ value: "Large", option: { title: "Size" } }],
+        images: [sharedImage],
+      })
       const directory = await mkdtemp(join(tmpdir(), "catalog-integration-"))
       try {
         await writeFile(join(directory, "catalog.json"), JSON.stringify(bundle))

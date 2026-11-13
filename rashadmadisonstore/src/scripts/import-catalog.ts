@@ -1,5 +1,6 @@
 import { ExecArgs } from "@medusajs/framework/types"
 import { ContainerRegistrationKeys } from "@medusajs/framework/utils"
+import { z } from "@medusajs/framework/zod"
 import {
   batchVariantImagesWorkflow, createCollectionsWorkflow, createInventoryItemsWorkflow,
   createProductCategoriesWorkflow, createProductsWorkflow, createProductTagsWorkflow,
@@ -9,9 +10,10 @@ import {
 import { resolve } from "node:path"
 import { readCatalog } from "../lib/catalog-migration/read"
 import { loadBundle, verifyMedia } from "../lib/catalog-migration/media"
-import { buildPlan, entities, idKey, mapped, productInput, provenance } from "../lib/catalog-migration/plan"
+import { buildPlan, entities, mapped, productInput, provenance } from "../lib/catalog-migration/plan"
 import { sortedCategories } from "../lib/catalog-migration/schema"
 import { verifyCatalog } from "../lib/catalog-migration/verify"
+import { planVariantImageLinks } from "../lib/catalog-migration/variant-images"
 
 export default async function importCatalog({ container, args }: ExecArgs) {
   const [directory, mode = "plan"] = args
@@ -136,18 +138,21 @@ export default async function importCatalog({ container, args }: ExecArgs) {
     logger.info(`Created product: ${row.handle}`)
   }
   const created = await readCatalog(container, true)
+  const query = container.resolve(ContainerRegistrationKeys.QUERY)
   for (const sourceProduct of source.products) {
     const target = created.products.find((product) => product.id === mapped(plan.maps, "products", sourceProduct.id))
     if (!target) throw new Error(`Created product not found: ${sourceProduct.handle}`)
-    for (const sourceVariant of sourceProduct.variants) {
-      const variant = target.variants.find((entry) => entry.metadata?.[idKey] === sourceVariant.id)
-      if (!variant) throw new Error(`Created variant not found: ${sourceVariant.id}`)
-      const add = sourceVariant.images.map((image) => {
-        const targetImage = target.images.find((entry) => entry.url === image.url)
-        if (!targetImage) throw new Error(`Created image not found: ${image.url}`)
-        return targetImage.id
-      }).filter((id) => !variant.images.some((image) => image.id === id))
-      if (add.length) await batchVariantImagesWorkflow(container).run({ input: { variant_id: variant.id, add } })
+    if (!sourceProduct.images.length) continue
+    const { data } = await query.graph({
+      entity: "product_image",
+      fields: ["id", "url", "variants.id"],
+      filters: { id: target.images.map((image) => image.id) },
+    })
+    const images = z.array(z.object({
+      id: z.string(), url: z.string(), variants: z.array(z.object({ id: z.string() })),
+    })).parse(data)
+    for (const [variant_id, add] of planVariantImageLinks(sourceProduct, target, images)) {
+      await batchVariantImagesWorkflow(container).run({ input: { variant_id, add } })
     }
   }
   const defaults: { default_sales_channel_id?: string; default_location_id?: string } = {}

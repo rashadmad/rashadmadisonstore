@@ -232,6 +232,9 @@ existing defaults are not overwritten.
 Final verification compares catalog values and relationships, variant prices,
 quantities, inventory kits, image URLs and variant-image associations. This is
 a one-time initial import, **not** an ongoing synchronization or rollback tool.
+Medusa displays images with no variant links on every variant. The importer
+creates explicit links for images visible on only some variants and stops rather
+than removing unexpected existing links.
 Recover unexpected partial migrations from a reviewed backup rather than
 manually deleting records indiscriminately.
 
