@@ -36,6 +36,7 @@ MEDUSA_BACKEND_URL=http://localhost:9000
 NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=<your-medusa-publishable-key>
 NEXT_PUBLIC_DEFAULT_REGION=us
 NEXT_PUBLIC_BASE_URL=http://localhost:8000
+NEXT_PUBLIC_GA_MEASUREMENT_ID=<your-ga4-measurement-id>
 ```
 
 Start the storefront:
@@ -108,11 +109,18 @@ configured; see its `npm run setup:profile-shipping` command and README.
 | `NEXT_PUBLIC_STRIPE_KEY`                      | No       | Stripe publishable key for Stripe checkout.                                               |
 | `NEXT_PUBLIC_MEDUSA_PAYMENTS_PUBLISHABLE_KEY` | No       | Alternative Medusa payment publishable key.                                               |
 | `NEXT_PUBLIC_MEDUSA_PAYMENTS_ACCOUNT_ID`      | No       | Medusa payment account identifier.                                                        |
+| `NEXT_PUBLIC_GA_MEASUREMENT_ID`               | No       | GA4 Measurement ID (for example, `G-XXXXXXXXXX`) used by the storefront for analytics.    |
 | `NEXT_PUBLIC_MASTODON_PROFILE_URL`            | No       | Public Mastodon profile URL shown with imported posts.                                    |
 | `MASTODON_API_BASE_URL`                       | No       | Mastodon instance API URL. Defaults to `https://mastodon.social`.                         |
 | `MASTODON_ACCOUNT_ACCT`                       | No       | Mastodon account handle to read. Defaults to `rashadmad`.                                 |
 | `MASTODON_ACCESS_TOKEN`                       | No       | Server-only token required to publish a post to Mastodon.                                 |
 | `BLOG_CROSSPOST_KEY`                          | No       | Server-only shared secret protecting the Mastodon cross-post endpoint.                    |
+
+Google Analytics runs in the Next.js storefront, so configure
+`NEXT_PUBLIC_GA_MEASUREMENT_ID` in the storefront's local environment and
+deployment/build environment, not only in the Medusa backend. With a measurement
+ID configured, the storefront tracks product views, add-to-cart, checkout starts,
+and completed purchases.
 
 ## Google Customer Authentication
 

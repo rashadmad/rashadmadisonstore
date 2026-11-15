@@ -1,3 +1,5 @@
+export const studioPhoneNumber = "(773) 320-5797"
+
 export const appCopy = {
   metadata: {
     home: {
@@ -243,7 +245,7 @@ export const appCopy = {
       heading: "Still have questions?",
       body: "We're here to help. Reach out directly to Rashad Madison's studio team.",
       emailLabel: "Email rashadmad@gmail.com",
-      phoneLabel: "Call or text 773-320-579",
+      phoneLabel: `Call or text ${studioPhoneNumber}`,
     },
     categories: [
       {
@@ -328,7 +330,7 @@ export const appCopy = {
           },
           {
             q: "How can I inquire about gallery representation, press, or exhibitions?",
-            a: "For press kits, exhibition invitations, or gallery inquiries, please email rashadmad@gmail.com or call 773-320-579."
+            a: `For press kits, exhibition invitations, or gallery inquiries, please email rashadmad@gmail.com or call ${studioPhoneNumber}.`
           }
         ]
       }
@@ -350,8 +352,8 @@ export const appCopy = {
       { label: "Store", href: "/store" },
     ],
     contact: {
-      phoneLabel: "773320579",
-      phoneHref: "tel:773320579",
+      phoneLabel: studioPhoneNumber,
+      phoneHref: `tel:${studioPhoneNumber.replace(/\D/g, "")}`,
       emailLabel: "rashadmad@gmail.com",
       emailHref: "mailto:rashadmad@gmail.com",
     },

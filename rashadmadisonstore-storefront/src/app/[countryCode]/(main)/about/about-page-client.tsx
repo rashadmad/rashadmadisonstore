@@ -178,13 +178,13 @@ export default function AboutPageClient() {
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="tel:7733205790"
+                href={appCopy.footer.contact.phoneHref}
                 className="inline-flex items-center gap-3 rounded-full border-b-4 border-yellow-600 bg-yellow-400 px-6 py-3.5 text-base font-bold text-[#101b12] hover:bg-yellow-300 transition-colors shadow-lg"
               >
                 <svg className="w-5 h-5 text-[#101b12]" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M6.62 10.79a15.053 15.053 0 006.59 6.59l2.2-2.2a1 1 0 011.11-.27c1.12.45 2.33.69 3.58.69a1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.24 2.46.69 3.57a1 1 0 01-.27 1.12l-2.2 2.2z" />
                 </svg>
-                <span>Call or Text: (773) 320-5790</span>
+                <span>Call or Text: {appCopy.footer.contact.phoneLabel}</span>
               </a>
               <a
                 href="mailto:rashadmad@gmail.com"

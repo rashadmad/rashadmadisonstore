@@ -59,8 +59,8 @@ describe("AboutPage", () => {
       screen.getByRole("heading", { name: /Interested in a Custom Commission\?/i })
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("link", { name: /Call or Text: \(773\) 320-5790/i })
-    ).toHaveAttribute("href", "tel:7733205790")
+      screen.getByRole("link", { name: "Call or Text: (773) 320-5797" })
+    ).toHaveAttribute("href", "tel:7733205797")
   })
 
   it("opens a larger modal when clicking a practice image", () => {

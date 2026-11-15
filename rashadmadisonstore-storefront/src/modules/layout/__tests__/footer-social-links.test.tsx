@@ -28,6 +28,15 @@ jest.mock('@modules/layout/components/medusa-cta', () => {
 })
 
 describe('Footer social icon links', () => {
+  it('renders the studio phone number as a callable link', async () => {
+    render(await Footer())
+
+    expect(screen.getByRole('link', { name: '(773) 320-5797' })).toHaveAttribute(
+      'href',
+      'tel:7733205797'
+    )
+  })
+
   it('renders Instagram and Facebook icon links in footer', async () => {
     render(await Footer())
 

@@ -33,8 +33,11 @@ describe("CustomerServicePage component", () => {
     ).toHaveAttribute("href", "mailto:rashadmad@gmail.com")
 
     expect(
-      screen.getByRole("link", { name: /call or text 773-320-579/i })
-    ).toHaveAttribute("href", "tel:773320579")
+      screen.getByRole("link", { name: "Call or text (773) 320-5797" })
+    ).toHaveAttribute("href", "tel:7733205797")
+    expect(
+      screen.getByText("For press kits, exhibition invitations, or gallery inquiries, please email rashadmad@gmail.com or call (773) 320-5797.")
+    ).toBeInTheDocument()
   })
 
   it("filters FAQ questions based on search query", () => {

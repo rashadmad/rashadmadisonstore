@@ -2,7 +2,10 @@
 
 # Rashad Madison Store
 
-Full-stack ecommerce project for Rashad Madison's art, prints, and related products.
+The Quintessential is Rashad Madison's online art store. This repository contains
+the customer storefront and the commerce backend that power the catalog, shopping
+cart, checkout, customer accounts, and store administration. It also includes
+custom studio-journal, newsletter, shipping, and catalog tooling.
 
 The project is organized as two sibling applications:
 
@@ -11,7 +14,10 @@ The project is organized as two sibling applications:
 | `rashadmadisonstore/` | Commerce backend, admin APIs, payments, and custom commerce modules | Medusa 2, TypeScript, PostgreSQL | `9000` |
 | `rashadmadisonstore-storefront/` | Customer-facing storefront, catalog, cart, checkout, accounts, blog, and content | Next.js 15, React 19, TypeScript, Tailwind CSS | `8000` |
 
-The storefront communicates with the Medusa backend through the Medusa JavaScript SDK. Stripe is supported for payments, and the storefront includes Mastodon blog synchronization and cross-posting support.
+The storefront communicates with the Medusa backend through the Medusa JavaScript
+SDK. Stripe payments and Google Analytics 4 are optional integrations configured
+in the storefront environment. The studio journal is Markdown-powered, with
+optional Mastodon feed and publishing support.
 
 ## Project Layout
 
@@ -34,15 +40,14 @@ rashadmadisonstore/
 
 ## Prerequisites
 
-- Node.js 20 or newer
-- npm 11 or newer
-- PostgreSQL
-- Redis, if required by the local Medusa setup
-- Stripe test credentials for payment flows
+- Node.js 20 or newer and npm 11 or newer
+- PostgreSQL for the Medusa backend, with a local database created
+- Redis for production; local development can use Medusa's in-memory defaults
+- Stripe test credentials only if you want to test Stripe checkout
 
-## Initial Setup
+## Installation and Local Setup
 
-### 1. Configure the backend
+Install and configure the backend first:
 
 ```shell
 cd rashadmadisonstore
@@ -50,28 +55,41 @@ npm install
 cp .env.template .env
 ```
 
-Update `.env` with a PostgreSQL connection string and valid local secrets. The [backend environment template](rashadmadisonstore/.env.template) includes settings for CORS, database access, Redis, JWT and cookie secrets, and Stripe.
+Edit `rashadmadisonstore/.env` for your local setup. At minimum, configure
+`DATABASE_URL` for your PostgreSQL database, the storefront/admin/auth CORS
+origins, and unique `JWT_SECRET` and `COOKIE_SECRET` values. Do not use example
+or production secrets in a local or shared environment. The template lists
+additional optional settings, including Redis, Stripe, Google sign-in, and media
+storage.
 
-### 2. Configure the storefront
+Install the storefront and create its local environment file:
 
 ```shell
 cd ../rashadmadisonstore-storefront
 npm install
 ```
 
-Create `.env.local` and set the backend URL and public Medusa key as needed:
+Create `rashadmadisonstore-storefront/.env.local`:
 
 ```dotenv
 MEDUSA_BACKEND_URL=http://localhost:9000
 NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=<your-medusa-publishable-key>
+NEXT_PUBLIC_DEFAULT_REGION=us
+NEXT_PUBLIC_BASE_URL=http://localhost:8000
 NEXT_PUBLIC_STRIPE_KEY=<your-stripe-publishable-key>
+NEXT_PUBLIC_GA_MEASUREMENT_ID=<your-ga4-measurement-id>
 ```
 
-The storefront also supports optional Cloudinary or Medusa Cloud image settings. Mastodon integration variables are documented in the storefront [README](rashadmadisonstore-storefront/README.md).
+The Medusa publishable key is created in Medusa Admin and is required by the
+storefront. The Stripe and GA4 values are optional; leave them unset if you are
+not configuring those integrations. `NEXT_PUBLIC_*` values are included in the
+browser bundle, so only use them for public identifiers and keys. Never put
+server secrets in the storefront environment. Optional image and Mastodon
+settings are documented in the [storefront README](rashadmadisonstore-storefront/README.md).
 
-## Running Locally
+## Run the Applications
 
-Start the backend first:
+Use separate terminals. Start the backend first:
 
 ```shell
 cd rashadmadisonstore
@@ -89,23 +107,32 @@ Then open:
 
 - Storefront: <http://localhost:8000>
 - Medusa backend: <http://localhost:9000>
+- Medusa Admin: <http://localhost:9000/app>
 
-The storefront defaults to `http://localhost:9000` when `MEDUSA_BACKEND_URL` is not set.
+Before testing a purchase, configure a store region, sales channel, products,
+shipping options, and payment provider in Medusa Admin. The storefront defaults
+to `http://localhost:9000` when `MEDUSA_BACKEND_URL` is not set, but the
+publishable key still needs to be configured.
 
 ## Common Commands
 
 ### Backend
 
+Run these commands from `rashadmadisonstore/`:
+
 ```shell
 npm run build                 # Build the Medusa backend
 npm run start                 # Start the built backend
 npm run seed                  # Seed development data
+npm run setup:profile-shipping # Configure profile-based shipping
 npm run test:unit             # Run unit tests
 npm run test:integration:http # Run HTTP integration tests
 npm run test:integration:modules
 ```
 
 ### Storefront
+
+Run these commands from `rashadmadisonstore-storefront/`:
 
 ```shell
 npm run build          # Build the Next.js storefront
@@ -114,6 +141,19 @@ npm test               # Run Jest tests
 npm run test:coverage  # Run tests with coverage
 ```
 
+## Project Areas
+
+- **Backend (`rashadmadisonstore/`)**: Medusa commerce APIs, admin, database
+  modules, payment and fulfillment providers, newsletter, and catalog scripts.
+- **Storefront (`rashadmadisonstore-storefront/src/app/`)**: localized shop,
+  product pages, cart, checkout, account, and studio content routes.
+- **Storefront modules (`rashadmadisonstore-storefront/src/modules/`)**:
+  feature UI and interactions; shared API and business helpers live in
+  `src/lib/`.
+- **Content and assets**: studio journal Markdown is in
+  `rashadmadisonstore-storefront/content/blog/`; static storefront assets are in
+  `rashadmadisonstore-storefront/public/`.
+
 ## Environment and Security
 
 - Keep `.env` and `.env.local` out of version control.
@@ -121,6 +161,11 @@ npm run test:coverage  # Run tests with coverage
 - Replace the default JWT and cookie secrets before deploying.
 - Configure backend CORS values to match the deployed storefront and admin URLs.
 - Never expose server-only secrets, including Stripe secret keys, Mastodon access tokens, or cross-post keys, to the browser.
+- Configure `NEXT_PUBLIC_GA_MEASUREMENT_ID` on the storefront service, not just
+  on the backend. Since it is a public build-time variable, rebuild the
+  storefront after changing it.
+- Production backend deployments require Redis. See the backend README for
+  Railway Redis and production media-storage setup.
 
 ## Further Documentation
 
