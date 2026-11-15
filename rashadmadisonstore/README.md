@@ -274,10 +274,15 @@ backend trims names, normalizes email to lowercase, validates lengths and email
 format, and records consent. Duplicate signups return the same generic success
 without changing existing data or reactivating unsubscribed records.
 
-Authenticated administrators can read subscribers at
+After deploying the backend and its Admin build, sign in to Medusa Admin and
+select **Newsletter** in the sidebar to see signups, their subscription status,
+and signup dates. The list includes unsubscribed records and can be paged through.
+Signups are stored in the database for the backend environment being viewed.
+
+Authenticated administrators can also read subscribers at
 `GET /admin/newsletter?limit=50&offset=0`. The response contains `subscribers`,
-`count`, `offset`, and `limit`; limit is capped at 100. This is an API endpoint,
-not a new Admin dashboard screen. Public signups never return subscriber data.
+`count`, `offset`, and `limit`; limit is capped at 100. Public signups never
+return subscriber data.
 
 This feature stores signups only. It does not send newsletters, verify email
 ownership, or implement automated unsubscribe links. Before sending campaigns,
