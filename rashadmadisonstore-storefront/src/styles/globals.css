@@ -7,6 +7,25 @@ body {
   font-family: var(--font-dm-sans), sans-serif;
 }
 
+@media (width < 400px) {
+  .nav-instagram-link,
+  .nav-facebook-link {
+    position: absolute;
+    top: 50%;
+    width: 2rem;
+    height: 2rem;
+    transform: translateY(-50%);
+  }
+
+  .nav-instagram-link {
+    left: calc(50% - 55px);
+  }
+
+  .nav-facebook-link {
+    right: calc(50% - 55px);
+  }
+}
+
 .blog-image-half {
   display: block;
   float: right;

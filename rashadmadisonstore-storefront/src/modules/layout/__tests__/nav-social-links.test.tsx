@@ -53,11 +53,13 @@ describe('Nav social icon links', () => {
       'href',
       'https://www.instagram.com/rashaddraws/'
     )
+    expect(screen.getByLabelText('Instagram')).toHaveClass('nav-instagram-link')
 
     expect(screen.getByLabelText('Facebook')).toHaveAttribute(
       'href',
       'https://www.facebook.com/rashad.madison.1/'
     )
+    expect(screen.getByLabelText('Facebook')).toHaveClass('nav-facebook-link')
   })
 
   it('shows Sign up for first-time signed-out users', async () => {

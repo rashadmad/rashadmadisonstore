@@ -59,7 +59,7 @@ export default async function Nav({ customer, hasLoggedInBefore }: NavProps) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Instagram"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500 hover:text-yellow-300"
+                className="nav-instagram-link inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500 hover:text-yellow-300"
               >
                 <FontAwesomeIcon icon={faInstagram} className="text-lg" />
               </a>
@@ -68,7 +68,7 @@ export default async function Nav({ customer, hasLoggedInBefore }: NavProps) {
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Facebook"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500 hover:text-yellow-300"
+                className="nav-facebook-link inline-flex h-10 w-10 items-center justify-center rounded-full bg-green-600 text-black transition hover:bg-green-500 hover:text-yellow-300"
               >
                 <FontAwesomeIcon icon={faFacebook} className="text-lg" />
               </a>
