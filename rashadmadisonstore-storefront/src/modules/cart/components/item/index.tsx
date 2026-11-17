@@ -3,7 +3,6 @@
 import { Table, Text, clx } from "@medusajs/ui"
 import { updateLineItem } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
-import CartItemSelect from "@modules/cart/components/cart-item-select"
 import ErrorMessage from "@modules/checkout/components/error-message"
 import DeleteButton from "@modules/common/components/delete-button"
 import LineItemOptions from "@modules/common/components/line-item-options"
@@ -12,7 +11,7 @@ import LineItemUnitPrice from "@modules/common/components/line-item-unit-price"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import Spinner from "@modules/common/icons/spinner"
 import Thumbnail from "@modules/products/components/thumbnail"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 type ItemProps = {
   item: HttpTypes.StoreCartLineItem
@@ -23,26 +22,53 @@ type ItemProps = {
 const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
   const [updating, setUpdating] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [quantity, setQuantity] = useState(String(item.quantity))
 
-  const changeQuantity = async (quantity: number) => {
+  useEffect(() => {
+    setQuantity(String(item.quantity))
+  }, [item.quantity])
+
+  const maxQuantity =
+    item.variant?.manage_inventory &&
+    !item.variant.allow_backorder &&
+    typeof item.variant.inventory_quantity === "number"
+      ? Math.max(item.quantity, item.variant.inventory_quantity)
+      : undefined
+
+  const changeQuantity = async () => {
+    const nextQuantity = Number(quantity)
+    if (
+      !Number.isInteger(nextQuantity) ||
+      nextQuantity < 1 ||
+      (maxQuantity !== undefined && nextQuantity > maxQuantity)
+    ) {
+      setError(
+        maxQuantity === undefined
+          ? "Enter a quantity of at least 1."
+          : `Only ${maxQuantity} units are available.`
+      )
+      setQuantity(String(item.quantity))
+      return
+    }
+
+    if (nextQuantity === item.quantity) {
+      return
+    }
+
     setError(null)
     setUpdating(true)
 
-    await updateLineItem({
-      lineId: item.id,
-      quantity,
-    })
-      .catch((err) => {
-        setError(err.message)
+    try {
+      await updateLineItem({
+        lineId: item.id,
+        quantity: nextQuantity,
       })
-      .finally(() => {
-        setUpdating(false)
-      })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unable to update quantity.")
+    } finally {
+      setUpdating(false)
+    }
   }
-
-  // TODO: Update this to grab the actual max inventory
-  const maxQtyFromInventory = 10
-  const maxQuantity = item.variant?.manage_inventory ? 10 : maxQtyFromInventory
 
   return (
     <Table.Row className="w-full border-b border-neutral-200/80" data-testid="product-row">
@@ -76,28 +102,30 @@ const Item = ({ item, type = "full", currencyCode }: ItemProps) => {
         <Table.Cell>
           <div className="flex gap-2 items-center w-28">
             <DeleteButton id={item.id} data-testid="product-delete-button" />
-            <CartItemSelect
-              value={item.quantity}
-              onChange={(value) => changeQuantity(parseInt(value.target.value))}
-              className="w-14 h-10 p-4"
+            <label className="sr-only" htmlFor={`quantity-${item.id}`}>
+              Quantity for {item.product_title}
+            </label>
+            <input
+              id={`quantity-${item.id}`}
+              type="number"
+              min={1}
+              max={maxQuantity}
+              value={quantity}
+              onChange={(event) => {
+                setQuantity(event.target.value)
+                setError(null)
+              }}
+              onBlur={changeQuantity}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  event.currentTarget.blur()
+                }
+              }}
+              disabled={updating}
+              className="w-16 h-10 rounded border border-ui-border-base px-2 text-center"
               data-testid="product-select-button"
-            >
-              {/* TODO: Update this with the v2 way of managing inventory */}
-              {Array.from(
-                {
-                  length: Math.min(maxQuantity, 10),
-                },
-                (_, i) => (
-                  <option value={i + 1} key={i}>
-                    {i + 1}
-                  </option>
-                )
-              )}
-
-              <option value={1} key={1}>
-                1
-              </option>
-            </CartItemSelect>
+              aria-invalid={Boolean(error)}
+            />
             {updating && <Spinner />}
           </div>
           <ErrorMessage error={error} data-testid="product-error-message" />

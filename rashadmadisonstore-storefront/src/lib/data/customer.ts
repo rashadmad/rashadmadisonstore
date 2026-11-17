@@ -16,7 +16,10 @@ import {
   setAuthToken,
 } from "./cookies"
 
-const getActionErrorMessage = (error: unknown): string => {
+const getActionErrorMessage = (
+  error: unknown,
+  fallback = "Unable to sign in. Please try again."
+): string => {
   if (error && typeof error === "object") {
     const typedError = error as {
       message?: string
@@ -26,7 +29,7 @@ const getActionErrorMessage = (error: unknown): string => {
     return (
       typedError.response?.data?.message ||
       typedError.message ||
-      "Unable to sign in. Please try again."
+      fallback
     )
   }
 
@@ -34,7 +37,7 @@ const getActionErrorMessage = (error: unknown): string => {
     return error
   }
 
-  return "Unable to sign in. Please try again."
+  return fallback
 }
 
 const getSafeRedirectPath = (value: FormDataEntryValue | null): string => {
@@ -154,6 +157,81 @@ export const updateCustomer = async (body: HttpTypes.StoreUpdateCustomer) => {
   revalidateTag(cacheTag)
 
   return updateRes
+}
+
+export type PasswordUpdateState = {
+  success: boolean
+  error: string | null
+}
+
+export async function updateCustomerPassword(
+  _currentState: PasswordUpdateState,
+  formData: FormData
+): Promise<PasswordUpdateState> {
+  const currentPassword = formData.get("old_password")
+  const newPassword = formData.get("new_password")
+  const confirmPassword = formData.get("confirm_password")
+
+  if (
+    typeof currentPassword !== "string" ||
+    typeof newPassword !== "string" ||
+    typeof confirmPassword !== "string" ||
+    !currentPassword ||
+    !newPassword ||
+    !confirmPassword
+  ) {
+    return { success: false, error: "Complete all password fields." }
+  }
+
+  if (newPassword.length < 8) {
+    return {
+      success: false,
+      error: "Your new password must be at least 8 characters.",
+    }
+  }
+
+  if (newPassword !== confirmPassword) {
+    return { success: false, error: "New passwords do not match." }
+  }
+
+  const customer = await retrieveCustomer()
+  if (!customer?.email) {
+    return {
+      success: false,
+      error: "Sign in again before changing your password.",
+    }
+  }
+
+  try {
+    const token = await sdk.auth.login("customer", "emailpass", {
+      email: customer.email,
+      password: currentPassword,
+    })
+
+    if (typeof token !== "string") {
+      return {
+        success: false,
+        error: "Unable to verify your current password. Please try again.",
+      }
+    }
+
+    await sdk.auth.updateProvider(
+      "customer",
+      "emailpass",
+      { password: newPassword },
+      token
+    )
+
+    return { success: true, error: null }
+  } catch (error) {
+    return {
+      success: false,
+      error: getActionErrorMessage(
+        error,
+        "Unable to update your password. Please try again."
+      ),
+    }
+  }
 }
 
 export async function signup(_currentState: unknown, formData: FormData) {

@@ -47,6 +47,10 @@ const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
         }))
       })
       .flat()
+      .filter(
+        (option): option is CountryOption =>
+          Boolean(option?.country && option.label)
+      )
       .sort((a, b) => (a?.label ?? "").localeCompare(b?.label ?? ""))
   }, [regions])
 

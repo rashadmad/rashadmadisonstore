@@ -3,48 +3,50 @@
 import React, { useEffect, useActionState } from "react"
 import Input from "@modules/common/components/input"
 import AccountInfo from "../account-info"
-import { HttpTypes } from "@medusajs/types"
-import { toast } from "@medusajs/ui"
+import {
+  updateCustomerPassword,
+  type PasswordUpdateState,
+} from "@lib/data/customer"
 
-type MyInformationProps = {
-  customer: HttpTypes.StoreCustomer
-}
+const initialState: PasswordUpdateState = { success: false, error: null }
 
-const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
+const ProfilePassword = () => {
   const [successState, setSuccessState] = React.useState(false)
-
-  // TODO: Add support for password updates
-  const updatePassword = async () => {
-    toast.info("Password update is not implemented")
-  }
+  const [state, formAction] = useActionState(
+    updateCustomerPassword,
+    initialState
+  )
 
   const clearState = () => {
     setSuccessState(false)
   }
 
+  useEffect(() => {
+    setSuccessState(state.success)
+  }, [state.success])
+
   return (
     <form
-      action={updatePassword}
+      action={formAction}
       onReset={() => clearState()}
       className="w-full"
     >
       <AccountInfo
         label="Password"
-        currentInfo={
-          <span>The password is not shown for security reasons</span>
-        }
+        currentInfo={<span>Change your account password</span>}
         isSuccess={successState}
-        isError={false}
-        errorMessage={undefined}
+        isError={Boolean(state.error)}
+        errorMessage={state.error ?? undefined}
         clearState={clearState}
         data-testid="account-password-editor"
       >
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <Input
             label="Old password"
             name="old_password"
             required
             type="password"
+            autoComplete="current-password"
             data-testid="old-password-input"
           />
           <Input
@@ -52,6 +54,8 @@ const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
             type="password"
             name="new_password"
             required
+            minLength={8}
+            autoComplete="new-password"
             data-testid="new-password-input"
           />
           <Input
@@ -59,6 +63,8 @@ const ProfilePassword: React.FC<MyInformationProps> = ({ customer }) => {
             type="password"
             name="confirm_password"
             required
+            minLength={8}
+            autoComplete="new-password"
             data-testid="confirm-password-input"
           />
         </div>

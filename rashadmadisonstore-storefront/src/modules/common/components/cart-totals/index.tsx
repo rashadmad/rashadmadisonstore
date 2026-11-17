@@ -12,7 +12,7 @@ type CartTotalsProps = {
     item_subtotal?: number | null
     shipping_subtotal?: number | null
     discount_subtotal?: number | null
-    shipping_methods?: { id: string }[]
+    shipping_methods?: { id: string }[] | null
   }
 }
 
@@ -25,7 +25,7 @@ const CartTotals: React.FC<CartTotalsProps> = ({ totals }) => {
     shipping_subtotal,
     discount_subtotal,
   } = totals
-  const shippingPending = totals.shipping_methods !== undefined && !totals.shipping_methods.length
+  const shippingPending = Array.isArray(totals.shipping_methods) && !totals.shipping_methods.length
 
   return (
     <div>

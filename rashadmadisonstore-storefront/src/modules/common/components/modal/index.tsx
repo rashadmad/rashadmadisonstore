@@ -64,8 +64,7 @@ const Modal = ({
                     "max-w-md": size === "small",
                     "max-w-xl": size === "medium",
                     "max-w-3xl": size === "large",
-                    "bg-transparent shadow-none": search,
-                    "bg-transparent shadow-none": !search,
+                    "bg-transparent shadow-none": true,
                   }
                 )}
               >

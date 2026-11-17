@@ -114,6 +114,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   img: ({ node, style, className, ...props }: any) => (
                     <img
                       {...props}
+                      alt={props.alt || ""}
                       style={style}
                       className={`h-auto rounded-xl my-4 ${className || ""}`.trim()}
                     />

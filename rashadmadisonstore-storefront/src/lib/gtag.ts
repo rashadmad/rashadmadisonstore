@@ -8,7 +8,8 @@ export const sendGAEvent = (
   eventName: string,
   params?: GAEventParams
 ): void => {
-  if (typeof window !== "undefined" && (window as GtagWindow).gtag) {
-    ;(window as GtagWindow).gtag("event", eventName, params)
+  if (typeof window !== "undefined") {
+    const gtag = (window as GtagWindow).gtag
+    gtag?.("event", eventName, params)
   }
 }

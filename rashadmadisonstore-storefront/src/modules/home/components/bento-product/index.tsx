@@ -95,16 +95,20 @@ export const getCollectionDescription = (
   rawCollection?: HttpTypes.StoreCollection
 ) => {
   const normalized = normalizeLabel(collectionName)
+  const rawDescription =
+    rawCollection && "description" in rawCollection
+      ? rawCollection.description
+      : undefined
 
   if (!normalized || normalized === "uncollected" || normalized === "uncategorized") {
     return null
   }
 
   if (
-    typeof rawCollection?.description === "string" &&
-    rawCollection.description.trim().length > 0
+    typeof rawDescription === "string" &&
+    rawDescription.trim().length > 0
   ) {
-    return rawCollection.description
+    return rawDescription
   }
 
   if (

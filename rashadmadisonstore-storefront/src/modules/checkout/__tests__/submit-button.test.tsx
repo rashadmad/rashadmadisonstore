@@ -15,35 +15,35 @@ jest.mock('react-dom', () => ({
 
 describe('Submit Button', () => {
   it('should render button with children', () => {
-    render(React.createElement(SubmitButton, { children: 'Submit' }))
+    render(<SubmitButton>Submit</SubmitButton>)
     expect(screen.getByText('Submit')).toBeInTheDocument()
   })
 
   it('should have type submit', () => {
-    const { container } = render(React.createElement(SubmitButton, { children: 'Submit' }))
+    const { container } = render(<SubmitButton>Submit</SubmitButton>)
     const button = container.querySelector('button')
     expect(button).toHaveAttribute('type', 'submit')
   })
 
   it('should apply variant prop', () => {
-    const { container } = render(React.createElement(SubmitButton, { children: 'Submit', variant: 'secondary' }))
+    const { container } = render(<SubmitButton variant="secondary">Submit</SubmitButton>)
     const button = container.querySelector('button')
     expect(button).toHaveAttribute('variant', 'secondary')
   })
 
   it('should apply className when provided', () => {
-    const { container } = render(React.createElement(SubmitButton, { children: 'Submit', className: 'custom-class' }))
+    const { container } = render(<SubmitButton className="custom-class">Submit</SubmitButton>)
     const button = container.querySelector('button')
     expect(button).toHaveClass('custom-class')
   })
 
   it('should apply data-testid when provided', () => {
-    render(React.createElement(SubmitButton, { children: 'Submit', 'data-testid': 'submit-btn' }))
+    render(<SubmitButton data-testid="submit-btn">Submit</SubmitButton>)
     expect(screen.getByTestId('submit-btn')).toBeInTheDocument()
   })
 
   it('should default to primary variant', () => {
-    const { container } = render(React.createElement(SubmitButton, { children: 'Submit' }))
+    const { container } = render(<SubmitButton>Submit</SubmitButton>)
     const button = container.querySelector('button')
     expect(button).toHaveAttribute('variant', 'primary')
   })
