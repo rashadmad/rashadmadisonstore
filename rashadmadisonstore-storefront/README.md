@@ -73,6 +73,12 @@ navigation event. Arbitrary server actions and external/full-document navigation
 are not tracked. Existing button-level progress indicators remain unchanged;
 navigation loading does not indicate that a payment has succeeded.
 
+## Apparel page
+
+The country-prefixed `/apparel` route is the storefront's apparel page. Old
+`/collections/apparel` and `/gallery/apparel` links redirect there; other
+collection and gallery pages are unchanged.
+
 ## Address state selection
 
 Checkout shipping and billing forms, saved-address forms, and signup use a

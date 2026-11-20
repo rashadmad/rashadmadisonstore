@@ -14,6 +14,20 @@ const CLOUDINARY_CLOUD_NAME = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME
  */
 const nextConfig = {
   reactStrictMode: true,
+  async redirects() {
+    return [
+      {
+        source: "/:countryCode/collections/apparel",
+        destination: "/:countryCode/apparel",
+        permanent: true,
+      },
+      {
+        source: "/:countryCode/gallery/apparel",
+        destination: "/:countryCode/apparel",
+        permanent: true,
+      },
+    ]
+  },
   logging: {
     fetches: {
       fullUrl: true,

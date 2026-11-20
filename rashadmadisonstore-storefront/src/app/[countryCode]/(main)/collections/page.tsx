@@ -1,6 +1,7 @@
 import { Metadata } from "next"
 
 import { listCollections } from "@lib/data/collections"
+import { getCollectionHref } from "@lib/util/get-collection-href"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 export const metadata: Metadata = {
@@ -46,7 +47,7 @@ export default async function CollectionsPage() {
           {collections.map((collection) => (
             <li key={collection.id}>
               <LocalizedClientLink
-                href={`/collections/${collection.handle}`}
+                href={getCollectionHref(collection.handle)}
                 className="group block rounded-xl border border-ui-border-base bg-white p-5 transition hover:border-green-500"
               >
                 <p className="text-lg font-semibold text-ui-fg-base group-hover:text-green-600">

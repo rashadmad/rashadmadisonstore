@@ -71,14 +71,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         ),
         lastModified: category.updated_at ?? undefined,
       })),
-      ...collectionsResponse.collections.map((collection) => ({
-        url: localizedUrl(
-          baseUrl,
-          countryCode,
-          `/collections/${encodeHandle(collection.handle)}`
-        ),
-        lastModified: collection.updated_at,
-      }))
+      ...collectionsResponse.collections
+        .filter((collection) => collection.handle !== "apparel")
+        .map((collection) => ({
+          url: localizedUrl(
+            baseUrl,
+            countryCode,
+            `/collections/${encodeHandle(collection.handle)}`
+          ),
+          lastModified: collection.updated_at,
+        }))
     )
 
     let page = 1

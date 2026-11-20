@@ -1,5 +1,6 @@
 import { listProducts } from "@lib/data/products"
 import { appCopy } from "@lib/copy"
+import { getCollectionHref } from "@lib/util/get-collection-href"
 import { HttpTypes } from "@medusajs/types"
 import { Text } from "@medusajs/ui"
 
@@ -39,7 +40,7 @@ export default async function ProductRail({
           </Text>
         </div>
         <InteractiveLink
-          href={`/collections/${collection.handle}`}
+          href={getCollectionHref(collection.handle)}
           prefetch={false}
           textClassName="text-yellow-300 group-hover:text-white"
           iconClassName="text-yellow-300 group-hover:text-white"

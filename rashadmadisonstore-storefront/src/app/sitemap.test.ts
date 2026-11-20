@@ -32,8 +32,11 @@ describe("sitemap", () => {
       { handle: "art", updated_at: "2026-10-01T00:00:00.000Z" },
     ])
     mockListCollections.mockResolvedValue({
-      collections: [{ handle: "featured", updated_at: "2026-10-02T00:00:00.000Z" }],
-      count: 1,
+      collections: [
+        { handle: "featured", updated_at: "2026-10-02T00:00:00.000Z" },
+        { handle: "apparel", updated_at: "2026-10-02T00:00:00.000Z" },
+      ],
+      count: 2,
     })
     mockListBlogPosts.mockResolvedValue([
       {
@@ -72,6 +75,9 @@ describe("sitemap", () => {
     expect(urls).toContain("https://shop.example/us/blog/studio-notes")
     expect(urls).toContain("https://shop.example/us/categories/art")
     expect(urls).toContain("https://shop.example/us/collections/featured")
+    expect(urls).toContain("https://shop.example/us/apparel")
+    expect(urls).not.toContain("https://shop.example/us/collections/apparel")
+    expect(urls).not.toContain("https://shop.example/ca/collections/apparel")
     expect(urls).toContain("https://shop.example/us/products/tender-head")
     expect(urls).toContain("https://shop.example/us/products/prince")
     expect(urls).toContain("https://shop.example/ca/products/tender-head")

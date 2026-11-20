@@ -1,6 +1,7 @@
 import { HttpTypes } from "@medusajs/types"
 import { Heading, Text } from "@medusajs/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import { getCollectionHref } from "@lib/util/get-collection-href"
 
 type ProductInfoProps = {
   product: HttpTypes.StoreProduct
@@ -24,7 +25,7 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
       <div className="mx-auto flex flex-col gap-y-4 lg:max-w-[500px]">
         {product.collection && (
           <LocalizedClientLink
-            href={`/collections/${product.collection.handle}`}
+            href={getCollectionHref(product.collection.handle)}
             className="text-xs font-semibold uppercase tracking-[0.18em] text-green-700 transition hover:text-green-600"
           >
             {product.collection.title}
