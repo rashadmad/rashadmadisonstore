@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
         "Content-Type": "application/json",
         "x-publishable-api-key": publishableKey ?? "",
       },
-      body: JSON.stringify({ email, firstName, lastName }),
+      body: JSON.stringify({ email, firstName, lastName, source: "the-quintessential-storefront" }),
       cache: "no-store",
     })
 

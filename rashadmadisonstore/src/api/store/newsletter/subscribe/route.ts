@@ -16,6 +16,7 @@ export async function POST(req: MedusaRequest, res: MedusaResponse) {
   await setNewsletterFlag(customerService, email, true, {
     first_name: clean(body.firstName),
     last_name: clean(body.lastName),
+    source: clean(body.source) ?? "storefront",
   })
 
   res.json({ ok: true })
