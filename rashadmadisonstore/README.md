@@ -74,3 +74,23 @@ Join our [Discord server](https://discord.com/invite/medusajs) to meet other com
 - [Twitter](https://twitter.com/medusajs)
 - [LinkedIn](https://www.linkedin.com/company/medusajs)
 - [Medusa Blog](https://medusajs.com/blog/)
+
+## Newsletter subscribe / unsubscribe
+
+Opt-ins are stored on the Medusa customer as `metadata.newsletter` (`true`/`false`), plus `newsletter_subscribed_at` / `newsletter_unsubscribed_at`. Both endpoints are Store API routes, so callers must send the `x-publishable-api-key` header.
+
+- `POST /store/newsletter/subscribe` with `{ "email", "firstName"?, "lastName"? }` creates or updates the customer and sets `newsletter: true`.
+- `POST /store/newsletter/unsubscribe` with `{ "token" }` sets `newsletter: false` for every customer with that email. It is idempotent and returns `{ "ok": true }` for any valid token, even if the email is unknown. Invalid token: `400`. Secret not set: `503`.
+
+### Unsubscribe token (for the newsletter app)
+
+Set the same `NEWSLETTER_UNSUBSCRIBE_SECRET` in this backend and in the newsletter app, then build the token per email:
+
+```
+email = lowercase(trimmed email)
+token = base64url(utf8(email)) + "." + hex(HMAC_SHA256(key = secret, message = email))
+```
+
+Node example: `Buffer.from(email).toString("base64url") + "." + createHmac("sha256", secret).update(email).digest("hex")`. Reference implementation: `src/lib/newsletter.ts`.
+
+Put the token in every email's unsubscribe link, e.g. `https://<store>/unsubscribe?token=<token>`. **TODO (later task):** build that storefront page; it should POST the token to the endpoint above.
