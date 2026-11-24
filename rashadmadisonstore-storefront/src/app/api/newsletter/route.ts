@@ -10,13 +10,8 @@ const normalize = (value: unknown) =>
 export async function POST(req: NextRequest) {
   const signupUrl = process.env.NEWSLETTER_SIGNUP_URL?.trim()
   const signupKey = process.env.NEWSLETTER_SIGNUP_KEY?.trim()
-
-  if (!signupUrl || !signupKey) {
-    return NextResponse.json(
-      { error: "Newsletter signup is not configured." },
-      { status: 503 }
-    )
-  }
+  const backendUrl = process.env.MEDUSA_BACKEND_URL?.trim() || "http://localhost:9000"
+  const publishableKey = process.env.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY?.trim()
 
   try {
     const body = (await req.json()) as Record<string, unknown>
@@ -36,25 +31,38 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Newsletter information is too long." }, { status: 400 })
     }
 
-    const headers: HeadersInit = {
-      "Content-Type": "application/json",
-      "x-newsletter-key": signupKey,
-    }
-
-    const response = await fetch(signupUrl, {
+    // Record the opt-in in Medusa (source of truth for unsubscribes).
+    const saved = await fetch(`${backendUrl}/store/newsletter/subscribe`, {
       method: "POST",
-      headers,
-      body: JSON.stringify({
-        email,
-        firstName,
-        lastName,
-        source: "the-quintessential-storefront",
-      }),
+      headers: {
+        "Content-Type": "application/json",
+        "x-publishable-api-key": publishableKey ?? "",
+      },
+      body: JSON.stringify({ email, firstName, lastName, source: "the-quintessential-storefront" }),
       cache: "no-store",
     })
 
-    if (!response.ok) {
-      return NextResponse.json({ error: "Newsletter provider rejected the signup." }, { status: 502 })
+    if (!saved.ok) {
+      return NextResponse.json({ error: "Could not save newsletter signup." }, { status: 502 })
+    }
+
+    // Forwarding to the newsletter app is optional.
+    if (signupUrl && signupKey) {
+      const response = await fetch(signupUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-newsletter-key": signupKey },
+        body: JSON.stringify({
+          email,
+          firstName,
+          lastName,
+          source: "the-quintessential-storefront",
+        }),
+        cache: "no-store",
+      })
+
+      if (!response.ok) {
+        return NextResponse.json({ error: "Newsletter provider rejected the signup." }, { status: 502 })
+      }
     }
 
     return NextResponse.json({ ok: true })

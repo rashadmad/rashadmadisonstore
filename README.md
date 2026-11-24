@@ -101,6 +101,7 @@ npm run build                 # Build the Medusa backend
 npm run start                 # Start the built backend
 npm run seed                  # Seed development data
 npm run test:unit             # Run unit tests
+npm run typecheck             # TypeScript check
 npm run test:integration:http # Run HTTP integration tests
 npm run test:integration:modules
 ```
@@ -111,8 +112,13 @@ npm run test:integration:modules
 npm run build          # Build the Next.js storefront
 npm run start          # Start the production server on port 8000
 npm test               # Run Jest tests
+npm run typecheck      # TypeScript check (non-test code)
 npm run test:coverage  # Run tests with coverage
 ```
+
+## TypeScript
+
+All app code is already TypeScript (strict in the storefront). The only `.js` files are tool configs (Jest, ESLint, Next, Tailwind, PostCSS), which are intentionally left as JavaScript. The backend runs `strictNullChecks` only; full `strict` there is deferred. The storefront currently has about 22 type errors in non-test code (mostly newer Medusa types, e.g. possibly-undefined prices and `service_zone`) plus type mismatches in test mocks (excluded from `typecheck`). The storefront typecheck runs in CI without blocking until these are fixed.
 
 ## Environment and Security
 
