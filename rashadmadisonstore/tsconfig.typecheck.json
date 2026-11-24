@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.json",
+  "include": ["src/**/*", ".medusa/types/*"],
+  "exclude": ["node_modules", ".medusa", "**/__tests__/**"]
+}

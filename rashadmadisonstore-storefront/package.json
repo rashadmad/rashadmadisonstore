@@ -27,6 +27,7 @@
     "build": "next build",
     "start": "next start -p 8000",
     "lint": "next lint",
+    "typecheck": "tsc --noEmit -p tsconfig.typecheck.json",
     "analyze": "ANALYZE=true next build",
     "test": "jest",
     "test:watch": "jest --watch",

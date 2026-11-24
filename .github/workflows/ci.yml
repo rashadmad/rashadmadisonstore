@@ -20,6 +20,9 @@ jobs:
           cache-dependency-path: rashadmadisonstore-storefront/package-lock.json
       - run: npm ci
       - run: npm run lint
+      # Known pre-existing type errors (see README); report but don't block yet.
+      - run: npm run typecheck
+        continue-on-error: true
       - run: npm test
       - run: npm run build
         env:
@@ -39,5 +42,6 @@ jobs:
           cache: npm
           cache-dependency-path: rashadmadisonstore/package-lock.json
       - run: npm ci
+      - run: npm run typecheck
       - run: npm run test:unit
       - run: npm run build
