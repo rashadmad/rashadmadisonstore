@@ -89,6 +89,8 @@ describe('Cart Item Component', () => {
     variant: {
       id: 'variant-1',
       manage_inventory: true,
+      allow_backorder: false,
+      inventory_quantity: 5,
       product: {
         images: [{ url: 'test-image.jpg' }],
       },
@@ -122,8 +124,9 @@ describe('Cart Item Component', () => {
 
     render(<Item item={mockItem} currencyCode={currencyCode} />)
 
-    const select = screen.getByTestId('product-select-button')
-    fireEvent.change(select, { target: { value: '3' } })
+    const quantity = screen.getByTestId('product-select-button')
+    fireEvent.change(quantity, { target: { value: '3' } })
+    fireEvent.blur(quantity)
 
     await waitFor(() => {
       expect(mockUpdateLineItem).toHaveBeenCalledWith({
@@ -139,8 +142,9 @@ describe('Cart Item Component', () => {
 
     render(<Item item={mockItem} currencyCode={currencyCode} />)
 
-    const select = screen.getByTestId('product-select-button')
-    fireEvent.change(select, { target: { value: '4' } })
+    const quantity = screen.getByTestId('product-select-button')
+    fireEvent.change(quantity, { target: { value: '4' } })
+    fireEvent.blur(quantity)
 
     await waitFor(() => {
       expect(screen.getByTestId('error-message')).toHaveTextContent(errorMessage)
@@ -152,8 +156,9 @@ describe('Cart Item Component', () => {
 
     render(<Item item={mockItem} currencyCode={currencyCode} />)
 
-    const select = screen.getByTestId('product-select-button')
-    fireEvent.change(select, { target: { value: '5' } })
+    const quantity = screen.getByTestId('product-select-button')
+    fireEvent.change(quantity, { target: { value: '5' } })
+    fireEvent.blur(quantity)
 
     // Spinner should be visible during update
     expect(screen.getByTestId('spinner')).toBeInTheDocument()
@@ -161,5 +166,11 @@ describe('Cart Item Component', () => {
     await waitFor(() => {
       expect(screen.queryByTestId('spinner')).not.toBeInTheDocument()
     })
+  })
+
+  it('limits managed inventory to the quantity Medusa reports', () => {
+    render(<Item item={mockItem} currencyCode={currencyCode} />)
+
+    expect(screen.getByTestId('product-select-button')).toHaveAttribute('max', '5')
   })
 })

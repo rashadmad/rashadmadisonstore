@@ -73,6 +73,12 @@ navigation event. Arbitrary server actions and external/full-document navigation
 are not tracked. Existing button-level progress indicators remain unchanged;
 navigation loading does not indicate that a payment has succeeded.
 
+## Apparel page
+
+The country-prefixed `/apparel` route is the storefront's apparel page. Old
+`/collections/apparel` and `/gallery/apparel` links redirect there; other
+collection and gallery pages are unchanged.
+
 ## Address state selection
 
 Checkout shipping and billing forms, saved-address forms, and signup use a
@@ -105,7 +111,7 @@ configured; see its `npm run setup:profile-shipping` command and README.
 | `MEDUSA_BACKEND_URL`                          | Yes      | URL of the Medusa backend. Local default: `http://localhost:9000`.                        |
 | `NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY`          | Yes      | Medusa publishable API key used by the storefront and middleware.                         |
 | `NEXT_PUBLIC_DEFAULT_REGION`                  | No       | Region used when a visitor's country cannot be determined. Defaults to `us`.              |
-| `NEXT_PUBLIC_BASE_URL`                        | No       | Public storefront URL used when constructing links. Defaults to `https://localhost:8000`. |
+| `NEXT_PUBLIC_BASE_URL`                        | No       | Public storefront origin used for metadata and sitemap URLs. Defaults to `http://localhost:8000` locally; set the deployed HTTPS origin in production. |
 | `NEXT_PUBLIC_STRIPE_KEY`                      | No       | Stripe publishable key for Stripe checkout.                                               |
 | `NEXT_PUBLIC_MEDUSA_PAYMENTS_PUBLISHABLE_KEY` | No       | Alternative Medusa payment publishable key.                                               |
 | `NEXT_PUBLIC_MEDUSA_PAYMENTS_ACCOUNT_ID`      | No       | Medusa payment account identifier.                                                        |
@@ -147,6 +153,7 @@ Never commit `.env.local` or any access tokens.
 ```shell
 npm run dev            # Start the local server on port 8000
 npm run build          # Create a production build
+npx tsc --noEmit       # Type-check application source
 npm run start          # Serve the production build on port 8000
 npm run lint           # Run Next.js linting
 npm test               # Run the Jest suite
@@ -210,6 +217,14 @@ public/images/      Local images used by posts and the storefront
 
 The Medusa backend, including catalog, regions, orders, and the blog module, lives in the sibling `rashadmadisonstore` directory. Start and configure it before running this storefront locally.
 
+## Search indexing
+
+The app serves localized `robots.txt` and `sitemap.xml` routes. The sitemap
+includes published storefront pages, blog posts, product categories,
+collections, and all published product pages for configured country codes.
+Set `NEXT_PUBLIC_BASE_URL` to the canonical production HTTPS origin before
+deployment. Account, checkout, and API routes are excluded from crawling.
+
 <p align="center">
   <a href="https://www.medusajs.com">
   <picture>
@@ -221,11 +236,11 @@ The Medusa backend, including catalog, regions, orders, and the blog module, liv
 </p>
 
 <h1 align="center">
-  Medusa Next.js Starter Template
+  The Quintessential Storefront
 </h1>
 
 <p align="center">
-Combine Medusa's modules for your commerce backend with the newest Next.js 15 features for a performant storefront.</p>
+The customer storefront for Rashad Madison's artwork, prints, apparel, and studio journal.</p>
 
 <p align="center">
   <a href="https://github.com/medusajs/medusa/blob/master/CONTRIBUTING.md">
@@ -241,18 +256,12 @@ Combine Medusa's modules for your commerce backend with the newest Next.js 15 fe
 
 ### Prerequisites
 
-To use the [Next.js Starter Template](https://medusajs.com/nextjs-commerce/), you should have a Medusa server running locally on port 9000.
-For a quick setup, run:
-
-```shell
-npx create-medusa-app@latest
-```
-
-Check out [create-medusa-app docs](https://docs.medusajs.com/learn/installation) for more details and troubleshooting.
+Run the sibling Medusa backend locally on port 9000 and configure the storefront
+environment variables described above before starting this application.
 
 # Overview
 
-The Medusa Next.js Starter is built with:
+The Quintessential storefront is built with:
 
 - [Next.js](https://nextjs.org/)
 - [Tailwind CSS](https://tailwindcss.com/)
@@ -281,19 +290,18 @@ Features include:
 
 ### Setting up the environment variables
 
-Navigate into your projects directory and get your environment variables ready:
+Use the `.env.local` values described in the Local Development section:
 
 ```shell
-cd nextjs-starter-medusa/
-mv .env.template .env.local
+cd rashadmadisonstore-storefront/
 ```
 
 ### Install dependencies
 
-Use Yarn to install all dependencies.
+Install the project's npm dependencies.
 
 ```shell
-yarn
+npm install
 ```
 
 ### Start developing
@@ -301,26 +309,22 @@ yarn
 You are now ready to start up your project.
 
 ```shell
-yarn dev
+npm run dev
 ```
 
 ### Open the code and start customizing
 
-Your site is now running at http://localhost:8000!
+The storefront runs at http://localhost:8000.
 
 # Payment integrations
 
-By default this starter supports the following payment integrations
+The storefront supports Stripe when configured in both the backend and storefront.
 
 - [Stripe](https://stripe.com/)
 
-To enable the integrations you need to add the following to your `.env.local` file:
-
-```shell
-NEXT_PUBLIC_STRIPE_KEY=<your-stripe-public-key>
-```
-
-You'll also need to setup the integrations in your Medusa server. See the [Medusa documentation](https://docs.medusajs.com) for more information on how to configure [Stripe](https://docs.medusajs.com/resources/commerce-modules/payment/payment-provider/stripe#main).
+Set `NEXT_PUBLIC_STRIPE_KEY` in the storefront environment and configure the
+backend Stripe provider and webhook secret. See the environment table above and
+the backend README for deployment details.
 
 # Resources
 

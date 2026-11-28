@@ -1,13 +1,12 @@
 import { loadEnv, defineConfig } from '@medusajs/framework/utils'
 import { s3FileModule } from './src/lib/s3-config'
+import { assertProductionEnvironment } from './src/lib/production-config'
 
 loadEnv(process.env.NODE_ENV || 'development', process.cwd())
 
-const redisUrl = process.env.REDIS_URL?.trim()
+assertProductionEnvironment(process.env)
 
-if (process.env.NODE_ENV === 'production' && !redisUrl) {
-  throw new Error('REDIS_URL is required in production. Reference the Railway Redis service URL in the backend variables.')
-}
+const redisUrl = process.env.REDIS_URL?.trim()
 
 const stripeProvider = process.env.STRIPE_API_KEY
   ? [

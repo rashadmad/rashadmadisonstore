@@ -7,6 +7,7 @@ import { getPricesForVariant } from "@lib/util/get-product-price"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@medusajs/ui"
 import Divider from "@modules/common/components/divider"
+import ErrorMessage from "@modules/checkout/components/error-message"
 import OptionSelect from "@modules/products/components/product-actions/option-select"
 import { isEqual } from "lodash"
 import { useParams, usePathname, useSearchParams } from "next/navigation"
@@ -25,7 +26,7 @@ const shippingPromo =
   "Add more, save on shipping: For every three shippable items, shipping is full price on the highest-rate item, half price on the next, and free on the lowest-rate one. The offer repeats as you add more."
 
 const optionsAsKeymap = (
-  variantOptions: HttpTypes.StoreProductVariant["options"]
+  variantOptions: HttpTypes.StoreProductVariant["options"] | undefined
 ) => {
   return variantOptions?.reduce((acc: Record<string, string>, varopt: any) => {
     acc[varopt.option_id] = varopt.value
@@ -53,6 +54,7 @@ export default function ProductActions({
     optionsAsKeymap(initialVariant?.options) ?? {}
   )
   const [isAdding, setIsAdding] = useState(false)
+  const [addToCartError, setAddToCartError] = useState<string | null>(null)
   const countryCode = useParams().countryCode as string
 
   const selectedVariant = useMemo(() => {
@@ -130,7 +132,7 @@ export default function ProductActions({
     }
 
     router.replace(pathname + "?" + params.toString())
-  }, [selectedVariant, isValidVariant])
+  }, [selectedVariant, isValidVariant, pathname, router, searchParams])
 
   // check if the selected variant is in stock
   const inStock = useMemo(() => {
@@ -164,23 +166,32 @@ export default function ProductActions({
     if (!selectedVariant?.id) return null
 
     setIsAdding(true)
+    setAddToCartError(null)
 
-    await addToCart({
-      variantId: selectedVariant.id,
-      quantity: 1,
-      countryCode,
-    })
+    try {
+      await addToCart({
+        variantId: selectedVariant.id,
+        quantity: 1,
+        countryCode,
+      })
 
-    if (analyticsItem) {
-      sendGAEvent("add_to_cart", analyticsItem)
-    }
+      if (analyticsItem) {
+        sendGAEvent("add_to_cart", analyticsItem)
+      }
 
-    setIsAdding(false)
-
-    if (window.history.length > 1) {
-      router.back()
-    } else {
-      router.push(`/${countryCode}`)
+      if (window.history.length > 1) {
+        router.back()
+      } else {
+        router.push(`/${countryCode}`)
+      }
+    } catch (error) {
+      setAddToCartError(
+        error instanceof Error
+          ? error.message
+          : "Unable to add this item to your cart."
+      )
+    } finally {
+      setIsAdding(false)
     }
   }
 
@@ -233,6 +244,7 @@ export default function ProductActions({
             ? "Out of stock"
             : "Add to cart"}
         </Button>
+        <ErrorMessage error={addToCartError} />
         <MobileActions
           product={product}
           variant={selectedVariant}

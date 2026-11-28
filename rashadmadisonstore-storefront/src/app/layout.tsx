@@ -19,6 +19,27 @@ const syne = Syne({
 
 export const metadata: Metadata = {
   metadataBase: new URL(getBaseURL()),
+  title: "The Quintessential | Rashad Madison",
+  description:
+    "Original artwork, limited-edition prints, and apparel by Chicago artist Rashad Madison.",
+  applicationName: "The Quintessential",
+  openGraph: {
+    type: "website",
+    siteName: "The Quintessential",
+    title: "The Quintessential | Rashad Madison",
+    description:
+      "Original artwork, limited-edition prints, and apparel by Chicago artist Rashad Madison.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Quintessential | Rashad Madison",
+    description:
+      "Original artwork, limited-edition prints, and apparel by Chicago artist Rashad Madison.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

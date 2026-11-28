@@ -5,7 +5,7 @@ import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
 
 import { appCopy } from "@lib/copy"
-import { getBlogPostBySlug, listBlogPosts } from "@lib/data/blog"
+import { getBlogPostBySlug } from "@lib/data/blog"
 import { retrieveCustomer } from "@lib/data/customer"
 import { listProducts } from "@lib/data/products"
 import { getProductPrice } from "@lib/util/get-product-price"
@@ -22,10 +22,7 @@ type BlogPostPageProps = {
   params: Promise<{ slug: string; countryCode: string }> | { slug: string; countryCode: string }
 }
 
-export async function generateStaticParams() {
-  const posts = await listBlogPosts()
-  return posts.map((post) => ({ slug: post.slug }))
-}
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
   const resolvedParams = await params
@@ -114,6 +111,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                   img: ({ node, style, className, ...props }: any) => (
                     <img
                       {...props}
+                      alt={props.alt || ""}
                       style={style}
                       className={`h-auto rounded-xl my-4 ${className || ""}`.trim()}
                     />

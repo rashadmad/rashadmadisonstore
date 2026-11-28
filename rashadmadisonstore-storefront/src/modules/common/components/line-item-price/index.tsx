@@ -17,8 +17,13 @@ const LineItemPrice = ({
   className,
 }: LineItemPriceProps) => {
   const { total, original_total } = item
-  const originalPrice = original_total
+  if (typeof total !== "number") {
+    return null
+  }
+
   const currentPrice = total
+  const originalPrice =
+    typeof original_total === "number" ? original_total : currentPrice
   const hasReducedPrice = currentPrice < originalPrice
 
   return (

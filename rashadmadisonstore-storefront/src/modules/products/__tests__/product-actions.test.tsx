@@ -22,6 +22,8 @@ jest.mock("@lib/data/cart", () => ({
   addToCart: jest.fn().mockResolvedValue(undefined),
 }))
 
+const mockAddToCart = require("@lib/data/cart").addToCart
+
 jest.mock("@lib/hooks/use-in-view", () => ({
   useIntersection: jest.fn().mockReturnValue(true),
 }))
@@ -92,6 +94,11 @@ describe("MobileActions", () => {
 })
 
 describe("ProductActions navigation after add to cart", () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    mockAddToCart.mockResolvedValue(undefined)
+  })
+
   it("navigates back to the previous page after adding an item to cart", async () => {
     Object.defineProperty(window.history, "length", {
       value: 2,
@@ -126,5 +133,29 @@ describe("ProductActions navigation after add to cart", () => {
     await waitFor(() => {
       expect(mockBack).toHaveBeenCalled()
     })
+  })
+
+  it("shows a clear error and remains on the page when adding to cart fails", async () => {
+    mockAddToCart.mockRejectedValue(new Error("Out of stock"))
+
+    const product = {
+      id: "prod_1",
+      title: "Test Canvas",
+      options: [],
+      variants: [{ id: "var_1", options: [], manage_inventory: false }],
+    } as any
+
+    render(
+      <ProductActions
+        product={product}
+        region={{ currency_code: "usd" } as any}
+      />
+    )
+
+    fireEvent.click(screen.getByTestId("add-product-button"))
+
+    expect(await screen.findByRole("alert")).toHaveTextContent("Out of stock")
+    expect(mockBack).not.toHaveBeenCalled()
+    expect(mockPush).not.toHaveBeenCalled()
   })
 })

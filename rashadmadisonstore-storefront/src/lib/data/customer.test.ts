@@ -3,6 +3,10 @@ jest.mock("@lib/config", () => ({
     auth: {
       register: jest.fn(),
       login: jest.fn(),
+      updateProvider: jest.fn(),
+    },
+    client: {
+      fetch: jest.fn(),
     },
     store: {
       customer: {
@@ -45,10 +49,17 @@ import {
   setAuthToken,
   setHasLoggedInBefore,
 } from "./cookies"
-import { login, retrieveCustomer, signup } from "./customer"
+import {
+  login,
+  retrieveCustomer,
+  signup,
+  updateCustomerPassword,
+} from "./customer"
 
 const mockRegister = sdk.auth.register as jest.Mock
 const mockLogin = sdk.auth.login as jest.Mock
+const mockUpdateProvider = sdk.auth.updateProvider as jest.Mock
+const mockFetchCustomer = sdk.client.fetch as jest.Mock
 const mockCreateCustomer = sdk.store.customer.create as jest.Mock
 const mockCreateAddress = sdk.store.customer.createAddress as jest.Mock
 const mockTransferCart = sdk.store.cart.transferCart as jest.Mock
@@ -85,6 +96,9 @@ describe("customer authentication actions", () => {
     mockGetCacheTag.mockResolvedValue("customers-cache-id")
     mockGetCartId.mockResolvedValue(undefined)
     mockCreateAddress.mockResolvedValue({ customer: { id: "customer_1" } })
+    mockFetchCustomer.mockResolvedValue({
+      customer: { id: "customer_1", email: "rashad@example.com" },
+    })
   })
 
   it("rejects signup when passwords do not match before calling Medusa", async () => {
@@ -247,6 +261,62 @@ describe("customer authentication actions", () => {
 
     expect(mockSetAuthToken).not.toHaveBeenCalled()
     expect(mockRedirect).not.toHaveBeenCalled()
+  })
+
+  it("verifies the current password and updates the email/password provider", async () => {
+    mockLogin.mockResolvedValue("verified-customer-token")
+    mockUpdateProvider.mockResolvedValue(undefined)
+    const formData = new FormData()
+    formData.set("old_password", "current-password")
+    formData.set("new_password", "a-new-password")
+    formData.set("confirm_password", "a-new-password")
+
+    await expect(
+      updateCustomerPassword({ success: false, error: null }, formData)
+    ).resolves.toEqual({ success: true, error: null })
+
+    expect(mockLogin).toHaveBeenCalledWith("customer", "emailpass", {
+      email: "rashad@example.com",
+      password: "current-password",
+    })
+    expect(mockUpdateProvider).toHaveBeenCalledWith(
+      "customer",
+      "emailpass",
+      { password: "a-new-password" },
+      "verified-customer-token"
+    )
+  })
+
+  it("rejects mismatched new passwords without contacting Medusa", async () => {
+    const formData = new FormData()
+    formData.set("old_password", "current-password")
+    formData.set("new_password", "a-new-password")
+    formData.set("confirm_password", "different-password")
+
+    await expect(
+      updateCustomerPassword({ success: false, error: null }, formData)
+    ).resolves.toEqual({
+      success: false,
+      error: "New passwords do not match.",
+    })
+    expect(mockLogin).not.toHaveBeenCalled()
+    expect(mockUpdateProvider).not.toHaveBeenCalled()
+  })
+
+  it("does not update the password when current-password verification fails", async () => {
+    mockLogin.mockRejectedValue(new Error("Invalid email or password"))
+    const formData = new FormData()
+    formData.set("old_password", "wrong-password")
+    formData.set("new_password", "a-new-password")
+    formData.set("confirm_password", "a-new-password")
+
+    await expect(
+      updateCustomerPassword({ success: false, error: null }, formData)
+    ).resolves.toEqual({
+      success: false,
+      error: "Invalid email or password",
+    })
+    expect(mockUpdateProvider).not.toHaveBeenCalled()
   })
 
   it("continues to the account page when cart transfer fails after login", async () => {

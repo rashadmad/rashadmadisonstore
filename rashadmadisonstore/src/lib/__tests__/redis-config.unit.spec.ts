@@ -7,6 +7,15 @@ import { defineConfig } from "@medusajs/framework/utils"
 
 const redisUrl = "redis://localhost:6379"
 
+function setProductionEnvironment() {
+  process.env.DATABASE_URL = "postgres://localhost:5432/store"
+  process.env.JWT_SECRET = "a".repeat(32)
+  process.env.COOKIE_SECRET = "b".repeat(32)
+  process.env.STORE_CORS = "https://store.example"
+  process.env.ADMIN_CORS = "https://admin.example"
+  process.env.AUTH_CORS = "https://store.example,https://admin.example"
+}
+
 function loadConfig() {
   jest.isolateModules(() => {
     require("../../../medusa-config")
@@ -42,12 +51,15 @@ describe("Redis configuration", () => {
     process.env.NODE_ENV = "production"
     process.env.REDIS_URL = " "
 
-    expect(loadConfig).toThrow("REDIS_URL is required in production")
+    expect(loadConfig).toThrow(
+      "Missing required production environment variables: DATABASE_URL, REDIS_URL, JWT_SECRET, COOKIE_SECRET, STORE_CORS, ADMIN_CORS, AUTH_CORS"
+    )
     expect(defineConfig).not.toHaveBeenCalled()
   })
 
   it("uses the same Redis connection for sessions, caches, events, workflows, and locks", () => {
     process.env.NODE_ENV = "production"
+    setProductionEnvironment()
     process.env.REDIS_URL = ` ${redisUrl} `
     loadConfig()
 

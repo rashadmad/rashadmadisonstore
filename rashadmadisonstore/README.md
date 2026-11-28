@@ -8,7 +8,7 @@
   </a>
 </p>
 <h1 align="center">
-  Medusa
+  The Quintessential Commerce Backend
 </h1>
 
 <h4 align="center">
@@ -17,7 +17,7 @@
 </h4>
 
 <p align="center">
-  Building blocks for digital commerce
+  Medusa-powered commerce services for The Quintessential storefront
 </p>
 <p align="center">
   <a href="https://github.com/medusajs/medusa/blob/master/CONTRIBUTING.md">
@@ -32,15 +32,15 @@
   </a>
 </p>
 
-## Compatibility
+## Local setup
 
-This starter is compatible with versions >= 2 of `@medusajs/medusa`. 
+Run `npm install`, copy `.env.template` to `.env`, configure a local PostgreSQL
+`DATABASE_URL`, CORS origins, and unique `JWT_SECRET` and `COOKIE_SECRET`
+values, then run `npm run dev`. The repository-level
+[README](../README.md) documents setup for both applications.
 
-## Getting Started
-
-Visit the [Quickstart Guide](https://docs.medusajs.com/learn/installation) to set up a server.
-
-Visit the [Docs](https://docs.medusajs.com/learn/installation#get-started) to learn more about our system requirements.
+Production requires PostgreSQL, Redis, all three CORS variables, and
+JWT/cookie secrets of at least 32 characters.
 
 ## Production Redis on Railway
 
